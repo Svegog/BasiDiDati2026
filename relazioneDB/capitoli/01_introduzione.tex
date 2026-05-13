@@ -1,0 +1,58 @@
+% ============================================================
+%  CAPITOLO 1 --- INTRODUZIONE
+% ============================================================
+\chapter{Introduzione}
+
+Il presente elaborato descrive la progettazione e l'implementazione di un sistema
+informativo per la gestione di uno \textbf{stabilimento balneare}.
+
+L'obiettivo del progetto è realizzare un gestionale che i proprietari dello stabilimento
+possano utilizzare per il monitoraggio delle funzioni essenziali: prenotazioni di ombrelloni
+e lettini, abbonamenti stagionali, gestione dei turni del personale e controllo del magazzino
+e delle forniture.
+
+\section{Contesto e motivazioni}
+
+La gestione di uno stabilimento balneare coinvolge diverse aree operative che, se
+non coordinate, rischiano di generare inefficienze: l'assegnazione manuale degli
+ombrelloni può portare a doppie prenotazioni, la mancanza di uno strumento per i
+turni rende difficile pianificare il personale, e l'assenza di controllo sul magazzino
+causa carenze di materiali.
+
+Il sistema informativo proposto affronta queste criticità fornendo al proprietario
+un unico strumento di consultazione e gestione.
+
+\section{Ambito del sistema}
+
+Il progetto \textbf{non} si occupa delle interazioni tra clienti e stabilimento:
+non è un sistema di prenotazione online accessibile dagli utenti finali. Le informazioni
+trattate sono esclusivamente rivolte ai \textbf{proprietari}, che accedono al gestionale
+tramite credenziali personali.
+
+\section{Funzionalità principali}
+
+Il sistema offre le seguenti funzionalità:
+
+\begin{itemize}
+  \item Inserimento e gestione di \textbf{clienti} (abituali o occasionali)
+  \item Gestione di \textbf{prenotazioni} e \textbf{abbonamenti} su ombrelloni e lettini
+  \item Registrazione e gestione dei \textbf{dipendenti} e dei loro \textbf{turni}
+  \item Monitoraggio del \textbf{magazzino} e gestione degli \textbf{ordini} ai fornitori
+  \item Consultazione della disponibilità in tempo reale
+\end{itemize}
+
+\section{Struttura della relazione}
+
+La relazione è organizzata come segue:
+
+\begin{description}
+  \item[Capitolo 2 --- Analisi dei requisiti:] intervista, rilevamento ambiguità,
+    specifiche in linguaggio naturale ed estrazione dei concetti principali.
+  \item[Capitolo 3 --- Progettazione concettuale:] schema scheletro, raffinamenti
+    progressivi e schema E/R finale.
+  \item[Capitolo 4 --- Progettazione logica:] stima dei volumi, operazioni principali,
+    schemi di navigazione, tabelle degli accessi, analisi delle ridondanze, schema
+    relazionale finale e query SQL.
+  \item[Capitolo 5 --- Progettazione dell'applicazione:] architettura del software,
+    tecnologie utilizzate e screenshot dell'interfaccia.
+\end{description}

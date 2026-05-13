@@ -1,0 +1,151 @@
+% ============================================================
+%  CAPITOLO 2 --- ANALISI DEI REQUISITI
+% ============================================================
+\chapter{Analisi dei requisiti}
+
+\section{Intervista}
+
+Di seguito si riporta il testo dell'intervista con il committente, che ha definito
+i requisiti del sistema informativo. Le righe sono numerate per facilitare il
+riferimento nelle sezioni successive.
+
+\begin{longtable}{p{0.5cm} p{13.5cm}}
+  \toprule
+  \textbf{N.} & \textbf{Testo} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{N.} & \textbf{Testo} \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endfoot
+
+  1  & Il proprietario o i proprietari (di seguito: \textit{proprietario}) possono
+       effettuare l'accesso al gestionale tramite credenziali (nome, cognome, email, password). \\[4pt]
+  2  & Il proprietario può inserire \textit{clienti} nel gestionale, specificando
+       nome, cognome, numero di telefono ed email. \\[4pt]
+  3  & I clienti possono essere assegnati a degli \textit{ombrelloni}, a dei
+       \textit{lettini} oppure possono sottoscrivere un \textit{abbonamento}
+       calcolato su base di durata e posizione. \\[4pt]
+  4  & Di ogni ombrellone è necessario memorizzare la posizione, il numero di
+       lettini e il numero di sedie associati. Il prezzo viene calcolato in base
+       alla richiesta del cliente. \\[4pt]
+  5  & Le informazioni che legano ombrelloni e clienti (data inizio, data fine)
+       sono conservate nelle \textit{prenotazioni}. \\[4pt]
+  6  & Il proprietario può gestire i \textit{turni} dei dipendenti, visualizzare
+       la forza lavoro disponibile in determinate giornate e modificare i turni
+       per coprire l'intera giornata. \\[4pt]
+  7  & È possibile verificare la disponibilità in \textit{magazzino} ed effettuare
+       \textit{ordini} per singoli o gruppi di prodotti. \\[4pt]
+  8  & Il pagamento degli ordini viene effettuato alla consegna; una volta aggiunto
+       un ordine, il contenuto viene automaticamente aggiunto al magazzino. \\[4pt]
+
+\end{longtable}
+
+% -- 2.2 Ambiguità -------------------------------------------
+\section{Rilevamento delle ambiguità e correzioni proposte}
+
+A seguito della lettura dei requisiti sono state individuate le seguenti ambiguità
+e si propongono le relative correzioni.
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella delle ambiguità rilevate e correzioni proposte}
+  \label{tab:ambiguita}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{1cm} L{3.5cm} L{3.5cm} L{5.5cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Riga} & \textbf{Termine originale} & \textbf{Termine adottato} & \textbf{Motivazione} \\
+    \midrule
+    3 & lettino & \textit{Lettino} (entità) & Disambiguato da \textit{numeroLettini}
+        (attributo di Ombrellone): il lettino è un'entità indipendente prenotabile
+        separatamente dall'ombrellone. \\[4pt]
+    3 & abbonamento & \textit{Abbonamento} (entità distinta da Prenotazione) &
+        L'abbonamento differisce dalla prenotazione per la durata (stagionale)
+        e per la struttura della tariffa. Si modella come entità separata. \\[4pt]
+    4 & posizione & \textit{fila} + \textit{numero} (attributi composti) &
+        La posizione di un ombrellone è identificata da una fila e un numero
+        progressivo all'interno della fila. Si decompone in due attributi atomici. \\[4pt]
+    6 & turno & \textit{Turno} (entità) con orario inizio e fine &
+        Un turno è caratterizzato da data, orario di inizio e orario di fine.
+        Un dipendente può avere più turni nella stessa giornata. \\[4pt]
+    7 & prodotto & \textit{Prodotto} (entità in magazzino) distinto da
+        \textit{Fornitore} & Aggiunto il concetto di \textit{Fornitore} come entità
+        autonoma, poiché un prodotto può essere acquistato da fornitori diversi. \\[4pt]
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% -- 2.3 Specifiche ristrutturate ----------------------------
+\section{Specifiche in linguaggio naturale ristrutturato}
+
+A seguito dell'analisi, si riporta il testo ristrutturato con i termini univoci
+adottati. I concetti principali sono evidenziati in \textsc{maiuscoletto}.
+
+\medskip
+\begin{tcolorbox}[colback=lightgray, colframe=primary!40, left=8pt, right=8pt,
+                  top=6pt, bottom=6pt]
+\setlength{\parskip}{6pt}
+
+Il \entita{Proprietario} accede al gestionale tramite credenziali (nome, cognome,
+email, password). Nel sistema possono essere presenti più proprietari.
+
+Il proprietario può registrare \entita{Clienti}, specificando nome, cognome,
+numero di telefono ed email. Un cliente può essere associato a una o più
+\entita{Prenotazioni} oppure a uno o più \entita{Abbonamenti}.
+
+Una \entita{Prenotazione} lega un \entita{Cliente} a un \entita{Ombrellone}
+e/o a un \entita{Lettino} per un periodo definito da \attributo{dataInizio}
+e \attributo{dataFine}. Il prezzo viene calcolato in base alla durata e alla
+posizione dell'ombrellone.
+
+Un \entita{Abbonamento} è simile a una prenotazione ma ha durata stagionale
+e una struttura tariffaria diversa (calcolata su base di durata e posizione).
+Anche l'abbonamento mostra solo il prezzo senza gestire il pagamento.
+
+Di ogni \entita{Ombrellone} si memorizzano: \attributo{fila}, \attributo{numero},
+\attributo{numeroLettini}, \attributo{numeroSedie}.
+
+Un \entita{Dipendente} è caratterizzato da nome, cognome, codice fiscale e
+recapito. Il proprietario può registrare i \entita{Turni} dei dipendenti,
+ciascuno con \attributo{data}, \attributo{orarioInizio} e \attributo{orarioFine}.
+
+In \entita{Magazzino} vengono gestiti i \entita{Prodotti}, ciascuno con
+\attributo{nome}, \attributo{quantità} e \attributo{prezzoUnitario}. Quando
+la quantità scende sotto una soglia, il sistema segnala la mancanza.
+
+Il proprietario può effettuare \entita{Ordini} verso i \entita{Fornitori},
+specificando i prodotti e le quantità desiderate. Al momento della consegna,
+le quantità ordinate vengono aggiunte automaticamente al magazzino.
+
+\end{tcolorbox}
+
+% -- 2.4 Concetti principali ---------------------------------
+\section{Estrazione dei concetti principali}
+
+\begin{table}[H]
+  \centering
+  \caption{Concetti principali estratti dall'analisi}
+  \label{tab:concetti}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{L{3cm} C{2cm} L{8.5cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Termine} & \textbf{Tipo} & \textbf{Descrizione} \\
+    \midrule
+    \entita{Proprietario}    & Entità      & Utente del gestionale, accede tramite credenziali \\
+    \entita{Cliente}         & Entità      & Persona registrata a cui si assegnano prenotazioni o abbonamenti \\
+    \entita{Ombrellone}      & Entità      & Postazione identificata da fila e numero \\
+    \entita{Prenotazione}    & Associazione & Lega un cliente a un ombrellone/lettino per un periodo \\
+    \entita{Abbonamento}     & Entità      & Contratto stagionale cliente-ombrellone con tariffa dedicata \\
+    \entita{Dipendente}      & Entità      & Lavoratore dello stabilimento \\
+    \entita{Turno}           & Entità      & Fascia oraria lavorativa di un dipendente \\
+    \entita{Prodotto}        & Entità      & Articolo presente in magazzino \\
+    \entita{Fornitore}       & Entità      & Azienda da cui si acquistano i prodotti \\
+    \entita{Ordine}          & Entità      & Richiesta di fornitura verso un fornitore \\
+    \relazione{Contiene}     & Associazione & Lega un ordine ai prodotti ordinati (con quantità) \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
