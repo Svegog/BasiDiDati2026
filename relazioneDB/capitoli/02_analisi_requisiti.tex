@@ -3,45 +3,50 @@
 % ============================================================
 \chapter{Analisi dei requisiti}
 
+\raggedbottom
+
 \section{Intervista}
 
 Di seguito si riporta il testo dell'intervista con il committente, che ha definito
 i requisiti del sistema informativo. Le righe sono numerate per facilitare il
 riferimento nelle sezioni successive.
 
-\begin{longtable}{p{0.5cm} p{13.5cm}}
-  \toprule
-  \textbf{N.} & \textbf{Testo} \\
-  \midrule
-  \endfirsthead
-  \toprule
-  \textbf{N.} & \textbf{Testo} \\
-  \midrule
-  \endhead
-  \bottomrule
-  \endfoot
+\begin{tcolorbox}[colback=lightgray, colframe=primary!40, left=8pt, right=8pt,
+                  top=6pt, bottom=6pt]
+\setlength{\parskip}{6pt}
 
-  1  & Il proprietario o i proprietari (di seguito: \textit{proprietario}) possono
-       effettuare l'accesso al gestionale tramite credenziali (nome, cognome, email, password). \\[4pt]
-  2  & Il proprietario può inserire \textit{clienti} nel gestionale, specificando
-       nome, cognome, numero di telefono ed email. \\[4pt]
-  3  & I clienti possono essere assegnati a degli \textit{ombrelloni}, a dei
-       \textit{lettini} oppure possono sottoscrivere un \textit{abbonamento}
-       calcolato su base di durata e posizione. \\[4pt]
-  4  & Di ogni ombrellone è necessario memorizzare la posizione, il numero di
-       lettini e il numero di sedie associati. Il prezzo viene calcolato in base
-       alla richiesta del cliente. \\[4pt]
-  5  & Le informazioni che legano ombrelloni e clienti (data inizio, data fine)
-       sono conservate nelle \textit{prenotazioni}. \\[4pt]
-  6  & Il proprietario può gestire i \textit{turni} dei dipendenti, visualizzare
-       la forza lavoro disponibile in determinate giornate e modificare i turni
-       per coprire l'intera giornata. \\[4pt]
-  7  & È possibile verificare la disponibilità in \textit{magazzino} ed effettuare
-       \textit{ordini} per singoli o gruppi di prodotti. \\[4pt]
-  8  & Il pagamento degli ordini viene effettuato alla consegna; una volta aggiunto
-       un ordine, il contenuto viene automaticamente aggiunto al magazzino. \\[4pt]
+\textbf{1.} Il proprietario o i proprietari (di seguito: \textit{proprietario}) possono
+effettuare l'accesso al gestionale tramite credenziali (nome, cognome, email, password).
 
-\end{longtable}
+\textbf{2.} Si vuole tenere traccia di clienti, prenotazioni, prodotti in magazzino,
+ordini, fornitori, dipendenti e turni.
+
+\textbf{3.} Per ogni \textit{cliente} nel gestionale, si memorizzano nome, cognome,
+numero di telefono ed email.
+
+\textbf{4.} I clienti possono prenotare \textit{ombrelloni} o \textit{lettini} oppure
+possono sottoscrivere un \textit{abbonamento} valido per tutta la stagione.
+
+\textbf{5.} Il prezzo dell'abbonamento stagionale è calcolato in base alla posizione
+dell'ombrellone, mentre il prezzo della prenotazione è calcolato in base a posizione e durata.
+
+\textbf{6.} Di ogni ombrellone è necessario memorizzare la posizione, il numero di lettini
+e il numero di sedie associati. Il numero di lettini è standard: 2 per ogni ombrellone.
+
+\textbf{7.} Le informazioni che legano ombrelloni e clienti (data inizio, data fine)
+sono conservate nelle \textit{prenotazioni}.
+
+\textbf{8.} Il proprietario può gestire i \textit{turni} dei dipendenti, visualizzare
+la forza lavoro disponibile in determinate giornate e modificare i turni
+per coprire l'intera giornata.
+
+\textbf{9.} È possibile verificare la disponibilità in \textit{magazzino} ed effettuare
+\textit{ordini} per singoli o gruppi di prodotti.
+
+\textbf{10.} Il pagamento degli ordini viene effettuato alla consegna; una volta aggiunto
+un ordine, il contenuto viene automaticamente aggiunto al magazzino.
+
+\end{tcolorbox}
 
 % -- 2.2 Ambiguità -------------------------------------------
 \section{Rilevamento delle ambiguità e correzioni proposte}
