@@ -11,7 +11,7 @@ Di seguito si riporta il testo dell'intervista con il committente, che ha defini
 i requisiti del sistema informativo. Le righe sono numerate per facilitare il
 riferimento nelle sezioni successive.
 
-\begin{tcolorbox}[colback=lightgray, colframe=primary!40, left=8pt, right=8pt,
+\begin{tcolorbox}[breakable, colback=lightgray, colframe=primary!40, left=8pt, right=8pt,
                   top=6pt, bottom=6pt]
 \setlength{\parskip}{6pt}
 
@@ -40,15 +40,21 @@ sono conservate nelle \textit{prenotazioni}.
 la forza lavoro disponibile in determinate giornate e modificare i turni
 per coprire l'intera giornata.
 
-\textbf{9.} È possibile verificare la disponibilità in \textit{magazzino} ed effettuare
-\textit{ordini} per singoli o gruppi di prodotti.
+\textbf{9.} Per ogni prodotto è necessario memorizzare nome, categoria e quantità minima necessaria 
+in magazzino. È possibile verificare la disponibilità in \textit{magazzino} per ogni prodotto
 
-\textbf{10.} Il pagamento degli ordini viene effettuato alla consegna; una volta aggiunto
-un ordine, il contenuto viene automaticamente aggiunto al magazzino.
+\textbf{10.} Si possono effettuare \textit{ordini} per singoli o gruppi di prodotti. Il pagamento 
+degli ordini viene effettuato alla consegna. Il contenuto dell'ordine viene aggiunto al magazzino 
+al momento della consegna. Ogni ordine viene effettuato da un fornitore unico.
+
+\textbf{11.} Per ogni \textit{fornitore} è necessario memorizzare partita iva, nome, email, indirizzo 
+e recapito telefonico. Ogni fornitore ha un suo insieme di prodotti che può vendere allo stabilimento: 
+per ogni prodotto nel catalogo serve memorizzare il prezzo a cui lo specifico fornitore vende il prodotto
 
 \end{tcolorbox}
 
 % -- 2.2 Ambiguità -------------------------------------------
+\clearpage
 \section{Rilevamento delle ambiguità e correzioni proposte}
 
 A seguito della lettura dei requisiti sono state individuate le seguenti ambiguità
@@ -90,7 +96,7 @@ A seguito dell'analisi, si riporta il testo ristrutturato con i termini univoci
 adottati. I concetti principali sono evidenziati in \textsc{maiuscoletto}.
 
 \medskip
-\begin{tcolorbox}[colback=lightgray, colframe=primary!40, left=8pt, right=8pt,
+\begin{tcolorbox}[breakable, colback=lightgray, colframe=primary!40, left=8pt, right=8pt,
                   top=6pt, bottom=6pt]
 \setlength{\parskip}{6pt}
 
