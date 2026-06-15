@@ -123,13 +123,19 @@ Un \entita{Dipendente} è caratterizzato da nome, cognome, codice fiscale e
 recapito. Il proprietario può registrare i \entita{Turni} dei dipendenti,
 ciascuno con \attributo{data}, \attributo{orarioInizio} e \attributo{orarioFine}.
 
-In \entita{Magazzino} vengono gestiti i \entita{Prodotti}, ciascuno con
-\attributo{nome}, \attributo{quantità} e \attributo{prezzoUnitario}. Quando
-la quantità scende sotto una soglia, il sistema segnala la mancanza.
+In magazzino vengono gestiti i \entita{Prodotti}, ciascuno identificato da un codice 
+univoco e caratterizzato da \attributo{nome}, \attributo{quantità}, \attributo{categoria}
+e \attributo{prezzoUnitario}. Il \attributo{prezzoUnitario} può variare a seconda del fornitore.
+Quando la quantità scende sotto una soglia, il sistema segnala la mancanza.
 
 Il proprietario può effettuare \entita{Ordini} verso i \entita{Fornitori},
-specificando i prodotti e le quantità desiderate. Al momento della consegna,
+specificando i prodotti e le quantità desiderate. Un ordine può contenere prodotti
+diversi ma tutti dello stesso fornitore. Al momento della consegna,
 le quantità ordinate vengono aggiunte automaticamente al magazzino.
+
+Un \entita{Fornitore} è caratterizzato da \attributo{partita iva}, \attributo{nome}, \attributo{email}, \attributo{numero di telefono}
+e \attributo{indirizzo}. Per ogni fornitore è memorizzato l'insieme di prodotti che possono
+essere comprati.
 
 \end{tcolorbox}
 
