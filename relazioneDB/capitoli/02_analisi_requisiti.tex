@@ -67,24 +67,26 @@ e si propongono le relative correzioni.
   \caption{Tabella delle ambiguità rilevate e correzioni proposte}
   \label{tab:ambiguita}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{C{1cm} L{3.5cm} L{3.5cm} L{5.5cm}}
+  \begin{tabularx}{\textwidth}{C{1cm} L{4cm} L{4cm} L{6cm}}
     \toprule
     \rowcolor{primary!15}
     \textbf{Riga} & \textbf{Termine originale} & \textbf{Termine adottato} & \textbf{Motivazione} \\
     \midrule
-    3 & lettino & \textit{Lettino} (entità) & Disambiguato da \textit{numeroLettini}
-        (attributo di Ombrellone): il lettino è un'entità indipendente prenotabile
-        separatamente dall'ombrellone. \\[4pt]
-    3 & abbonamento & \textit{Abbonamento} (entità distinta da Prenotazione) &
-        L'abbonamento differisce dalla prenotazione per la durata (stagionale)
-        e per la struttura della tariffa. Si modella come entità separata. \\[4pt]
-    4 & posizione & \textit{fila} + \textit{numero} (attributi composti) &
+    4 & lettino & \textit{PrenotazioneLettino} (entità) & Il lettino, inteso come singolo 
+    lettino vendibile senza ombrellone, solitamente a riva, non avendo caratteristiche sufficienti
+    da essere una entità assestante, viene sostituito da l'entità \textit{Prenotazione_Lettino} 
+    associata. \\[4pt]
+    4 & abbonamento & \textit{Abbonamento} (entità distinta da Prenotazione) &
+        L'abbonamento differisce dalla prenotazione per la durata (stagionale, quindi fissa)
+        e per la struttura della tariffa. Si modella come entità separata, con un unico attributo
+        temporale, cioè l'anno di riferimento. \\[4pt]
+    5 & posizione & \textit{CodFila} (dall'entità \textit{Fila}) + \textit{numero} (attributi composti) &
         La posizione di un ombrellone è identificata da una fila e un numero
         progressivo all'interno della fila. Si decompone in due attributi atomici. \\[4pt]
-    6 & turno & \textit{Turno} (entità) con orario inizio e fine &
+    8 & turno & \textit{Turno} (entità) con orario inizio e fine &
         Un turno è caratterizzato da data, orario di inizio e orario di fine.
         Un dipendente può avere più turni nella stessa giornata. \\[4pt]
-    7 & prodotto & \textit{Prodotto} (entità in magazzino) distinto da
+    9 & prodotto & \textit{Prodotto} (entità in magazzino) distinto da
         \textit{Fornitore} & Aggiunto il concetto di \textit{Fornitore} come entità
         autonoma, poiché un prodotto può essere acquistato da fornitori diversi. \\[4pt]
     \bottomrule
@@ -115,15 +117,16 @@ e \attributo{dataFine}. Il prezzo viene calcolato in base alla durata e alla
 posizione dell'ombrellone.
 
 Un \entita{Abbonamento} è simile a una prenotazione ma ha durata stagionale
-e una struttura tariffaria diversa (calcolata su base di durata e posizione).
+e una struttura tariffaria diversa (calcolata su base della posizione).
 Anche l'abbonamento mostra solo il prezzo senza gestire il pagamento.
 
-Di ogni \entita{Ombrellone} si memorizzano: \attributo{fila}, \attributo{numero},
-\attributo{numeroLettini}, \attributo{numeroSedie}.
+Di ogni \entita{Ombrellone} si memorizza il \attributo{numero} (corrispondente alla posizione), 
+mentre la \entita{Fila} indica la base su cui calcolare il prezzo.
 
 Un \entita{Dipendente} è caratterizzato da nome, cognome, codice fiscale e
 recapito. Il proprietario può registrare i \entita{Turni} dei dipendenti,
-ciascuno con \attributo{data}, \attributo{orarioInizio} e \attributo{orarioFine}.
+ciascuno con \attributo{data}, \attributo{orarioInizio} e \attributo{orarioFine},
+che svolgeranno una specifica \entita{Mansione}.
 
 In magazzino vengono gestiti i \entita{Prodotti}, ciascuno identificato da un codice 
 univoco e caratterizzato da \attributo{nome}, \attributo{quantità}, \attributo{categoria}
@@ -149,22 +152,23 @@ essere comprati.
   \caption{Concetti principali estratti dall'analisi}
   \label{tab:concetti}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{L{3cm} C{2cm} L{8.5cm}}
+  \begin{tabularx}{\textwidth}{L{3cm} C{3cm} L{8.5cm}}
     \toprule
     \rowcolor{primary!15}
     \textbf{Termine} & \textbf{Tipo} & \textbf{Descrizione} \\
     \midrule
     \entita{Proprietario}    & Entità      & Utente del gestionale, accede tramite credenziali \\
     \entita{Cliente}         & Entità      & Persona registrata a cui si assegnano prenotazioni o abbonamenti \\
-    \entita{Ombrellone}      & Entità      & Postazione identificata da fila e numero \\
-    \entita{Prenotazione}    & Associazione & Lega un cliente a un ombrellone/lettino per un periodo \\
-    \entita{Abbonamento}     & Entità      & Contratto stagionale cliente-ombrellone con tariffa dedicata \\
     \entita{Dipendente}      & Entità      & Lavoratore dello stabilimento \\
+    \entita{Ombrellone}      & Entità      & Postazione identificata da fila e numero \\
+    \entita{Prenotazione}    & Entità      & Lega un cliente a un ombrellone o lettino per una durata concordata \\
+    \entita{Abbonamento}     & Entità      & Contratto stagionale cliente-ombrellone con tariffa dedicata \\
     \entita{Turno}           & Entità      & Fascia oraria lavorativa di un dipendente \\
+    \entita{Mansione}        & Entità      & Compito che un dipendente svolgerà durante il turno in questione \\
     \entita{Prodotto}        & Entità      & Articolo presente in magazzino \\
     \entita{Fornitore}       & Entità      & Azienda da cui si acquistano i prodotti \\
     \entita{Ordine}          & Entità      & Richiesta di fornitura verso un fornitore \\
-    \relazione{Contiene}     & Associazione & Lega un ordine ai prodotti ordinati (con quantità) \\
+    \entita{Contiene}     & Associazione & Lega un ordine ai prodotti ordinati (con quantità) \\
     \bottomrule
   \end{tabularx}
 \end{table}
