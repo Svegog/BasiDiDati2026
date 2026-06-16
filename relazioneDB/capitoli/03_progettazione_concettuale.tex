@@ -8,30 +8,37 @@ La progettazione procede per raffinamenti successivi, partendo da uno schema sch
 e arricchendolo progressivamente per area tematica.
 
 % -- 3.1 Schema scheletro ------------------------------------
-\section{Schema scheletro}
+\section{Area Ordini}
 
-Lo schema scheletro individua le entit\`{a} principali e le associazioni fondamentali,
-senza ancora specificare gli attributi n\'e le cardinalit\`{a} precise.
-
+\subsection{Schema Scheletro}
 \begin{figure}[H]
   \centering
   % -- Inserire qui l'immagine dello schema scheletro ------
-  % \includegraphics[width=0.9\textwidth]{immagini/schema_scheletro.png}
-  \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
-    \textit{[Inserire immagine: schema\_scheletro.png]}\\
-    Esportare il diagramma E/R come PNG e salvarlo in \texttt{immagini/}
-  \vspace{3cm}}}
-  \caption{Schema scheletro --- entit\`{a} e associazioni principali}
-  \label{fig:schema-scheletro}
+  \includegraphics[width=0.9\textwidth]{immagini/03/scheletroOrdini.png}
+  \caption{Schema scheletro dell'area ordini}
+  \label{fig:scheletroOrdini}
 \end{figure}
 
-Le entit\`{a} individuate sono: \entita{Proprietario}, \entita{Cliente},
-\entita{Ombrellone}, \entita{Dipendente}, \entita{Prodotto},
-\entita{Fornitore}, \entita{Ordine}.
+\subsection{Raffinamenti proposti}
+\begin{itemize}
+  \item L'entita \entita{Proprietario} è una specializzazione del concetto più generale di persona. Verrà
+        quindi aggiunta l'entità \entita{Persona} come generalizzazione.
+  \item Per ogni prodotto va memorizzata la categoria ma poiché le categorie saranno poche e molto ripetute
+        è opportuna la creazione di un entità \entita{Categoria} che sara in associazione 1 a N con
+        l'entità \entita{Prodotto}
+  \item Il \entita{Catalogo} è meglio rappresentato da un entità così da poter garantire l'esistenza della corrispondenza tra
+        prodotto e fornitore quando viene effettuato un ordine.
+  \item L'entità \entita{Ordine} non sarà più associata a prodotto ma alla nuova \entita{Catalogo} così da poter
+        distinguere prodotti uguali da fornitori diversi
+\end{itemize}
 
-Le associazioni principali sono: \relazione{Effettua} (Proprietario--Ordine),
-\relazione{Prenota} (Cliente--Ombrellone), \relazione{LavoraIn} (Dipendente--Turno),
-\relazione{Rifornisce} (Fornitore--Ordine), \relazione{Contiene} (Ordine--Prodotto).
+\subsection{Schema completo}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{immagini/03/scheletroOrdini.png}
+  \caption{Schema scheletro dell'area ordini}
+  \label{fig:scheletroOrdini}
+\end{figure}
 
 % -- 3.2 Raffinamenti ----------------------------------------
 \section{Raffinamenti proposti}
