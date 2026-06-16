@@ -7,7 +7,7 @@ In questo capitolo si descrive lo sviluppo dello schema Entit\`{a}-Relazione (E/
 La progettazione procede per raffinamenti successivi, partendo da uno schema scheletro
 e arricchendolo progressivamente per area tematica.
 
-% -- 3.1 Schema scheletro ------------------------------------
+% -- 3.1 Schemi scheletro ------------------------------------
 \section{Area Ordini}
 
 \subsection{Schema Scheletro}
@@ -40,18 +40,56 @@ e arricchendolo progressivamente per area tematica.
   \label{fig:scheletroOrdini}
 \end{figure}
 
-% -- 3.2 Raffinamenti ----------------------------------------
-\section{Raffinamenti proposti}
+\section{Area Dipendenti} % SCHEMA DA FARE
 
-\subsection{Area: Clienti, Prenotazioni e Abbonamenti}
+\subsection{Schema Scheletro}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{immagini/03/scheletroDipendenti.png}
+  \caption{Schema scheletro dell'area dipendenti e turni}
+  \label{fig:scheletroDipendenti}
+\end{figure}
 
-\textbf{Decisione:} si modellano \entita{Prenotazione} e \entita{Abbonamento}
-come entit\`{a} distinte anzich\'e come un'unica entit\`{a} con un attributo booleano.
+\subsection{Raffinamenti proposti}
+\begin{itemize}
+  \item L'entita \entita{Dipendente} è una specializzazione del concetto più generale di persona. Verrà
+        quindi aggiunta l'entità \entita{Persona} come generalizzazione.
+  \item Per ogni \entita{Dipendente} va memorizzato, come informazione personale, il codice fiscale.
+  \item Ogni turno sarà identificato dal lavoratore, dalla data e dall'ora d'inizio dello stesso. Per 
+        questo motivo si è deciso di identificarlo con attributo composto \textit{Dipendente,Data,OraInizio},
+        in modo da permettere lo svolgimento di turni \textit{spezzati}.
+\end{itemize}
 
-\textbf{Motivazione:} le due entit\`{a} hanno strutture diverse. La prenotazione ha
-una durata breve e un prezzo calcolato su base giornaliera; l'abbonamento ha una
-durata stagionale e una tariffa fissa per posizione. Unirle in un'unica entit\`{a}
-introdurrebbe numerosi attributi NULL.
+\begin{notabox}[Vincolo implicito]
+Un dipendente non pu\`{o} lavorare, durante un turno, due volte per due lassi di tempo sovrapposti. 
+Questo vincolo non \`{e} esprimibile nello schema E/R ma verr\`{a} implementato tramite
+\texttt{CHECK} o trigger nel database.
+\end{notabox}
+
+\subsection{Schema completo}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{immagini/03/schemaCompletoDipendenti.png}
+  \caption{Schema completo dell'area dipendenti e turni}
+  \label{fig:schemaDipendenti}
+\end{figure}
+
+\section{Area Spiaggia}
+
+\subsection{Schema Scheletro} % DA FARE
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{immagini/03/scheletroLettiniOmbrelloni.png}
+  \caption{Schema scheletro dell'area spiaggia}
+  \label{fig:scheletroSpiaggia}
+\end{figure}
+
+\subsection{Raffinamenti Proposti}
+\begin{itemize}
+  \item L'entita \entita{Cliente} è una specializzazione del concetto più generale di persona. Verrà
+        quindi aggiunta l'entità \entita{Persona} come generalizzazione.
+  \item Il prezzo di un singolo noleggio
+\end{itemize}
 
 \begin{notabox}[Vincolo implicito]
 Un ombrellone non pu\`{o} essere prenotato due volte per lo stesso periodo. Questo
@@ -68,15 +106,6 @@ La coppia (fila, numero) costituisce l'identificatore naturale dell'ombrellone.
 \textbf{Decisione:} \attributo{numeroLettini} e \attributo{numeroSedie} rimangono
 attributi dell'entit\`{a} \entita{Ombrellone} e non diventano entit\`{a} separate, in
 quanto non hanno attributi propri rilevanti ai fini del sistema.
-
-\subsection{Area: Dipendenti e Turni}
-
-\textbf{Decisione:} \entita{Turno} viene modellato come entit\`{a} separata (e non
-come semplice attributo del dipendente) per permettere la storicizzazione e la
-consultazione per data.
-
-\textbf{Cardinalit\`{a}:} un dipendente pu\`{o} avere pi\`{u} turni; un turno appartiene a
-un solo dipendente \card{1}{N}.
 
 \subsection{Area: Magazzino, Prodotti e Ordini}
 

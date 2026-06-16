@@ -15,41 +15,41 @@ riferimento nelle sezioni successive.
                   top=6pt, bottom=6pt]
 \setlength{\parskip}{6pt}
 
-\textbf{1.} Il proprietario o i proprietari (di seguito: \textit{proprietario}) possono
+Il proprietario o i proprietari (di seguito: \textit{proprietario}) possono
 effettuare l'accesso al gestionale tramite credenziali (nome, cognome, email, password).
 
-\textbf{2.} Si vuole tenere traccia di clienti, prenotazioni, prodotti in magazzino,
+Si vuole tenere traccia di clienti, prenotazioni, prodotti in magazzino,
 ordini, fornitori, dipendenti e turni.
 
-\textbf{3.} Per ogni \textit{cliente} nel gestionale, si memorizzano nome, cognome,
+Per ogni \textit{cliente} nel gestionale, si memorizzano nome, cognome,
 numero di telefono ed email.
 
-\textbf{4.} I clienti possono prenotare \textit{ombrelloni} o \textit{lettini} oppure
-possono sottoscrivere un \textit{abbonamento} valido per tutta la stagione.
+I clienti possono prenotare \textit{ombrelloni}, sottoscrivere un \textit{abbonamento} 
+valido per tutta la stagione agli ultimi oppure noleggiare \textit{lettini}.
 
-\textbf{5.} Il prezzo dell'abbonamento stagionale è calcolato in base alla posizione
+Il prezzo dell'abbonamento stagionale è calcolato in base alla posizione
 dell'ombrellone, mentre il prezzo della prenotazione è calcolato in base a posizione e durata.
 
-\textbf{6.} Di ogni ombrellone è necessario memorizzare la posizione (contrassegnata da un numero), 
+Di ogni ombrellone è necessario memorizzare la posizione (contrassegnata da un numero), 
 definita successivamente dalla sua locazione relativa alla \textit{fila}, che ne determinerà la 
 variazione di prezzo.
 
-\textbf{7.} Le informazioni che legano ombrelloni e clienti (data inizio, data fine)
+Le informazioni che legano ombrelloni e clienti (data inizio, data fine)
 sono conservate nelle \textit{prenotazioni}.
 
-\textbf{8.} Il proprietario può gestire i \textit{turni} dei dipendenti, visualizzare
+Il proprietario può gestire i \textit{turni} dei dipendenti, visualizzare
 la forza lavoro disponibile in determinate giornate e modificare i turni
 per coprire l'intera giornata. Ad ogni turno corrisponde anche una \textit{mansione} che il 
 lavoratore svolgerà.
 
-\textbf{9.} Per ogni prodotto è necessario memorizzare nome, categoria e quantità minima necessaria 
+Per ogni prodotto è necessario memorizzare nome, categoria e quantità minima necessaria 
 in magazzino. È possibile verificare la disponibilità in \textit{magazzino} per ogni prodotto
 
-\textbf{10.} Si possono effettuare \textit{ordini} per singoli o gruppi di prodotti. Il pagamento 
+Si possono effettuare \textit{ordini} per singoli o gruppi di prodotti. Il pagamento 
 degli ordini viene effettuato alla consegna. Il contenuto dell'ordine viene aggiunto al magazzino 
 al momento della consegna. Ogni ordine viene effettuato da un fornitore unico.
 
-\textbf{11.} Per ogni \textit{fornitore} è necessario memorizzare partita iva, nome, email, indirizzo 
+Per ogni \textit{fornitore} è necessario memorizzare partita iva, nome, email, indirizzo 
 e recapito telefonico. Ogni fornitore ha un suo insieme di prodotti che può vendere allo stabilimento: 
 per ogni prodotto nel catalogo serve memorizzare il prezzo a cui lo specifico fornitore vende il prodotto
 
@@ -57,7 +57,7 @@ per ogni prodotto nel catalogo serve memorizzare il prezzo a cui lo specifico fo
 
 % -- 2.2 Ambiguità -------------------------------------------
 \clearpage
-\section{Rilevamento delle ambiguità e correzioni proposte}
+\section{Rilevamento delle ambiguità e correzioni proposte} % aggiungere stagionale
 
 A seguito della lettura dei requisiti sono state individuate le seguenti ambiguità
 e si propongono le relative correzioni.
@@ -111,12 +111,14 @@ Il proprietario può registrare \entita{Clienti}, specificando nome, cognome,
 numero di telefono ed email. Un cliente può essere associato a una o più
 \entita{Prenotazioni} oppure a uno o più \entita{Abbonamenti}.
 
-Una \entita{Prenotazione} lega un \entita{Cliente} a un \entita{Ombrellone}
-e/o a un \entita{Lettino} per un periodo definito da \attributo{dataInizio}
-e \attributo{dataFine}. Il prezzo viene calcolato in base alla durata e alla
-posizione dell'ombrellone.
+Un \entita{Noleggio} rappresenta l'acquisto temporaneo (della durata di \attributo{mezza giornata} 
+oppure \attributo{giornata intera}) di un lettino.
 
-Un \entita{Abbonamento} è simile a una prenotazione ma ha durata stagionale
+Una \entita{Prenotazione} lega un \entita{Cliente} a un \entita{Ombrellone} 
+per un periodo definito da \attributo{dataInizio} e \attributo{dataFine}. 
+Il prezzo viene calcolato in base alla durata e alla posizione dell'ombrellone.
+
+Un \entita{Abbonamento} è simile a una prenotazione ma ha durata annuale
 e una struttura tariffaria diversa (calcolata su base della posizione).
 Anche l'abbonamento mostra solo il prezzo senza gestire il pagamento.
 
@@ -161,8 +163,9 @@ essere comprati.
     \entita{Cliente}           & Persona registrata a cui si assegnano prenotazioni o abbonamenti \\
     \entita{Dipendente}        & Lavoratore dello stabilimento \\
     \entita{Ombrellone}        & Postazione identificata da fila e numero \\
-    \entita{Prenotazione}      & Lega un cliente a un ombrellone o lettino per una durata concordata \\
-    \entita{Abbonamento}       & Contratto stagionale cliente-ombrellone con tariffa dedicata \\
+    \entita{Noleggio}          & Lega un cliente a un lettino per mezza giornata o giornata intera \\
+    \entita{Prenotazione}      & Lega un cliente a un ombrellone per una durata concordata \\
+    \entita{Abbonamento}       & Contratto annuale cliente-ombrellone con tariffa dedicata \\
     \entita{Turno}             & Fascia oraria lavorativa di un dipendente \\
     \entita{Mansione}          & Compito che un dipendente svolgerà durante il turno in questione \\
     \entita{Prodotto}          & Articolo presente in magazzino \\
