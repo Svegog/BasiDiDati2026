@@ -38,7 +38,7 @@ Le informazioni che legano ombrelloni e clienti (data inizio, data fine)
 sono conservate nelle \textit{prenotazioni}.
 
 Il proprietario può gestire i \textit{turni} dei dipendenti, visualizzare
-la forza lavoro disponibile in determinate giornate e modificare i turni
+la forza lavoro disponibile in determinate giornate e modificare i turni 
 per coprire l'intera giornata. Ad ogni turno corrisponde anche una \textit{mansione} che il 
 lavoratore svolgerà.
 
@@ -55,12 +55,23 @@ per ogni prodotto nel catalogo serve memorizzare il prezzo a cui lo specifico fo
 
 \end{tcolorbox}
 
-% -- 2.2 Ambiguità -------------------------------------------
+% -- 2.2 Ambiguità ------------------------------------------- DA FARE
 \clearpage
 \section{Rilevamento delle ambiguità e correzioni proposte} % aggiungere stagionale
-
+% configurazione standard -> le richieste si aggiungono nelle note visto la POCA frequenza
+% valutare booleani pagamenti
 A seguito della lettura dei requisiti sono state individuate le seguenti ambiguità
 e si propongono le relative correzioni.
+
+\subsection{Lettino}
+\textbf{Decisione:} si evita di creare l'entit\`{a} lettino.
+
+\textbf{Motivazione:} \entita{Lettino}, intesa come unità fisica singola, non viene 
+modellata nel database in quanto risulterebbe \attributo{un'entità debole} priva di attributi rilevanti. 
+La posizione è dinamica e concordata con il proprietario dello stabilimento 
+al momento della prenotazione, il costo è fisso e non associato al singolo lettino, e la 
+disponibilità è un'informazione derivata, ottenibile tramite verifica in tempo reale 
+sull'applicazione. Si presuppone che la richiesta di lettini sia sempre maggiore della richiesta.
 
 \begin{table}[H]
   \centering
@@ -86,9 +97,6 @@ e si propongono le relative correzioni.
     8 & turno & \textit{Turno} (entità) con orario inizio e fine &
         Un turno è caratterizzato da data, orario di inizio e orario di fine.
         Un dipendente può avere più turni nella stessa giornata. \\[4pt]
-    9 & prodotto & \textit{Prodotto} (entità in magazzino) distinto da
-        \textit{Fornitore} & Aggiunto il concetto di \textit{Fornitore} come entità
-        autonoma, poiché un prodotto può essere acquistato da fornitori diversi. \\[4pt]
     \bottomrule
   \end{tabularx}
 \end{table}
