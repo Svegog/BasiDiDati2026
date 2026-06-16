@@ -74,7 +74,7 @@ e si propongono le relative correzioni.
     \midrule
     4 & lettino & \textit{PrenotazioneLettino} (entità) & Il lettino, inteso come singolo 
     lettino vendibile senza ombrellone, solitamente a riva, non avendo caratteristiche sufficienti
-    da essere una entità assestante, viene sostituito da l'entità \textit{Prenotazione_Lettino} 
+    da essere una entità assestante, viene sostituito da l'entità \textit{Prenotazione Lettino} 
     associata. \\[4pt]
     4 & abbonamento & \textit{Abbonamento} (entità distinta da Prenotazione) &
         L'abbonamento differisce dalla prenotazione per la durata (stagionale, quindi fissa)
@@ -152,23 +152,22 @@ essere comprati.
   \caption{Concetti principali estratti dall'analisi}
   \label{tab:concetti}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{L{3cm} C{3cm} L{8.5cm}}
+  \begin{tabularx}{\textwidth}{L{3cm} L{11.5cm}}
     \toprule
     \rowcolor{primary!15}
-    \textbf{Termine} & \textbf{Tipo} & \textbf{Descrizione} \\
+    \textbf{Termine} & \textbf{Descrizione} \\
     \midrule
-    \entita{Proprietario}    & Entità      & Utente del gestionale, accede tramite credenziali \\
-    \entita{Cliente}         & Entità      & Persona registrata a cui si assegnano prenotazioni o abbonamenti \\
-    \entita{Dipendente}      & Entità      & Lavoratore dello stabilimento \\
-    \entita{Ombrellone}      & Entità      & Postazione identificata da fila e numero \\
-    \entita{Prenotazione}    & Entità      & Lega un cliente a un ombrellone o lettino per una durata concordata \\
-    \entita{Abbonamento}     & Entità      & Contratto stagionale cliente-ombrellone con tariffa dedicata \\
-    \entita{Turno}           & Entità      & Fascia oraria lavorativa di un dipendente \\
-    \entita{Mansione}        & Entità      & Compito che un dipendente svolgerà durante il turno in questione \\
-    \entita{Prodotto}        & Entità      & Articolo presente in magazzino \\
-    \entita{Fornitore}       & Entità      & Azienda da cui si acquistano i prodotti \\
-    \entita{Ordine}          & Entità      & Richiesta di fornitura verso un fornitore \\
-    \entita{Contiene}     & Associazione & Lega un ordine ai prodotti ordinati (con quantità) \\
+    \entita{Proprietario}      & Utente del gestionale, accede tramite credenziali \\
+    \entita{Cliente}           & Persona registrata a cui si assegnano prenotazioni o abbonamenti \\
+    \entita{Dipendente}        & Lavoratore dello stabilimento \\
+    \entita{Ombrellone}        & Postazione identificata da fila e numero \\
+    \entita{Prenotazione}      & Lega un cliente a un ombrellone o lettino per una durata concordata \\
+    \entita{Abbonamento}       & Contratto stagionale cliente-ombrellone con tariffa dedicata \\
+    \entita{Turno}             & Fascia oraria lavorativa di un dipendente \\
+    \entita{Mansione}          & Compito che un dipendente svolgerà durante il turno in questione \\
+    \entita{Prodotto}          & Articolo presente in magazzino \\
+    \entita{Fornitore}         & Azienda da cui si acquistano i prodotti \\
+    \entita{Ordine}            & Richiesta di fornitura verso un fornitore \\
     \bottomrule
   \end{tabularx}
 \end{table}
