@@ -32,7 +32,7 @@ I turni sono mantenuti nel sistema solo per una stagione.
     \entita{Fila}              & 10        & File totali \\
     \entita{Prenotazione}      & 7.500     & $\sim$ 10 prenotazioni/ombrellone a stagione \\
     \entita{Abbonamento}       & 250       & $\sim$ 50 abbonamenti a stagione \\
-    \entita{Noleggio\_lettino} & 7500      & $\sim$ 15 al giorno \\
+    \entita{Noleggio\_lettino} & 7.500      & $\sim$ 15 al giorno \\
     \entita{Tariffe\_noleggio} & 3         & Mattina, pomeriggio o giornata completa \\
     \entita{Dipendente}        & 20        & Personale stagionale \\
     \entita{Turno}             & 1.800     & ~90 turni/dipendente/stagione \\
@@ -56,14 +56,21 @@ I turni sono mantenuti nel sistema solo per una stagione.
     \rowcolor{primary!15}
     \textbf{Associazione} & \textbf{Cardinalità} & \textbf{Volume} & \textbf{Derivazione} \\
     \midrule
-    Emissione             & 1:N     & 1000    & =\entita{Ordine} \\
-    Inserimento           & 1:N     & 1000    & =\entita{Ordine} \\
-    Dettaglio\_Ordine     & N:M     & 10000   & $\sim$ 10 prodotti per \entita{Ordine} \\
+    Emissione             & 1:N     & 1.000   & =\entita{Ordine} \\
+    Inserimento           & 1:N     & 1.000   & =\entita{Ordine} \\
+    Dettaglio\_Ordine     & N:M     & 10.000  & $\sim$10 prodotti per \entita{Ordine} \\
     Offerta               & 1:N     & 300     & =\entita{Catalogo} \\
     Relativa              & 1:N     & 300     & =\entita{Catalogo} \\
     Appartenenza          & 1:N     & 150     & =\entita{Prodotto} \\
-    Acquisto              & 1:N     & 7500    & =\entita{Noleggio\_lettino} \\
-    Tipologia             & 1:N     & 7500    & =\entita{Noleggio\_lettino} \\
+    Acquisto              & 1:N     & 7.500   & =\entita{Noleggio\_lettino} \\
+    Tipologia             & 1:N     & 7.500   & =\entita{Noleggio\_lettino} \\
+    Richiesta             & 1:N     & 7.500   & =\entita{Prenotazione} \\
+    Riguarda              & N:M     & 9.000   & $\sim$1.2 \entita{Ombrelloni} per prenotazione \\
+    Sottoscrizione        & 1:N     & 250     & =\entita{Abbonamento} \\
+    Riservazione          & 1:N     & 250     & =\entita{Abbonamento} \\
+    Locazione\_ombrellone & 1:N     & 200     & =\entita{Ombrellone} \\
+    Assegnazione          & 1:N     & 1.800   & =\entita{Turno} \\
+    Svolgimento           & 1:N     & 1.800   & =\entita{Turno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
