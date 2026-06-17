@@ -12,27 +12,58 @@ La tabella seguente riporta la stima del numero di istanze per ogni entit\`{a} e
 associazione, basata su un'ipotetica stagione balneare di medio-grandi dimensioni
 (~200 ombrelloni, ~1000 clienti registrati).
 
-\begin{table}[H]
+Dato che è tenuto in memoria lo storico delle prenotazioni assumiamo i volumi
+per i dati degli ultimi 5 anni. Dati più vecchi verranno eliminati dal sistema.
+I turni sono mantenuti nel sistema solo per una stagione.
+
+\begin{table}[htbp]
   \centering
-  \caption{Stima del volume dei dati}
-  \label{tab:volumi}
+  \caption{Tabella dei volumi: Entità}
+  \label{tab:volumi-entità}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{L{4cm} C{2cm} R{3cm} L{5cm}}
+  \begin{tabularx}{\textwidth}{L{4cm} R{1.6cm} L{8cm}}
     \toprule
     \rowcolor{primary!15}
-    \textbf{Concetto} & \textbf{Tipo} & \textbf{Volume} & \textbf{Note} \\
+    \textbf{Entità} & \textbf{Volume} & \textbf{Note} \\
     \midrule
-    \entita{Proprietario}    & E & 2--5      & Soci dello stabilimento \\
-    \entita{Cliente}         & E & 1.000     & Clienti registrati a stagione \\
-    \entita{Ombrellone}      & E & 200       & Postazioni totali \\
-    \entita{Prenotazione}    & E & 3.000     & ~15 prenotazioni/ombrellone \\
-    \entita{Abbonamento}     & E & 150       & ~15\% dei clienti \\
-    \entita{Dipendente}      & E & 20        & Personale stagionale \\
-    \entita{Turno}           & E & 1.800     & ~90 turni/dipendente/stagione \\
-    \entita{Prodotto}        & E & 80        & Articoli a catalogo \\
-    \entita{Fornitore}       & E & 10        & Fornitori abituali \\
-    \entita{Ordine}          & E & 100       & ~2 ordini/settimana \\
-    \relazione{Contiene}     & A & 300       & ~3 prodotti/ordine \\
+    \entita{Proprietario}      & 2--5      & Soci dello stabilimento \\
+    \entita{Cliente}           & 2.000     & Clienti registrati \\
+    \entita{Ombrellone}        & 200       & Postazioni totali \\
+    \entita{Fila}              & 10        & File totali \\
+    \entita{Prenotazione}      & 7.500     & $\sim$ 10 prenotazioni/ombrellone a stagione \\
+    \entita{Abbonamento}       & 250       & $\sim$ 50 abbonamenti a stagione \\
+    \entita{Noleggio\_lettino} & 7500      & $\sim$ 15 al giorno \\
+    \entita{Tariffe\_noleggio} & 3         & Mattina, pomeriggio o giornata completa \\
+    \entita{Dipendente}        & 20        & Personale stagionale \\
+    \entita{Turno}             & 1.800     & ~90 turni/dipendente/stagione \\
+    \entita{Mansione}          & 10        & Ruoli necessari \\
+    \entita{Prodotto}          & 150       & Articoli abitualmente comprati \\
+    \entita{Categoria}         & 20        & Categorie dei prodotti \\
+    \entita{Fornitore}         & 20        & Fornitori abituali \\
+    \entita{Catalogo}          & 300       & Coppie fornitore-prodotto fornito \\
+    \entita{Ordine}            & 1000      & $\sim$ 2 ordini/giorno \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Tabella dei volumi: Associazioni}
+  \label{tab:volumi-associazioni}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{L{3cm} C{2.5cm} R{1.6cm} L{6cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Associazione} & \textbf{Cardinalità} & \textbf{Volume} & \textbf{Derivazione} \\
+    \midrule
+    Emissione             & 1:N     & 1000    & =\entita{Ordine} \\
+    Inserimento           & 1:N     & 1000    & =\entita{Ordine} \\
+    Dettaglio\_Ordine     & N:M     & 10000   & $\sim$ 10 prodotti per \entita{Ordine} \\
+    Offerta               & 1:N     & 300     & =\entita{Catalogo} \\
+    Relativa              & 1:N     & 300     & =\entita{Catalogo} \\
+    Appartenenza          & 1:N     & 150     & =\entita{Prodotto} \\
+    Acquisto              & 1:N     & 7500    & =\entita{Noleggio\_lettino} \\
+    Tipologia             & 1:N     & 7500    & =\entita{Noleggio\_lettino} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -179,7 +210,7 @@ per \entita{Cliente} e \entita{Proprietario}).
   FORNITORE      & (\chiave{id}, ragioneSociale, telefono, email, indirizzo) \\[4pt]
   ORDINE         & (\chiave{id}, \chiaveest{idFornitore}, \chiaveest{idProprietario},
                    dataOrdine, statoConsegna) \\[4pt]
-  CONTIENE       & (\chiave{\chiaveest{idOrdine}}, \chiave{\chiaveest{idProdotto}},
+  CONTIENE       & (\chiave{\chiaveest{idOrdine}, \chiaveest{idProdotto}},
                    quantitaOrdinata, prezzoUnitarioAlMomento) \\[4pt]
 \end{longtable}
 
