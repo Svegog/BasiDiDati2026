@@ -24,7 +24,7 @@ e arricchendolo progressivamente per area tematica.
   \item L'entita \entita{Proprietario} è una specializzazione del concetto più generale di persona. Verrà
         quindi aggiunta l'entità \entita{Persona} come generalizzazione.
   \item Per ogni prodotto va memorizzata la categoria ma poiché le categorie saranno poche e molto ripetute
-        è opportuna la creazione di un entità \entita{Categoria} che sara in associazione 1 a N con
+        è opportuna la creazione di un entità \entita{Categoria} che sar\`{a} in associazione 1 a N con
         l'entità \entita{Prodotto}
   \item Il \entita{Catalogo} è meglio rappresentato da un entità così da poter garantire l'esistenza della corrispondenza tra
         prodotto e fornitore quando viene effettuato un ordine.
@@ -47,7 +47,7 @@ devono avere come fornitore lo stesso dell'ordine.
 \end{notabox}
 
 % -- 3.2 Area Dipendenti ------------------------------------
-\section{Area Dipendenti} % SCHEMA DA FARE
+\section{Area Dipendenti} % ANDATA A CAPO (NUOVA PAGINA) PRIMA DI QUESTO
 
 \subsection{Schema Scheletro}
 \begin{figure}[H]
@@ -69,14 +69,13 @@ devono avere come fornitore lo stesso dell'ordine.
 
 \begin{notabox}[Vincolo implicito]
 Un dipendente non pu\`{o} lavorare, durante un turno, due volte per due lassi di tempo sovrapposti. 
-Questo vincolo non \`{e} esprimibile nello schema E/R ma verr\`{a} implementato tramite
-\texttt{CHECK} o trigger nel database.
+Questo vincolo non \`{e} esprimibile nello schema ma sar\'{a} realizzato nell'applicativo.
 \end{notabox}
 
 \subsection{Schema completo}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{immagini/03/schemaCompletoDipendenti.png} % NELL'IMMAGINE MANCA L'ENTITA PERSONA!!!!!
+  \includegraphics[width=0.9\textwidth]{immagini/03/schemaCompletoDipendenti.png}
   \caption{Schema completo dell'area dipendenti e turni}
   \label{fig:schemaDipendenti}
 \end{figure}
@@ -94,9 +93,16 @@ Questo vincolo non \`{e} esprimibile nello schema E/R ma verr\`{a} implementato 
 
 \subsection{Raffinamenti Proposti}
 \begin{itemize}
-  \item L'entita \entita{Cliente} è una specializzazione del concetto più generale di persona. Verrà
+  \item L'entit\`{a} \entita{Cliente} è una specializzazione del concetto più generale di persona. Verrà
         quindi aggiunta l'entità \entita{Persona} come generalizzazione.
-  \item Il prezzo di un singolo noleggio
+  \item Il concetto di \entita{Lettino} non è stato modellato come precedentemente spiegato nella sezione~\ref{sec:lettino}
+  \item Il prezzo di un noleggio, essendo fisso e dipendente solo dalla \textit{mezza giornata} oppure \textit{giornata intera}
+        porta alla scelta di aggiungere una nuova entit\`{a} \entita{Tariffe\_Noleggio}
+  \item Il prezzo di un \entita{Abbonamento} o di una \entita{Prenotazione} richiedono entrambe la fila dove 
+        quest'ultimo è posizionato, quindi si è deciso di aggiungere l'entit\`{a} \entita{Fila} contenente 
+        il prezzo specifico per ognuna
+  \item Gli attributi aggiunti chiamati \textit{Pagamento} sono attributi \textit{booleani} che indicano lo 
+        stato del pagamento (in caso il cliente voglia pagare in momento diverso dalla richiesta)
 \end{itemize}
 
 \begin{notabox}[Vincolo implicito]
@@ -105,25 +111,13 @@ vincolo non \`{e} esprimibile nello schema E/R ma verr\`{a} implementato tramite
 \texttt{CHECK} o trigger nel database.
 \end{notabox}
 
-\subsection{Area: Ombrelloni}
-
-\textbf{Decisione:} l'attributo \textit{posizione} viene decomposto in
-\attributo{fila} (lettera, es. A--Z) e \attributo{numero} (intero progressivo).
-La coppia (fila, numero) costituisce l'identificatore naturale dell'ombrellone.
-
-\textbf{Decisione:} \attributo{numeroLettini} e \attributo{numeroSedie} rimangono
-attributi dell'entit\`{a} \entita{Ombrellone} e non diventano entit\`{a} separate, in
-quanto non hanno attributi propri rilevanti ai fini del sistema.
-
-\subsection{Area: Magazzino, Prodotti e Ordini}
-
-\textbf{Decisione:} si introduce l'associazione \relazione{Contiene} tra
-\entita{Ordine} e \entita{Prodotto} con l'attributo \attributo{quantit\`{a}Ordinata}.
-Questa associazione permette di gestire ordini multi-prodotto.
-
-\textbf{Decisione:} l'attributo \attributo{quantit\`{a}} di \entita{Prodotto}
-rappresenta la giacenza attuale in magazzino. Quando un ordine viene confermato,
-la quantit\`{a} viene aggiornata automaticamente (trigger).
+\subsection{Schema completo}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{immagini/03/schemaCompletoSpiaggia.png}
+  \caption{Schema completo dell'area spiaggia}
+  \label{fig:schemaSpiaggia}
+\end{figure}
 
 % -- 3.4 Schema concettuale finale ---------------------------
 \section{Schema concettuale finale}
