@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guida: dal Diagramma ER all'Applicativo Web (Flask + MySQL)</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --bg-code: #1e2530;
+    --text: #2a2d34;
+    --text-muted: #6b7280;
+    --accent: #0e7490;
+    --accent-light: #e7f3fb;
+    --border: #e2e2de;
+    --step-bg: #ffffff;
+    --warn-bg: #fff7e6;
+    --warn-border: #e8b339;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  .layout {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* SIDEBAR NAV */
+  nav.toc {
+    width: 260px;
+    flex-shrink: 0;
+    padding: 40px 20px;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    overflow-y: auto;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  nav.toc .toc-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+  }
+  nav.toc li {
+    counter-increment: step;
+    margin-bottom: 4px;
+  }
+  nav.toc a {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 6px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.88rem;
+  }
+  nav.toc a::before {
+    content: counter(step) ". ";
+    color: var(--accent);
+    font-weight: 700;
+  }
+  nav.toc a:hover { background: var(--accent-light); }
+
+  /* MAIN CONTENT */
+  main {
+    flex: 1;
+    padding: 48px 56px 100px;
+    min-width: 0;
+  }
+
+  header.hero {
+    margin-bottom: 56px;
+    padding-bottom: 28px;
+    border-bottom: 3px solid var(--accent);
+  }
+  header.hero .eyebrow {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  header.hero h1 {
+    font-size: 2.3rem;
+    margin: 0 0 14px;
+    line-height: 1.25;
+  }
+  header.hero p.subtitle {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin: 0;
+    max-width: 640px;
+  }
+
+  section.step {
+    margin-bottom: 64px;
+    scroll-margin-top: 24px;
+  }
+
+  .step-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .step-number {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  h2 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  h3 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.02rem;
+    color: var(--accent);
+    margin: 28px 0 10px;
+  }
+
+  p { margin: 0 0 14px; }
+
+  .tool-box {
+    background: var(--step-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.92rem;
+  }
+  .tool-box .label {
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .customize-box {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.92rem;
+  }
+  .customize-box .label {
+    font-weight: 700;
+    color: #8a6200;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .customize-box ul { margin: 0; padding-left: 20px; }
+  .customize-box li { margin-bottom: 6px; }
+
+  pre {
+    background: var(--bg-code);
+    color: #e2e8f0;
+    padding: 18px 20px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    margin: 14px 0;
+  }
+  code {
+    font-family: 'Consolas', 'Monaco', monospace;
+    background: var(--accent-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    color: #0c5d73;
+  }
+  pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  .file-tag {
+    display: inline-block;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    background: #2a2d34;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 4px 4px 0 0;
+    margin-bottom: -14px;
+    position: relative;
+    top: 14px;
+    left: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.9rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--accent-light);
+    font-weight: 700;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 0 64px;
+  }
+
+  ul, ol.normal { padding-left: 22px; }
+  ul li, ol.normal li { margin-bottom: 8px; }
+
+  .final-box {
+    background: linear-gradient(135deg, var(--accent-light), #f0f9ff);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin-top: 20px;
+  }
+  .final-box h3 { margin-top: 0; color: var(--text); }
+
+  @media (max-width: 880px) {
+    .layout { flex-direction: column; }
+    nav.toc { position: static; width: auto; height: auto; }
+    main { padding: 32px 24px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <nav class="toc">
+    <div class="toc-title">Indice della guida</div>
+    <ol>
+      <li><a href="#step1">Dal diagramma ER allo schema logico</a></li>
+      <li><a href="#step2">Traduzione in DDL (CREATE TABLE)</a></li>
+      <li><a href="#step3">Creazione del database in MySQL</a></li>
+      <li><a href="#step4">Struttura del progetto Flask</a></li>
+      <li><a href="#step5">Connessione Python-MySQL</a></li>
+      <li><a href="#step6">Traduzione delle query in route</a></li>
+      <li><a href="#step7">Template HTML e grafica</a></li>
+      <li><a href="#step8">Personalizzare l'estetica</a></li>
+      <li><a href="#step9">Test dell'applicativo</a></li>
+      <li><a href="#step10">Preparazione dello ZIP finale</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Progetto Basi di Dati &mdash; Guida operativa</div>
+      <h1>Dal Diagramma ER all'Applicativo Web Consegnabile</h1>
+      <p class="subtitle">
+        Percorso completo, passo per passo, per trasformare uno schema ER
+        in un'applicazione web funzionante con Flask e MySQL, pronta da
+        comprimere in uno ZIP e consegnare.
+      </p>
+    </header>
+
+    <!-- STEP 1 -->
+    <section class="step" id="step1">
+      <div class="step-head">
+        <span class="step-number">1</span>
+        <h2>Dal diagramma ER allo schema logico</h2>
+      </div>
+      <p>
+        Punto di partenza: il diagramma Entit&agrave;-Relazione realizzato in DbMain.
+        Prima di scrivere una sola riga di codice, va completata la
+        progettazione logica, cio&egrave; la traduzione di entit&agrave; e relazioni
+        in tabelle relazionali (con chiavi primarie e chiavi esterne).
+      </p>
+
+      <div class="tool-box">
+        <span class="label">Tool utilizzato</span>
+        DbMain (o equivalente) per disegnare l'ER e generare automaticamente
+        lo schema logico/relazionale a partire da esso.
+      </div>
+
+      <p>Regole di traduzione principali da applicare (probabilmente gi&agrave; fatte nella relazione):</p>
+      <ul>
+        <li>Ogni <strong>entit&agrave;</strong> diventa una tabella.</li>
+        <li>Ogni <strong>attributo</strong> diventa una colonna.</li>
+        <li>Le <strong>associazioni 1-N</strong> diventano chiavi esterne nella tabella "N".</li>
+        <li>Le <strong>associazioni N-N</strong> diventano una tabella ponte con due chiavi esterne.</li>
+      </ul>
+
+      <div class="customize-box">
+        <span class="label">Se lo rifacessi da capo, cosa cambierei</span>
+        <ul>
+          <li>Verificare che ogni tabella abbia una chiave primaria esplicita (anche se DbMain lo fa di default), preferibilmente un intero auto-incrementale, per semplificare poi le query in Flask.</li>
+          <li>Annotare a parte i nomi definitivi di tabelle e colonne: verranno riutilizzati identici in tutto il codice Python e HTML, quindi conviene fissarli da subito per evitare di doverli cambiare in pi&ugrave; punti.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section class="step" id="step2">
+      <div class="step-head">
+        <span class="step-number">2</span>
+        <h2>Traduzione in DDL (CREATE TABLE)</h2>
+      </div>
+      <p>
+        Dallo schema logico si genera il codice SQL DDL (Data Definition Language):
+        le istruzioni <code>CREATE TABLE</code> che creeranno fisicamente le tabelle nel database.
+      </p>
+
+      <div class="tool-box">
+        <span class="label">Tool utilizzato</span>
+        DbMain pu&ograve; esportare direttamente il DDL nel dialetto SQL scelto (in questo
+        caso MySQL). In alternativa si scrive manualmente seguendo lo schema logico.
+      </div>
+
+      <p>Esempio di struttura attesa (adattare ai nomi reali delle proprie tabelle):</p>
+      <span class="file-tag">esempio</span>
+      <pre><code>CREATE TABLE Cliente (
+    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    cognome VARCHAR(50) NOT NULL,
+    telefono VARCHAR(20)
+);
+
+CREATE TABLE Ombrellone (
+    id_ombrellone INT AUTO_INCREMENT PRIMARY KEY,
+    numero INT NOT NULL,
+    fila VARCHAR(10),
+    stato VARCHAR(20)
+);
+
+CREATE TABLE Prenotazione (
+    id_prenotazione INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    id_ombrellone INT NOT NULL,
+    data_inizio DATE NOT NULL,
+    data_fine DATE NOT NULL,
+    FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
+    FOREIGN KEY (id_ombrellone) REFERENCES Ombrellone(id_ombrellone)
+);</code></pre>
+
+      <div class="customize-box">
+        <span class="label">Cosa si pu&ograve; cambiare</span>
+        <ul>
+          <li>Tipi di dato: usare <code>DATE</code>, <code>DECIMAL(6,2)</code> per importi, <code>ENUM(...)</code> per stati con valori fissi (es. stato ombrellone: <em>libero/occupato/manutenzione</em>) invece di <code>VARCHAR</code> generico.</li>
+          <li>Vincoli aggiuntivi: <code>UNIQUE</code> su un numero di ombrellone, <code>NOT NULL</code> su campi obbligatori, <code>CHECK</code> per vincoli di dominio (es. data_fine &gt; data_inizio).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section class="step" id="step3">
+      <div class="step-head">
+        <span class="step-number">3</span>
+        <h2>Creazione del database in MySQL</h2>
+      </div>
+      <p>
+        Il DDL prodotto al passo precedente viene eseguito concretamente
+        su MySQL Community Server, usando MySQL Workbench come interfaccia grafica.
+      </p>
+
+      <div class="tool-box">
+        <span class="label">Tool utilizzato</span>
+        MySQL Workbench &mdash; editor SQL grafico per connettersi al server,
+        eseguire script ed esplorare le tabelle create.
+      </div>
+
+      <ol class="normal">
+        <li>Apri Workbench e connettiti all'istanza locale (solitamente <code>localhost</code>, porta <code>3306</code>).</li>
+        <li>Crea una nuova query window (<code>File &gt; New Query Tab</code>).</li>
+        <li>Esegui prima <code>CREATE DATABASE bagno_db;</code> e poi <code>USE bagno_db;</code></li>
+        <li>Incolla ed esegui tutte le <code>CREATE TABLE</code> (Step 2), rispettando l'ordine: prima le tabelle senza chiavi esterne, poi quelle che le referenziano.</li>
+        <li>Verifica nel pannello <em>Schemas</em> a sinistra che tutte le tabelle siano comparse correttamente.</li>
+      </ol>
+
+      <div class="customize-box">
+        <span class="label">Da tenere a mente</span>
+        <ul>
+          <li>Se si modifica lo schema in seguito (es. si aggiunge una colonna), va rieseguita la modifica anche su Workbench: lo script <code>.sql</code> e il database reale devono restare sincronizzati.</li>
+          <li>&Egrave; utile salvare lo script SQL finale in un file (es. <code>schema.sql</code>) da includere nella consegna, cos&igrave; chi riceve il progetto pu&ograve; ricreare il database identico.</li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- STEP 4 -->
+    <section class="step" id="step4">
+      <div class="step-head">
+        <span class="step-number">4</span>
+        <h2>Struttura del progetto Flask</h2>
+      </div>
+      <p>
+        Con il database pronto, si passa alla parte applicativa. Flask &egrave; un
+        micro-framework Python per applicazioni web: richiede poca configurazione
+        e si integra bene con query SQL scritte a mano (utile per mostrare la
+        coerenza con il lavoro di traduzione gi&agrave; svolto in DbMain).
+      </p>
+
+      <div class="tool-box">
+        <span class="label">Tool/librerie utilizzate</span>
+        Python 3, Flask (framework web), <code>mysql-connector-python</code>
+        (libreria per collegare Python a MySQL).
+      </div>
+
+      <p>Struttura di cartelle e file da creare:</p>
+      <pre><code>gestionale_bagno/
+├── app.py              (route e logica dell'applicazione)
+├── db.py               (funzioni di connessione al database)
+├── config.py           (credenziali di accesso a MySQL)
+├── schema.sql           (script DDL dello Step 2-3)
+├── requirements.txt     (elenco librerie da installare)
+├── templates/            (pagine HTML)
+│   ├── base.html
+│   ├── index.html
+│   └── ...
+└── static/
+    └── style.css         (grafica)</code></pre>
+
+      <p>Contenuto di <code>requirements.txt</code>:</p>
+      <span class="file-tag">requirements.txt</span>
+      <pre><code>Flask==3.0.3
+mysql-connector-python==9.0.0</code></pre>
+
+      <p>Installazione (in un virtual environment, consigliato):</p>
+      <pre><code>python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Mac/Linux
+pip install -r requirements.txt</code></pre>
+
+      <div class="customize-box">
+        <span class="label">Alternative possibili</span>
+        <ul>
+          <li>Al posto di <code>mysql-connector-python</code> si potrebbe usare <code>PyMySQL</code> oppure <code>SQLAlchemy</code> come ORM: quest'ultimo nasconde le query SQL dietro oggetti Python, comodo ma meno trasparente se l'obiettivo &egrave; mostrare la traduzione diretta dalle query DbMain.</li>
+          <li>Al posto di Flask si potrebbe usare Django (pi&ugrave; strutturato ma pi&ugrave; lento da configurare per un progetto di questa dimensione).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- STEP 5 -->
+    <section class="step" id="step5">
+      <div class="step-head">
+        <span class="step-number">5</span>
+        <h2>Connessione Python &harr; MySQL</h2>
+      </div>
+      <p>
+        Si centralizzano credenziali e funzioni di accesso al database in due
+        file separati, in modo da non ripetere codice in ogni route.
+      </p>
+
+      <span class="file-tag">config.py</span>
+      <pre><code>DB_CONFIG = {
+    'host': 'localhost',
+    'port': 3306,
+    'user': 'root',
+    'password': 'TUA_PASSWORD',
+    'database': 'bagno_db'
+}</code></pre>
+
+      <span class="file-tag">db.py</span>
+      <pre><code>import mysql.connector
+from flask import g
+from config import DB_CONFIG
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = mysql.connector.connect(**DB_CONFIG)
+    return db
+
+def query_db(query, args=(), one=False, commit=False):
+    db = get_db()
+    cur = db.cursor(dictionary=True)  # righe leggibili come dizionari
+    cur.execute(query, args)
+    if commit:
+        db.commit()
+        cur.close()
+        return None
+    rv = cur.fetchall()
+    cur.close()
+    return (rv[0] if rv else None) if one else rv
+
+def close_db(exception=None):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()</code></pre>
+
+      <div class="customize-box">
+        <span class="label">Perch&eacute; questa struttura</span>
+        <ul>
+          <li><code>dictionary=True</code> permette di leggere le colonne per nome nei template (es. <code>riga['nome']</code>) invece che per indice numerico: pi&ugrave; leggibile e meno soggetto a errori se si modifica l'ordine delle colonne.</li>
+          <li>La connessione &egrave; salvata in <code>g</code> (oggetto di contesto di Flask) e chiusa automaticamente a fine richiesta, evitando connessioni aperte inutilmente.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- STEP 6 -->
+    <section class="step" id="step6">
+      <div class="step-head">
+        <span class="step-number">6</span>
+        <h2>Traduzione delle query in route</h2>
+      </div>
+      <p>
+        Ogni operazione CRUD (Create, Read, Update, Delete) sulle tabelle dello
+        schema logico diventa una <em>route</em> Flask, cio&egrave; un URL associato
+        a una funzione Python che esegue la query e restituisce una pagina HTML.
+      </p>
+
+      <h3>Lettura (SELECT)</h3>
+      <pre><code>@app.route('/clienti')
+def lista_clienti():
+    clienti = query_db("SELECT * FROM Cliente ORDER BY cognome")
+    return render_template('lista_clienti.html', clienti=clienti)</code></pre>
+
+      <h3>Inserimento (INSERT)</h3>
+      <pre><code>@app.route('/clienti/nuovo', methods=['GET', 'POST'])
+def nuovo_cliente():
+    if request.method == 'POST':
+        query_db(
+            "INSERT INTO Cliente (nome, cognome, telefono) VALUES (%s, %s, %s)",
+            (request.form['nome'], request.form['cognome'], request.form['telefono']),
+            commit=True
+        )
+        return redirect(url_for('lista_clienti'))
+    return render_template('form_cliente.html', cliente=None)</code></pre>
+
+      <h3>Modifica (UPDATE) ed eliminazione (DELETE)</h3>
+      <p>Stesso schema: query parametrizzata con <code>%s</code>, eseguita con <code>commit=True</code>.</p>
+      <pre><code>query_db("UPDATE Cliente SET nome=%s, cognome=%s WHERE id_cliente=%s",
+         (nome, cognome, id), commit=True)
+
+query_db("DELETE FROM Cliente WHERE id_cliente=%s", (id,), commit=True)</code></pre>
+
+      <h3>Query con JOIN (relazioni tra tabelle)</h3>
+      <pre><code>prenotazioni = query_db("""
+    SELECT c.nome AS nome_cliente, c.cognome AS cognome_cliente,
+           o.numero AS numero_ombrellone, p.data_inizio, p.data_fine
+    FROM Prenotazione p
+    JOIN Cliente c ON p.id_cliente = c.id_cliente
+    JOIN Ombrellone o ON p.id_ombrellone = o.id_ombrellone
+""")</code></pre>
+
+      <div class="customize-box">
+        <span class="label">Punto critico da personalizzare</span>
+        <ul>
+          <li>I nomi di tabelle e colonne nelle query devono corrispondere <strong>esattamente</strong> a quelli creati nello Step 3. Conviene copiare le query gi&agrave; tradotte da DbMain piuttosto che riscriverle a mano, per evitare incongruenze.</li>
+          <li>Usare sempre <code>%s</code> come segnaposto (mai concatenare stringhe con i valori dell'utente): previene errori di sintassi e vulnerabilit&agrave; di SQL injection.</li>
+          <li>Per ogni nuova entit&agrave; dello schema (es. Stagione, Dipendente) si replica lo stesso blocco di 4 route: lista, nuovo, modifica, elimina.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- STEP 7 -->
+    <section class="step" id="step7">
+      <div class="step-head">
+        <span class="step-number">7</span>
+        <h2>Template HTML e grafica</h2>
+      </div>
+      <p>
+        Flask usa il motore di template <strong>Jinja2</strong>: permette di
+        inserire dati Python dentro file HTML con la sintassi <code>{{ variabile }}</code>
+        e cicli/condizioni con <code>{% %}</code>.
+      </p>
+
+      <div class="tool-box">
+        <span class="label">Tool/librerie utilizzate</span>
+        Jinja2 (incluso in Flask) per i template; Bootstrap 5 (via CDN) per
+        la grafica di base senza scrivere CSS da zero.
+      </div>
+
+      <h3>Template base (eredita su tutte le pagine)</h3>
+      <span class="file-tag">templates/base.html</span>
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;title&gt;{% block title %}Gestionale Bagno{% endblock %}&lt;/title&gt;
+    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+    &lt;link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;nav class="navbar navbar-dark bg-primary"&gt;...&lt;/nav&gt;
+    &lt;div class="container"&gt;
+        {% block content %}{% endblock %}
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+      <h3>Pagina che estende il template base</h3>
+      <span class="file-tag">templates/lista_clienti.html</span>
+      <pre><code>{% extends "base.html" %}
+{% block content %}
+&lt;table class="table table-striped"&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Nome&lt;/th&gt;&lt;th&gt;Cognome&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;
+  {% for c in clienti %}
+    &lt;tr&gt;&lt;td&gt;{{ c['nome'] }}&lt;/td&gt;&lt;td&gt;{{ c['cognome'] }}&lt;/td&gt;&lt;/tr&gt;
+  {% endfor %}
+  &lt;/tbody&gt;
+&lt;/table&gt;
+{% endblock %}</code></pre>
+
+      <div class="customize-box">
+        <span class="label">Cosa si pu&ograve; cambiare</span>
+        <ul>
+          <li>I nomi delle colonne nelle celle (<code>c['nome']</code>) devono coincidere con gli alias usati nella query SELECT.</li>
+          <li>Si possono aggiungere colonne calcolate direttamente nella query (es. durata soggiorno) e visualizzarle senza modificare la logica Python.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- STEP 8 -->
+    <section class="step" id="step8">
+      <div class="step-head">
+        <span class="step-number">8</span>
+        <h2>Personalizzare l'estetica</h2>
+      </div>
+      <p>
+        La grafica si modifica senza toccare la logica applicativa, agendo
+        solo su due punti: il foglio di stile CSS e il template base.
+      </p>
+
+      <table>
+        <tr><th>Cosa modificare</th><th>Dove</th><th>Esempio</th></tr>
+        <tr>
+          <td>Colori principali</td>
+          <td><code>static/style.css</code></td>
+          <td><code>.btn-primary { background-color: #0e7490; }</code></td>
+        </tr>
+        <tr>
+          <td>Nome app, logo, voci di menu</td>
+          <td><code>templates/base.html</code> (sezione <code>&lt;nav&gt;</code>)</td>
+          <td>Cambiare testo del brand e i link del menu</td>
+        </tr>
+        <tr>
+          <td>Tema colore navbar</td>
+          <td><code>base.html</code>, classe Bootstrap</td>
+          <td><code>bg-primary</code> &rarr; <code>bg-dark</code>, <code>bg-info</code>...</td>
+        </tr>
+        <tr>
+          <td>Font</td>
+          <td><code>style.css</code></td>
+          <td><code>body { font-family: 'Segoe UI', sans-serif; }</code></td>
+        </tr>
+        <tr>
+          <td>Layout homepage</td>
+          <td><code>templates/index.html</code></td>
+          <td>Aggiungere/rimuovere le card di riepilogo</td>
+        </tr>
+      </table>
+
+      <div class="customize-box">
+        <span class="label">Suggerimento</span>
+        Bootstrap fornisce gi&agrave; classi pronte (<code>card</code>, <code>table</code>,
+        <code>btn</code>, <code>navbar</code>...): modificarne i colori in CSS &egrave; molto
+        pi&ugrave; rapido che scrivere componenti da zero, ed &egrave; sufficiente per
+        un progetto d'esame.
+      </div>
+    </section>
+
+    <!-- STEP 9 -->
+    <section class="step" id="step9">
+      <div class="step-head">
+        <span class="step-number">9</span>
+        <h2>Test dell'applicativo</h2>
+      </div>
+      <p>Con tutti i file pronti, si avvia il server di sviluppo Flask:</p>
+      <pre><code>python app.py</code></pre>
+      <p>e si apre il browser su <code>http://127.0.0.1:5000</code></p>
+
+      <p>Da verificare per ogni entit&agrave; dello schema:</p>
+      <ul>
+        <li>La lista si carica e mostra i dati corretti.</li>
+        <li>L'inserimento di un nuovo record funziona e appare nella lista.</li>
+        <li>La modifica aggiorna correttamente i dati esistenti.</li>
+        <li>L'eliminazione rimuove il record e non genera errori di vincolo (es. eliminare un cliente con prenotazioni attive, se non gestito, dar&agrave; errore di chiave esterna: comportamento corretto da spiegare in relazione).</li>
+      </ul>
+
+      <table>
+        <tr><th>Errore tipico</th><th>Causa</th></tr>
+        <tr><td><code>Access denied for user</code></td><td>Credenziali errate in <code>config.py</code></td></tr>
+        <tr><td><code>Unknown database</code></td><td>Schema non ancora creato in Workbench</td></tr>
+        <tr><td><code>1146: Table doesn't exist</code></td><td>Nome tabella errato o maiuscole/minuscole diverse</td></tr>
+        <tr><td>Pagina bianca / errore 500</td><td>Errore di sintassi SQL: testare la query isolata in Workbench</td></tr>
+      </table>
+    </section>
+
+    <!-- STEP 10 -->
+    <section class="step" id="step10">
+      <div class="step-head">
+        <span class="step-number">10</span>
+        <h2>Preparazione dello ZIP finale</h2>
+      </div>
+      <p>Ultimo passaggio prima della consegna:</p>
+      <ol class="normal">
+        <li>Fermare il server (<code>Ctrl+C</code> nel terminale).</li>
+        <li>Eliminare la cartella <code>venv/</code> (non va consegnata: pesante e non necessaria, le dipendenze si reinstallano con <code>requirements.txt</code>).</li>
+        <li>Eliminare eventuali cartelle <code>__pycache__/</code>.</li>
+        <li>Selezionare tutti i file rimanenti della cartella progetto e comprimerli in un unico <code>.zip</code>.</li>
+      </ol>
+
+      <div class="final-box">
+        <h3>Contenuto finale dello ZIP</h3>
+        <pre><code>gestionale_bagno/
+├── app.py
+├── config.py
+├── db.py
+├── schema.sql
+├── requirements.txt
+├── templates/
+│   └── *.html
+└── static/
+    └── style.css</code></pre>
+        <p style="margin-bottom:0;">
+          Da indicare nella relazione: per eseguire l'applicativo, creare il
+          database con <code>schema.sql</code> in Workbench, impostare le
+          credenziali in <code>config.py</code>, installare le dipendenze con
+          <code>pip install -r requirements.txt</code> ed eseguire
+          <code>python app.py</code>.
+        </p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>
