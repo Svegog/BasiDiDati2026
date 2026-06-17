@@ -57,49 +57,50 @@ per ogni prodotto nel catalogo serve memorizzare il prezzo a cui lo specifico fo
 
 % -- 2.2 Ambiguità ------------------------------------------- DA FARE
 \clearpage
-\section{Rilevamento delle ambiguità e correzioni proposte} % aggiungere stagionale
-% configurazione standard -> le richieste si aggiungono nelle note visto la POCA frequenza
-% valutare booleani pagamenti
+\section{Rilevamento delle ambiguità e correzioni} % valutare booleani pagamenti
+
 A seguito della lettura dei requisiti sono state individuate le seguenti ambiguità
 e si propongono le relative correzioni.
 
 \subsection{Lettino}
-\textbf{Decisione:} si evita di creare l'entit\`{a} lettino.
+\textbf{Decisione:} Si evita di creare l'entit\`{a} lettino.
 
 \textbf{Motivazione:} \entita{Lettino}, intesa come unità fisica singola, non viene 
 modellata nel database in quanto risulterebbe \attributo{un'entità debole} priva di attributi rilevanti. 
 La posizione è dinamica e concordata con il proprietario dello stabilimento 
 al momento della prenotazione, il costo è fisso e non associato al singolo lettino, e la 
 disponibilità è un'informazione derivata, ottenibile tramite verifica in tempo reale 
-sull'applicazione. Si presuppone che la richiesta di lettini sia sempre maggiore della richiesta.
+sull'applicazione. Si presuppone che la richiesta di lettini sia sempre maggiore della disponibilità.
 
-\begin{table}[H]
-  \centering
-  \caption{Tabella delle ambiguità rilevate e correzioni proposte}
-  \label{tab:ambiguita}
-  \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{C{1cm} L{4cm} L{4cm} L{6cm}}
-    \toprule
-    \rowcolor{primary!15}
-    \textbf{Riga} & \textbf{Termine originale} & \textbf{Termine adottato} & \textbf{Motivazione} \\
-    \midrule
-    4 & lettino & \textit{PrenotazioneLettino} (entità) & Il lettino, inteso come singolo 
-    lettino vendibile senza ombrellone, solitamente a riva, non avendo caratteristiche sufficienti
-    da essere una entità assestante, viene sostituito da l'entità \textit{Prenotazione Lettino} 
-    associata. \\[4pt]
-    4 & abbonamento & \textit{Abbonamento} (entità distinta da Prenotazione) &
-        L'abbonamento differisce dalla prenotazione per la durata (stagionale, quindi fissa)
-        e per la struttura della tariffa. Si modella come entità separata, con un unico attributo
-        temporale, cioè l'anno di riferimento. \\[4pt]
-    5 & posizione & \textit{CodFila} (dall'entità \textit{Fila}) + \textit{numero} (attributi composti) &
-        La posizione di un ombrellone è identificata da una fila e un numero
-        progressivo all'interno della fila. Si decompone in due attributi atomici. \\[4pt]
-    8 & turno & \textit{Turno} (entità) con orario inizio e fine &
-        Un turno è caratterizzato da data, orario di inizio e orario di fine.
-        Un dipendente può avere più turni nella stessa giornata. \\[4pt]
-    \bottomrule
-  \end{tabularx}
-\end{table}
+\subsection{Noleggio, Prenotazione, Abbonamento}
+\textbf{Decisione:} Si modellano tre entit\`{a} separate, al posto di un'unica prenotazione 
+
+\textbf{Motivazione:} \entita{Noleggio}, \entita{Prenotazione}, \entita{Abbonamento} indicano tutte una
+forma di acquisto di un servizio, ma sono intrinsecamente diverse:
+\begin{itemsize}
+    \item \entita{Noleggio}: corrisponde all'acquisto di un lettino, per la durata fissa di mezza giornata
+    o giornata intera, con costo fisso scelto dal \entita{Proprietario}.
+    \item \entita{Prenotazione}: corrisponde alla prenotazione (cos\`{i} nominata in quanto una volta occupato
+    \textit{quello specifico ombrellone} non è più disponibile) con prezzo variabile in base alla \textit{durata}
+    e alla \textit{posizione}.
+    \item \entita{Abbonamento}: corrisponde a riservare per un'\textit{intera stagione} un ombrellone,
+    con prezzo relativo alla \textit{posizione}.
+\end{itemsize}
+
+\subsection{Terminologia ambigua} % TERMINOLOGIA
+
+A seguito la spiegazione di alcuni termini ambigui o non chiari precedentemente citati:
+\begin{itemsize}
+    \item \textbf{Stagionale:} Verrà successivamente sostituito da \textbf{Annuale} 
+    in quanto stagionale è un termine discorsivo che indica la stagione estiva dell'anno corrente,
+    quindi poco chiaro e non rappresentativo
+    \item \textbf{Ombrellone:} Anche se il concetto è chiaro, in un'ottica di uno stabilimento balneare
+    è importante specificare che la \textit{configurazione standard} del `pacchetto' ombrellone è data 
+    dall'ombrellone con due lettini, ogni aggiunta richiesta dal cliente (visto la rarità della richiesta)
+    sarà messa nelle \textit{note} e la tariffa aggiuntiva concordata con il \entita{Proprietario}
+    \item \textbf{Posizione:} (inerente agli \entita{Ombrelloni}) Indica la combinazione del \textit{numero dell'ombrellone}
+    e della corrispondente \textit{fila}, componenti fondamentali per il calcolo del prezzo 
+\end{itemsize}
 
 % -- 2.3 Specifiche ristrutturate ----------------------------
 \section{Specifiche in linguaggio naturale ristrutturato}
