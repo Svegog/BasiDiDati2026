@@ -7,7 +7,7 @@ In questo capitolo si descrive lo sviluppo dello schema Entit\`{a}-Relazione (E/
 La progettazione procede per raffinamenti successivi, partendo da uno schema scheletro
 e arricchendolo progressivamente per area tematica.
 
-% -- 3.1 Schemi scheletro ------------------------------------
+% -- 3.1 Area Ordini ------------------------------------
 \section{Area Ordini}
 
 \subsection{Schema Scheletro}
@@ -46,6 +46,7 @@ quindi un vincolo inespresso è che tutte le tuple di catalogo associate ad un o
 devono avere come fornitore lo stesso dell'ordine.
 \end{notabox}
 
+% -- 3.2 Area Dipendenti ------------------------------------
 \section{Area Dipendenti} % SCHEMA DA FARE
 
 \subsection{Schema Scheletro}
@@ -75,11 +76,12 @@ Questo vincolo non \`{e} esprimibile nello schema E/R ma verr\`{a} implementato 
 \subsection{Schema completo}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{immagini/03/schemaCompletoDipendenti.png}
+  \includegraphics[width=0.9\textwidth]{immagini/03/schemaCompletoDipendenti.png} % NELL'IMMAGINE MANCA L'ENTITA PERSONA!!!!!
   \caption{Schema completo dell'area dipendenti e turni}
   \label{fig:schemaDipendenti}
 \end{figure}
 
+% -- 3.1 Area Spiaggia ------------------------------------
 \section{Area Spiaggia}
 
 \subsection{Schema Scheletro} % DA FARE
@@ -123,7 +125,7 @@ Questa associazione permette di gestire ordini multi-prodotto.
 rappresenta la giacenza attuale in magazzino. Quando un ordine viene confermato,
 la quantit\`{a} viene aggiornata automaticamente (trigger).
 
-% -- 3.3 Schema concettuale finale ---------------------------
+% -- 3.4 Schema concettuale finale ---------------------------
 \section{Schema concettuale finale}
 
 Di seguito si presenta lo schema E/R completo con tutti gli attributi, le
@@ -131,11 +133,7 @@ cardinalit\`{a} e i vincoli di partecipazione.
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=\textwidth]{immagini/schema_er_finale.png}
-  \fbox{\parbox{0.95\textwidth}{\centering\vspace{4cm}
-    \textit{[Inserire immagine: schema\_er\_finale.png]}\\
-    Schema E/R completo con attributi e cardinalit\`{a}
-  \vspace{4cm}}}
+  \includegraphics[angle=90, width=\textwidth]{immagini/03/CompletoER.png}
   \caption{Schema E/R finale}
   \label{fig:schema-er-finale}
 \end{figure}
