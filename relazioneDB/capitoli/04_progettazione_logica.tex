@@ -12,9 +12,8 @@ La tabella seguente riporta la stima del numero di istanze per ogni entit\`{a} e
 associazione, basata su un'ipotetica stagione balneare di medio-grandi dimensioni
 (~200 ombrelloni, ~1000 clienti registrati).
 
-Dato che è tenuto in memoria lo storico delle prenotazioni assumiamo i volumi
-per i dati degli ultimi 5 anni. Dati più vecchi verranno eliminati dal sistema.
-I turni sono mantenuti nel sistema solo per una stagione.
+Dato che, da richiesta del committente, si tiene uno storico degli ordini, clienti e turni,
+la stima seguente è calcolata su un lasso di tempo di 5 anni.
 
 \begin{table}[htbp]
   \centering
@@ -26,16 +25,16 @@ I turni sono mantenuti nel sistema solo per una stagione.
     \rowcolor{primary!15}
     \textbf{Entità} & \textbf{Volume} & \textbf{Note} \\
     \midrule
-    \entita{Proprietario}      & 2--5      & Soci dello stabilimento \\
-    \entita{Cliente}           & 2.000     & Clienti registrati \\
+    \entita{Proprietario}      & 2 \- 5      & Soci dello stabilimento \\
+    \entita{Cliente}           & 4.000     & Clienti registrati \\
     \entita{Ombrellone}        & 200       & Postazioni totali \\
     \entita{Fila}              & 10        & File totali \\
-    \entita{Prenotazione}      & 7.500     & $\sim$ 10 prenotazioni/ombrellone a stagione \\
+    \entita{Prenotazione}      & 11.250    & $\sim$ 15 prenotazioni/ombrellone a stagione \\
     \entita{Abbonamento}       & 250       & $\sim$ 50 abbonamenti a stagione \\
-    \entita{Noleggio\_lettino} & 7.500      & $\sim$ 15 al giorno \\
+    \entita{Noleggio\_lettino} & 7.500     & $\sim$ 15 al giorno \\
     \entita{Tariffe\_noleggio} & 3         & Mattina, pomeriggio o giornata completa \\
-    \entita{Dipendente}        & 20        & Personale stagionale \\
-    \entita{Turno}             & 1.800     & ~90 turni/dipendente/stagione \\
+    \entita{Dipendente}        & 60        & Personale stagionale \\
+    \entita{Turno}             & 1.800     & \~90 turni/dipendente/stagione \\
     \entita{Mansione}          & 10        & Ruoli necessari \\
     \entita{Prodotto}          & 150       & Articoli abitualmente comprati \\
     \entita{Categoria}         & 20        & Categorie dei prodotti \\
