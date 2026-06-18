@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Prenotazioni{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Elenco Prenotazioni</h2>
+    <!-- aggiungi qui eventuale bottone "+ Nuova Prenotazione" seguendo lo stesso schema di Cliente -->
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <!-- inserisci qui i nomi colonne, tipicamente da una JOIN -->
+            <th>Cliente</th>
+            <th>Ombrellone</th>
+            <th>Data Inizio</th>
+            <th>Data Fine</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in prenotazioni %}
+        <tr>
+            <!-- inserisci qui le celle corrispondenti -->
+            <td>{{ p['nome_cliente'] }} {{ p['cognome_cliente'] }}</td>
+            <td>{{ p['numero_ombrellone'] }}</td>
+            <td>{{ p['data_inizio'] }}</td>
+            <td>{{ p['data_fine'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
