@@ -190,11 +190,11 @@ un collasso verso il basso dato che gli accesi alle entità figlie sono separati
 Questo tipo di eliminazione mi permette di mantenere i vincoli sulle associazioni e 
 allo stesso tempo, dato che la copertura è esclusiva, non introduce ridondanza.
 
-\subsection{Scelta delle chiavi}
-Ogni entit\`{a} viene identificata da una chiave surrogata \texttt{id SERIAL PRIMARY KEY}.
-Le chiavi naturali vengono mantenute come vincoli UNIQUE dove applicabile
-(es. coppia \texttt{fila + numero} per \entita{Ombrellone}, \texttt{email}
-per \entita{Cliente} e \entita{Proprietario}).
+\subsection{Scelta delle chiavi primarie}
+Nello schema ER sono già evidenziate in modo non ambiguo le chiavi primarie della maggior parte 
+delle entità. Gli identificatori delle 3 relazioni create a seguito del collasso verso
+il basso della gerarchia persona diventeranno dei nuovi codici surrogati in quanto 
+l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel tempo.
 
 % -- 4.6 Traduzione in relazioni -----------------------------
 \section{Traduzione di entit\`{a} e associazioni in relazioni}
@@ -215,7 +215,7 @@ per \entita{Cliente} e \entita{Proprietario}).
   \bottomrule
   \endfoot
 
-  PROPRIETARIO   & (\chiave{id}, nome, cognome, email, passwordHash) \\[4pt]
+  PROPRIETARIO   & (\chiave{idProprietario}, nome, cognome, email, password) \\[4pt]
   CLIENTE        & (\chiave{id}, nome, cognome, telefono, email) \\[4pt]
   OMBRELLONE     & (\chiave{id}, fila, numero, numeroLettini, numeroSedie) \\[4pt]
   PRENOTAZIONE   & (\chiave{id}, \chiaveest{idCliente}, \chiaveest{idOmbrellone},
@@ -225,13 +225,13 @@ per \entita{Cliente} e \entita{Proprietario}).
   DIPENDENTE     & (\chiave{id}, nome, cognome, codiceFiscale, telefono, email) \\[4pt]
   TURNO          & (\chiave{id}, \chiaveest{idDipendente}, data,
                    orarioInizio, orarioFine) \\[4pt]
-  PRODOTTO       & (\chiave{id}, nome, descrizione, quantita, prezzoUnitario,
-                   sogliaMinimaRiordino) \\[4pt]
-  FORNITORE      & (\chiave{id}, ragioneSociale, telefono, email, indirizzo) \\[4pt]
-  ORDINE         & (\chiave{id}, \chiaveest{idFornitore}, \chiaveest{idProprietario},
-                   dataOrdine, statoConsegna) \\[4pt]
-  CONTIENE       & (\chiave{\chiaveest{idOrdine}, \chiaveest{idProdotto}},
-                   quantitaOrdinata, prezzoUnitarioAlMomento) \\[4pt]
+  CATEGORIA      & (\chiave{CodCategoria}, NomeCategoria, Descrizione*) \\ [4pt]
+  PRODOTTO       & (\chiave{CodProdotto}, nome, quantità, quantitàMinima, \chiaveest{CodCategoria}:CATEGORIA) \\[4pt]
+  FORNITORE      & (\chiave{PartitaIVA}, Nome, Email, RecapitoTelefonico, Indirizzo) \\[4pt]
+  ORDINE         & (\chiave{CodOrdine}, \chiaveest{PartitaIVA}:FORNITORE, \chiaveest{idProprietario}:PROPRIETARIO,
+                   dataOrdine, ConsegnaPrevista, DataConsegna*) \\[4pt]
+  CATALOGO       & (\chiave{\chiaveest{CodProdotto}:PRODOTTO, \chiaveest{PartitaIVA}:FORNITORE}, prezzoUnitario) \\ [4pt]
+  DETTAGLIO\_ORDINE & (\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiaveest{CodOrdine}:ORDINE}, PrezzoAlMomento) \\[4pt]
 \end{longtable}
 
 % -- 4.7 Schema relazionale finale ---------------------------
