@@ -151,17 +151,29 @@ poi all'associazione \relazione{PrenotaOmb} e infine all'entit\`{a}
 % -- 4.4 Analisi delle ridondanze ----------------------------
 \section{Analisi delle ridondanze}
 
-\textbf{Ridondanza candidata:} l'attributo \attributo{prezzoTotale} in
-\entita{Prenotazione} \`{e} calcolabile come:
-\[
-  \text{prezzoTotale} = \text{tariffaGiornaliera}(\text{posizione}) \times
-  (\text{dataFine} - \text{dataInizio})
-\]
+\begin{itemize}
+  \item \textbf{Ridondanza:} l'attributo \attributo{prezzoTotale} in
+        \entita{Prenotazione} \`{e} calcolabile come:
+        \[
+          \text{prezzoTotale} = \text{tariffaGiornaliera}(\text{fila}) \times
+          (\text{dataFine} - \text{dataInizio}) \times (1 - \text{sconto})
+        \]
 
-\textbf{Decisione:} si mantiene l'attributo ridondante \attributo{prezzoTotale}
-perch\'e la tariffa potrebbe variare nel tempo e si vuole registrare il prezzo
-concordato al momento della prenotazione. Questo evita problemi di consistenza
-se le tariffe cambiano.
+        \textbf{Decisione:} si mantiene l'attributo ridondante \attributo{prezzoTotale}
+        perché la tariffa potrebbe variare nel tempo e si vuole registrare il prezzo
+        concordato al momento della prenotazione. Questo evita problemi di consistenza
+        se le tariffe cambiano.
+  \item Per lo stesso motivo della ridondanza precedente viene mantenuto anche
+        l'attributo \attributo{Prezzo} in \entita{Abbonamento}
+  \item \textbf{Ridondanza candidata:} l'attributo \attributo{PrezzoAlMomento}
+        in \entita{Dettaglio Ordine}.
+
+        \textbf{Decisione:} l'attributo ridondante \attributo{PrezzoAlMomento}
+        è mantenuto perché il prezzo di un determinato \entita{prodotto},
+        venduto da un \entita{Fornitore}, potrebbe cambiare nel tempo.
+\end{itemize}
+
+
 
 % -- 4.5 Raffinamento schema ---------------------------------
 \section{Raffinamento dello schema}
@@ -174,7 +186,8 @@ sono identificate da una chiave surrogata (\texttt{id} intero auto-incrementale)
 \`{E} presente nello schema una sola gerarchia dove l'entità madre è \entita{Persona}
 e le entità figlie sono \entita{Proprietario}, \entita{Cliente} e \entita{Dipendente}.
 La copertura di tale gerarchia è totale ed esclusiva quindi elimino la gerarchia facendo
-un collasso verso il basso che mi permette di mantenere i vincoli sulle associazioni e 
+un collasso verso il basso dato che gli accesi alle entità figlie sono separati.
+Questo tipo di eliminazione mi permette di mantenere i vincoli sulle associazioni e 
 allo stesso tempo, dato che la copertura è esclusiva, non introduce ridondanza.
 
 \subsection{Scelta delle chiavi}
