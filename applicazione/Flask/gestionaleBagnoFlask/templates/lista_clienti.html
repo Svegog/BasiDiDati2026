@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Clienti{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Elenco Clienti</h2>
+    <a href="{{ url_for('nuovo_cliente') }}" class="btn btn-primary">+ Nuovo Cliente</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <!-- inserisci qui i nomi delle colonne secondo il tuo schema, es: -->
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Telefono</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in clienti %}
+        <tr>
+            <!-- inserisci qui le celle corrispondenti, es: -->
+            <td>{{ c['id_cliente'] }}</td>
+            <td>{{ c['nome'] }}</td>
+            <td>{{ c['cognome'] }}</td>
+            <td>{{ c['telefono'] }}</td>
+            <td>
+                <a href="{{ url_for('modifica_cliente', id=c['id_cliente']) }}" class="btn btn-sm btn-outline-secondary">Modifica</a>
+                <a href="{{ url_for('elimina_cliente', id=c['id_cliente']) }}" class="btn btn-sm btn-outline-danger">Elimina</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
