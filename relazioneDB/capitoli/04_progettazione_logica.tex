@@ -217,7 +217,7 @@ l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel t
 % -- 4.6 Traduzione in relazioni -----------------------------
 \section{Traduzione di entit\`{a} e associazioni in relazioni}
 
-\begin{longtable}{L{4.5cm} L{10cm}}
+\begin{longtable}{L{4.3cm} L{10cm}}
   \caption{Traduzione dello schema E/R in relazioni}
   \label{tab:traduzione} \\
   \toprule
@@ -257,11 +257,7 @@ l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel t
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=\textwidth]{immagini/schema_relazionale.png}
-  \fbox{\parbox{0.95\textwidth}{\centering\vspace{3cm}
-    \textit{[Inserire immagine: schema\_relazionale.png]}\\
-    Diagramma dello schema relazionale con chiavi e foreign key
-  \vspace{3cm}}}
+  \includegraphics[width=\textwidth]{immagini/04/schemaLogico.png}
   \caption{Schema relazionale finale}
   \label{fig:schema-relazionale}
 \end{figure}
@@ -271,109 +267,139 @@ l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel t
 
 \begin{lstlisting}[caption={Creazione delle tabelle principali},
                    label={lst:create-tables}]
--- Proprietario
-CREATE TABLE Proprietario (
-    id            SERIAL PRIMARY KEY,
-    nome          VARCHAR(50)  NOT NULL,
-    cognome       VARCHAR(50)  NOT NULL,
-    email         VARCHAR(100) NOT NULL UNIQUE,
-    passwordHash  VARCHAR(255) NOT NULL
-);
+create table ABBONAMENTO (
+     CodFila int not null,
+     NumOmbrellone int not null,
+     Anno int not null,
+     Prezzo decimal(8,2) not null,
+     Sconto float(1) not null,
+     Pagamento char not null,
+     IdCliente char(1) not null,
+     constraint IDABBONAMENTO primary key (CodFila, NumOmbrellone, Anno));
 
--- Cliente
-CREATE TABLE Cliente (
-    id        SERIAL PRIMARY KEY,
-    nome      VARCHAR(50)  NOT NULL,
-    cognome   VARCHAR(50)  NOT NULL,
-    telefono  VARCHAR(20),
-    email     VARCHAR(100) UNIQUE
-);
+create table CATALOGO (
+     CodProdotto int not null,
+     PartitaIVA char(11) not null,
+     PrezzoUnitario decimal(8,2) not null,
+     constraint IDFORNITURA primary key (PartitaIVA, CodProdotto));
 
--- Ombrellone
-CREATE TABLE Ombrellone (
-    id             SERIAL PRIMARY KEY,
-    fila           CHAR(1)  NOT NULL,
-    numero         INTEGER  NOT NULL,
-    numeroLettini  INTEGER  NOT NULL DEFAULT 2,
-    numeroSedie    INTEGER  NOT NULL DEFAULT 2,
-    UNIQUE (fila, numero)
-);
+create table CATEGORIA (
+     CodCategoria int not null auto_increment,
+     NomeCategoria varchar(40) not null,
+     Descrizione varchar(255),
+     constraint IDCATEGORIA primary key (CodCategoria));
 
--- Prenotazione
-CREATE TABLE Prenotazione (
-    id              SERIAL PRIMARY KEY,
-    idCliente       INTEGER NOT NULL
-                    REFERENCES Cliente(id) ON DELETE RESTRICT,
-    idOmbrellone    INTEGER NOT NULL
-                    REFERENCES Ombrellone(id) ON DELETE RESTRICT,
-    dataInizio      DATE    NOT NULL,
-    dataFine        DATE    NOT NULL,
-    prezzoTotale    DECIMAL(8,2),
-    CONSTRAINT chk_date CHECK (dataFine >= dataInizio)
-);
+create table CLIENTE (
+     IdCliente char(1) not null,
+     Nome varchar(30) not null,
+     Cognome varchar(30) not null,
+     Email varchar(50) not null,
+     RecapitoTelefonico varchar(15) not null,
+     constraint IDCLIENTE primary key (IdCliente));
 
--- Dipendente
-CREATE TABLE Dipendente (
-    id            SERIAL PRIMARY KEY,
-    nome          VARCHAR(50)  NOT NULL,
-    cognome       VARCHAR(50)  NOT NULL,
-    codiceFiscale CHAR(16)     UNIQUE,
-    telefono      VARCHAR(20),
-    email         VARCHAR(100)
-);
+create table DETTAGLIO_ORDINE (
+     CodOrdine int not null,
+     PartitaIVA char(11) not null,
+     CodProdotto int not null,
+     Quantità int not null,
+     PrezzoAlMomento decimal(8,2) not null,
+     constraint IDDettaglio_Ordine primary key (CodOrdine, PartitaIVA, CodProdotto));
 
--- Turno
-CREATE TABLE Turno (
-    id            SERIAL PRIMARY KEY,
-    idDipendente  INTEGER NOT NULL
-                  REFERENCES Dipendente(id) ON DELETE CASCADE,
-    data          DATE    NOT NULL,
-    orarioInizio  TIME    NOT NULL,
-    orarioFine    TIME    NOT NULL,
-    CONSTRAINT chk_orari CHECK (orarioFine > orarioInizio)
-);
+create table DIPENDENTE (
+     IdDipendente char(1) not null,
+     Nome varchar(30) not null,
+     Cognome varchar(30) not null,
+     Email varchar(50) not null,
+     RecapitoTelefonico varchar(15) not null,
+     CodiceFiscale char(16) not null,
+     constraint IDDIPENDENTE primary key (IdDipendente));
 
--- Prodotto
-CREATE TABLE Prodotto (
-    id                    SERIAL PRIMARY KEY,
-    nome                  VARCHAR(100) NOT NULL,
-    descrizione           TEXT,
-    quantita              INTEGER NOT NULL DEFAULT 0,
-    prezzoUnitario        DECIMAL(8,2),
-    sogliaMinimaRiordino  INTEGER DEFAULT 5
-);
+create table FILA (
+     CodFila int not null,
+     TariffaGiornaliera decimal(8,2) not null,
+     TariffaStagionale char(1) not null,
+     constraint IDFILA primary key (CodFila));
 
--- Fornitore
-CREATE TABLE Fornitore (
-    id             SERIAL PRIMARY KEY,
-    ragioneSociale VARCHAR(150) NOT NULL,
-    telefono       VARCHAR(20),
-    email          VARCHAR(100),
-    indirizzo      TEXT
-);
+create table FORNITORE (
+     PartitaIVA char(11) not null,
+     Nome varchar(50) not null,
+     Email varchar(50) not null,
+     Indirizzo varchar(60) not null,
+     RecapitoTelefonico varchar(15) not null,
+     constraint IDFornitore_ID primary key (PartitaIVA));
 
--- Ordine
-CREATE TABLE Ordine (
-    id               SERIAL PRIMARY KEY,
-    idFornitore      INTEGER NOT NULL
-                     REFERENCES Fornitore(id) ON DELETE RESTRICT,
-    idProprietario   INTEGER NOT NULL
-                     REFERENCES Proprietario(id) ON DELETE RESTRICT,
-    dataOrdine       DATE    NOT NULL DEFAULT CURRENT_DATE,
-    statoConsegna    VARCHAR(20) NOT NULL DEFAULT 'in_attesa'
-                     CHECK (statoConsegna IN ('in_attesa','consegnato','annullato'))
-);
+create table MANSIONE (
+     CodMansione int not null auto_increment,
+     NomeMansione varchar(40) not null,
+     Descrizione varchar(255) not null,
+     constraint IDMANSIONE_ID primary key (CodMansione),
+     constraint IDMANSIONE_1 unique (NomeMansione));
 
--- Contiene (associazione Ordine--Prodotto)
-CREATE TABLE Contiene (
-    idOrdine               INTEGER NOT NULL
-                           REFERENCES Ordine(id) ON DELETE CASCADE,
-    idProdotto             INTEGER NOT NULL
-                           REFERENCES Prodotto(id) ON DELETE RESTRICT,
-    quantitaOrdinata       INTEGER NOT NULL CHECK (quantitaOrdinata > 0),
-    prezzoUnitarioAlMomento DECIMAL(8,2),
-    PRIMARY KEY (idOrdine, idProdotto)
-);
+create table NOLEGGIO_LETTINO (
+     CodNoleggio int not null auto_increment,
+     Data date not null,
+     Quantità int not null,
+     Pagamento char not null,
+     IdCliente char(1) not null,
+     TipoNoleggio varchar(15) not null,
+     constraint IDNOLEGGIO_LETTINO primary key (CodNoleggio));
+
+create table OMBRELLONE (
+     CodFila int not null,
+     NumOmbrellone int not null,
+     constraint IDOMBRELLONE primary key (CodFila, NumOmbrellone));
+
+create table ORDINE (
+     CodOrdine int not null auto_increment,
+     DataOrdine date not null,
+     ConsegnaPrevista date not null,
+     DataConsegna date,
+     IdProprietario int not null,
+     PartitaIVA char(11) not null,
+     constraint IDOrdine primary key (CodOrdine));
+
+create table PRENOTAZIONE (
+     CodPrenotazione int not null auto_increment,
+     DataInizio date not null,
+     DataFine date not null,
+     Prezzo decimal(8,2) not null,
+     Sconto float(1) not null,
+     Note varchar(255),
+     Pagamento char not null,
+     IdCliente char(1) not null,
+     CodFila int not null,
+     NumOmbrellone int not null,
+     constraint IDPRENOTAZIONE primary key (CodPrenotazione));
+
+create table PRODOTTO (
+     CodProdotto int not null auto_increment,
+     NomeProdotto char(40) not null,
+     QuantitàMagazzino int not null,
+     QuantitàMinima int not null,
+     CodCategoria int not null,
+     constraint IDProdotto_ID primary key (CodProdotto));
+
+create table PROPRIETARIO (
+     IdProprietario int not null auto_increment,
+     Nome varchar(30) not null,
+     Cognome varchar(30) not null,
+     Email varchar(50) not null,
+     RecapitoTelefonico varchar(15) not null,
+     Password varchar(255) not null,
+     constraint IDPROPRIETARIO primary key (IdProprietario));
+
+create table TARIFFE_NOLEGGIO (
+     TipoNoleggio varchar(15) not null,
+     Prezzo decimal(8,2) not null,
+     constraint IDTARIFFE_NOLEGGIO primary key (TipoNoleggio));
+
+create table TURNO (
+     IdDipendente char(1) not null,
+     Data date not null,
+     OraInizio char(5) not null,
+     OraFine char(5) not null,
+     CodMansione int not null,
+     constraint IDTURNO primary key (IdDipendente, Data, OraInizio));
 \end{lstlisting}
 
 % -- 4.9 Query SQL -------------------------------------------
