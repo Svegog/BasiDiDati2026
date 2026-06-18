@@ -356,6 +356,14 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
   \end{tabularx}
 \end{table}
 
+\subsection{O.11 --- Verifica disponibilità ombrelloni per intervallo}
+
+Le grandi dimensioni di questa operazione sono giustificabili dal fatto che, nel caso
+peggiore, la visualizzazione di ombrelloni disponibili richiederebbe la lettura di tutte
+le tuple di \entita{Prenotazioni} e \entita{Abbonamenti}.
+Una possibile ottimizzazione è l'aggiunta di un \textbf{indice} nel database.
+% L'index crea un B-tree che ordina le tuple prima per DataInizio poi per DataFine
+
 \begin{table}[H] % DA FAREEEEEEE
   \centering
   \caption{Tabella operazione O.11}
@@ -366,10 +374,11 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Dipendenti}      & E & L & 18    \\
-    \entita{Turno}           & E & L & 18    \\
+    \entita{Ombrelloni}      & E & L & 200      \\
+    \entita{Prenotazioni}    & E & L & 11.250   \\
+    \entita{Abbonamenti}     & E & L & 250      \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 32 letture $\rightarrow$ 160 accessi al giorno} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 11.700 letture $\rightarrow$ 351.000 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -446,6 +455,8 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
     \bottomrule
   \end{tabularx}
 \end{table}
+
+\clearpage
 
 \subsection{O.16, O.17 --- Aggiornamento prezzi catalogo di un fornitore e giacenze dopo inventario}
 
@@ -574,7 +585,7 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
         venduto da un \entita{Fornitore}, potrebbe cambiare nel tempo.
 \end{itemize}
 
-
+\clearpage
 
 % -- 4.5 Raffinamento schema ---------------------------------
 \section{Raffinamento dello schema}
