@@ -20,7 +20,7 @@ la stima seguente è calcolata su un lasso di tempo di 5 anni.
   \caption{Tabella dei volumi: Entità}
   \label{tab:volumi-entità}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{L{4cm} R{1.6cm} L{8cm}}
+  \begin{tabularx}{\textwidth}{L{4cm} R{1.6cm} L{9.1cm}}
     \toprule
     \rowcolor{primary!15}
     \textbf{Entità} & \textbf{Volume} & \textbf{Note} \\
@@ -34,7 +34,7 @@ la stima seguente è calcolata su un lasso di tempo di 5 anni.
     \entita{Noleggio\_lettino} & 7.500     & $\sim$ 15 al giorno \\
     \entita{Tariffe\_noleggio} & 3         & Mattina, pomeriggio o giornata completa \\
     \entita{Dipendente}        & 60        & Personale stagionale \\
-    \entita{Turno}             & 1.800     & $\sim$ 90 turni per dipendente ogni stagione \\
+    \entita{Turno}             & 9000      & $\sim$ 90 turni per dipendente ogni stagione \\
     \entita{Mansione}          & 10        & Ruoli necessari \\
     \entita{Prodotto}          & 600       & Articoli abitualmente comprati \\
     \entita{Categoria}         & 20        & Categorie dei prodotti \\
@@ -45,71 +45,92 @@ la stima seguente è calcolata su un lasso di tempo di 5 anni.
   \end{tabularx}
 \end{table}
 
-\begin{table}[htbp]
+\begin{table}[H]  %[htbp]
   \centering
   \caption{Tabella dei volumi: Associazioni}
   \label{tab:volumi-associazioni}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{L{3cm} C{2.5cm} R{1.6cm} L{8cm}}
+  \begin{tabularx}{\textwidth}{L{3cm} C{2.5cm} R{1.6cm} L{7.3cm}}
     \toprule
     \rowcolor{primary!15}
     \textbf{Associazione} & \textbf{Cardinalità} & \textbf{Volume} & \textbf{Derivazione} \\
     \midrule
     Emissione             & 1:N     & 1.000   & = \entita{Ordine} \\
     Inserimento           & 1:N     & 1.000   & = \entita{Ordine} \\
-    Dettaglio\_Ordine     & N:M     & 10.000  & $\sim$10 prodotti per \entita{Ordine} \\
+    Dettaglio\_Ordine     & N:M     & 10.000  & $\sim$ 10 prodotti per \entita{Ordine} \\
     Offerta               & 1:N     & 1200    & = \entita{Catalogo} \\
     Relativa              & 1:N     & 1200    & = \entita{Catalogo} \\
-    Appartenenza          & 1:N     & 150     & = \entita{Prodotto} \\
+    Appartenenza          & 1:N     & 600     & = \entita{Prodotto} \\
     Acquisto              & 1:N     & 7.500   & = \entita{Noleggio\_lettino} \\
     Tipologia             & 1:N     & 7.500   & = \entita{Noleggio\_lettino} \\
     Richiesta             & 1:N     & 7.500   & = \entita{Prenotazione} \\
-    Riguarda              & N:M     & 9.000   & $\sim$1.2 \entita{Ombrelloni} per prenotazione \\
+    Riguarda              & N:M     & 9.000   & $\sim$ 1.2 \entita{Ombrelloni} per prenotazione \\
     Sottoscrizione        & 1:N     & 250     & = \entita{Abbonamento} \\
     Riservazione          & 1:N     & 250     & = \entita{Abbonamento} \\
     Locazione\_ombrellone & 1:N     & 200     & = \entita{Ombrellone} \\
-    Assegnazione          & 1:N     & 1.800   & = \entita{Turno} \\
-    Svolgimento           & 1:N     & 1.800   & = \entita{Turno} \\
+    Assegnazione          & 1:N     & 9000    & = \entita{Turno} \\
+    Svolgimento           & 1:N     & 9000    & = \entita{Turno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
 % -- 4.2 Operazioni principali -------------------------------
-\section{Descrizione delle operazioni principali e stima della loro frequenza}
+\section{Descrizione operazioni principali e stima}
+
+A seguito le operazioni principali richieste dal committente sul database.
+
+\begin{itemize}[itemsep=1pt, topsep=0pt]
+    \item \textbf{O.1:} \ Inserimento di un cliente
+    \item \textbf{O.2:} \ Inserimento di una prenotazione
+    \item \textbf{O.3:} \ Inserimento di un abbonamento
+    \item \textbf{O.4:} \ Inserimento del noleggio di un lettino
+    \item \textbf{O.5:} \ Registrazione nuovi dipendenti
+    \item \textbf{O.6:} \ Aggiunta di un nuovo turno di lavoro
+    \item \textbf{O.7:} \ Inserimento di un ordine
+    \item \textbf{O.8:} \ Aggiunta di un nuovo fornitore con catalogo prodotti
+    \item \textbf{O.9:} \ Registrazione consegna e aggiornamento giacenze
+    \item \textbf{O.10:} Visualizzazione dipendenti in turno per data
+    \item \textbf{O.11:} Verifica disponibilit\`{a} ombrelloni per intervallo
+    \item \textbf{O.12:} Controllo giacenze magazzino
+    \item \textbf{O.13:} Visualizzazione storico cliente
+    \item \textbf{O.14:} Modifica tariffa lettini
+    \item \textbf{O.15:} Modifica prezzi per fila
+    \item \textbf{O.16:} Aggiornamento prezzi catalogo di un fornitore
+    \item \textbf{O.17:} Aggiornamento giacenze dopo inventario
+    \item \textbf{O.18:} Inserimento conferma pagamento
+\end{itemize}
 
 \begin{table}[H]
   \centering
-  \caption{Operazioni principali e frequenza}
+  \caption{Frequenza operazioni principali}
   \label{tab:operazioni}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{C{0.6cm} L{6cm} C{2.5cm} C{2.5cm}}
-    \toprule
-    \rowcolor{primary!15}
-    \textbf{N.} & \textbf{Operazione} & \textbf{Frequenza} & \textbf{Tipo} \\
-    \midrule
-    O1 & Inserimento nuova prenotazione            & 30/giorno   & Scrittura \\
-    O2 & Verifica disponibilit\`{a} ombrelloni per data& 50/giorno   & Lettura \\
-    O3 & Visualizzazione dipendenti in turno per data & 5/giorno & Lettura \\
-    O4 & Inserimento/modifica turno dipendente     & 10/giorno   & Scrittura \\
-    O5 & Controllo giacenze magazzino              & 3/giorno    & Lettura \\
-    O6 & Inserimento nuovo ordine                  & 2/settimana & Scrittura \\
-    O7 & Inserimento nuovo cliente                 & 10/giorno   & Scrittura \\
-    O8 & Visualizzazione storico prenotazioni cliente & 5/giorno & Lettura \\
-    \bottomrule
+  \begin{tabularx}{\textwidth}{C{2cm} C{0.6cm} C{2.8cm} C{2cm} C{0.6cm} C{2.8cm} C{2cm}}
+  \toprule
+  \rowcolor{primary!15}
+  & \textbf{N.} & \textbf{Frequenza} & & \textbf{N.} & \textbf{Frequenza} & \\
+  \midrule
+   & O.1 & 10/giorno     & & O.10 & 5/giorno     & \\
+   & O.2 & 25/giorno     & & O.11 & 30/giorno    & \\
+   & O.3 & 50/stagione   & & O.12 & 2/giorno     & \\
+   & O.4 & 15/giorno     & & O.13 & 3/giorno     & \\
+   & O.5 & 12/stagione   & & O.14 & 3/stagione   & \\
+   & O.6 & 15/giorno     & & O.15 & 10/stagione  & \\
+   & O.7 & 2/giorno      & & O.16 & 2/settimana  & \\
+   & O.8 & 2/giorno      & & O.17 & 1/giorno     & \\
+   & O.9 & 2/giorno      & & O.18 & 45/giorno    & \\
+  \bottomrule
   \end{tabularx}
 \end{table}
 
+\clearpage
+
 % -- 4.3 Schemi di navigazione -------------------------------
-\section{Schemi di navigazione e tabelle degli accessi}
+\section{Schemi di navigazione e tabelle degli accessi} % ONGOING
 
-\subsection{O2 --- Verifica disponibilit\`{a} ombrelloni per una data}
+\subsection{O.1 --- Inserimento cliente}
 
-Questa operazione verifica quali ombrelloni non hanno prenotazioni attive
-in una determinata data.
-
-\textbf{Schema di navigazione:} si accede all'entit\`{a} \entita{Ombrellone},
-poi all'associazione \relazione{PrenotaOmb} e infine all'entit\`{a}
-\entita{Prenotazione} per verificare le date.
+Questa operazione inserisce un nuovo cliente nel Database.
 
 \begin{table}[H]
   \centering
@@ -121,9 +142,7 @@ poi all'associazione \relazione{PrenotaOmb} e infine all'entit\`{a}
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} & \textbf{Tot/mese} \\
     \midrule
-    \entita{Ombrellone}   & E & L & 200    & 300.000 \\
-    \entita{Prenotazione} & E & L & 3.000  & 4.500.000 \\
-    \relazione{PrenotaOmb}& A & L & 3.000  & 4.500.000 \\
+    \entita{Cliente}   & E & S & 200    & 300.000 \\
     \bottomrule
   \end{tabularx}
 \end{table}
