@@ -117,7 +117,7 @@ A seguito le operazioni principali richieste dal committente sul database.
    & O.5 & 12/stagione   & & O.14 & 3/stagione   & \\
    & O.6 & 15/giorno     & & O.15 & 10/stagione  & \\
    & O.7 & 2/giorno      & & O.16 & 2/settimana  & \\
-   & O.8 & 2/giorno      & & O.17 & 1/giorno     & \\
+   & O.8 & 2/stagione    & & O.17 & 40/giorno     & \\
    & O.9 & 2/giorno      & & O.18 & 45/giorno    & \\
   \bottomrule
   \end{tabularx}
@@ -128,40 +128,423 @@ A seguito le operazioni principali richieste dal committente sul database.
 % -- 4.3 Schemi di navigazione -------------------------------
 \section{Schemi di navigazione e tabelle degli accessi} % ONGOING
 
-\subsection{O.1 --- Inserimento cliente}
-
-Questa operazione inserisce un nuovo cliente nel Database.
+Di seguito mostreremo solo tramite la tabella degli accessi le operazioni più \textit{banali}, 
+mentre quelle più complesse avranno la loro sezione specifica. 
 
 \begin{table}[H]
   \centering
-  \caption{Tabella degli accessi --- O2: Disponibilit\`{a} ombrelloni}
-  \label{tab:accessi-o2}
+  \caption{Tabella operazione O.1}
+  \label{tab:accessi-o1}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{L{4cm} C{2cm} C{2cm} C{2cm} C{2cm}}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2cm} C{2cm} C{2cm} C{3cm}}
     \toprule
     \rowcolor{primary!15}
-    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} & \textbf{Tot/mese} \\
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Cliente}   & E & S & 200    & 300.000 \\
+    \entita{Cliente}   & E & S & 1 \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 1 scrittura $\rightarrow$ 20 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
-\subsection{O3 --- Dipendenti in turno per una data specifica}
+\subsection{O.2, O.3 --- Inserimento prenotazione, abbonamento}
+
+Questa operazione inserisce uno dei tre servizi relativi ad un singolo cliente. Nel caso di 
+\entita{Prenotazione} e \entita{Abbonamento} bisogna verificare anche che l'ombrellone sia libero
+nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un singolo ombrellone.
 
 \begin{table}[H]
   \centering
-  \caption{Tabella degli accessi --- O3: Dipendenti in turno}
-  \label{tab:accessi-o3}
+  \caption{Tabella operazione O.2}
+  \label{tab:accessi-o2}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{L{4cm} C{2cm} C{2cm} C{2cm} C{2cm}}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
     \toprule
     \rowcolor{primary!15}
-    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} & \textbf{Tot/mese} \\
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Turno}      & E & L & 1.800  & 27.000 \\
-    \entita{Dipendente} & E & L & 20     & 300 \\
-    \relazione{LavoraIn}& A & L & 1.800  & 27.000 \\
+    \entita{Cliente}      & E & L & 1      \\
+    \entita{Prenotazione} & E & L & 56,25  \\
+    \entita{Abbonamento}  & E & L & 1,25   \\
+    \entita{Prenotazione} & E & S & 1      \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 58,5 letture + 1 scrittura $\rightarrow$ 1512,5 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.3}
+  \label{tab:accessi-o3}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Cliente}      & E & L & 1      \\
+    \entita{Prenotazione} & E & L & 56,25  \\
+    \entita{Abbonamento}  & E & L & 1,25   \\
+    \entita{Abbonamento}  & E & S & 1      \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 58,5 letture + 1 scrittura $\rightarrow$ 3025 accessi a stagione} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.4}
+  \label{tab:accessi-o4}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Cliente}            & E & L & 1 \\
+    \entita{Tariffa\_Noleggio} & E & L & 1 \\
+    \entita{Noleggio\_Lettino} & E & S & 1 \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 2 letture + 1 scrittura $\rightarrow$ 60 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.5}
+  \label{tab:accessi-o5}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Dipendente} & E & S & 1      \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 1 scrittura $\rightarrow$ 12 accessi a stagione} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.6}
+  \label{tab:accessi-o6}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Dipendente} & E & L & 1      \\
+    \entita{Mansione}   & E & L & 1      \\
+    \entita{Turno}      & E & S & 1      \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 2 letture + 1 scrittura $\rightarrow$ 60 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.7}
+  \label{tab:accessi-o7}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Proprietario}         & E & L & 1      \\
+    \entita{Fornitore}            & E & L & 1      \\
+    \entita{Catalogo}             & E & L & 10     \\
+    \entita{Prodotto}             & E & L & 10     \\
+    \entita{Dettaglio\_Ordine}    & A & S & 10      \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 22 letture + 10 scritture $\rightarrow$ 84 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{O.8 --- Aggiunta fornitore con catalogo prodotti}
+
+L'aggiunta di un fornitore richiede anche l'aggiunta del suo catalogo al Database, che però conterrà
+già il prodotto corrispondente al catalogo.
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.8}
+  \label{tab:accessi-o8}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Catalogo}         & E & S & 60    \\
+    \entita{Prodotto}         & E & L & 60    \\
+    \entita{Fornitore}        & E & S & 1     \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 60 letture + 61 scritture $\rightarrow$ 364 accessi a stagione} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{O.9 --- Registrazione consegna e aggiornamento giacenze}
+
+Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} in quanto il 
+\textit{CodProdotto} è già ottenuto dalla letture in \entita{Dettaglio\_Ordine}. 
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.9}
+  \label{tab:accessi-o9}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Ordine}           & E & L & 1    \\
+    \entita{Ordine}           & E & S & 1    \\
+    \entita{Dettaglio\_Ordine} & A & L & 10   \\
+    \entita{Prodotto}         & E & S & 10   \\
+    \entita{Prodotto}         & E & L & 10   \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 21 letture + 11 scritture $\rightarrow$ 86 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.10}
+  \label{tab:accessi-o10}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Dipendenti}      & E & L & 18    \\
+    \entita{Turno}           & E & L & 18    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 32 letture $\rightarrow$ 160 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.10}
+  \label{tab:accessi-o10}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Dipendenti}      & E & L & 18    \\
+    \entita{Turno}           & E & L & 18    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 32 letture $\rightarrow$ 160 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H] % DA FAREEEEEEE
+  \centering
+  \caption{Tabella operazione O.11}
+  \label{tab:accessi-o11}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Dipendenti}      & E & L & 18    \\
+    \entita{Turno}           & E & L & 18    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 32 letture $\rightarrow$ 160 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.12}
+  \label{tab:accessi-o12}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Prodotto}      & E & L & 600    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 600 letture $\rightarrow$ 1200 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.13}
+  \label{tab:accessi-o13}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Cliente}            & E & L & 1    \\
+    \entita{Prenotazione}       & E & L & 2,8    \\
+    \entita{Abbonamento}        & E & L & 0,07    \\
+    \entita{Noleggio\_Lettino}  & E & L & 1,9    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 5,77 letture $\rightarrow$ 17,3 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.14}
+  \label{tab:accessi-o14}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Tariffe\_Lettino}            & E & L & 3    \\
+    \entita{Tariffe\_Lettino}            & E & S & 3    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 3 letture + 3 scritture $\rightarrow$ 27 accessi a stagione} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.15}
+  \label{tab:accessi-o15}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Fila}            & E & L & 10    \\
+    \entita{Fila}            & E & S & 10    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 10 letture + 10 scritture $\rightarrow$ 300 accessi a stagione} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{O.16, O.17 --- Aggiornamento prezzi catalogo di un fornitore e giacenze dopo inventario}
+
+L'aggiornamento del prezzo del catalogo viene fatto un prodotto alla volta, cos\`{i} come
+per la giacenza di un prodotto dopo l'inventario.
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.16}
+  \label{tab:accessi-o16}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Fornitore}           & E & L & 1    \\
+    \entita{Catalogo}            & E & L & 1    \\
+    \entita{Catalogo}            & E & S & 1    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 2 letture + 1 scrittura $\rightarrow$ 8 accessi a settimana} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.17}
+  \label{tab:accessi-o17}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Prodotto}           & E & L & 1    \\
+    \entita{Prodotto}           & E & S & 1    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 1 lettura + 1 scrittura $\rightarrow$ 120 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{O.18 --- Inserimento conferma pagamento}
+
+La conferma del pagamento deve avvenire nel caso di \textit{noleggio}, 
+\textit{prenotazioni} ed \textit{abbonamenti}, visto la similitudine concettuale sono 
+tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codice} associato.
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.18.a}
+  \label{tab:accessi-o18.a}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Noleggio\_Lettino}           & E & L & 1    \\
+    \entita{Noleggio\_Lettino}           & E & S & 1    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 1 lettura + 1 scrittura $\rightarrow$ 45 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.18.b}
+  \label{tab:accessi-o18.b}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Prenotazione}           & E & L & 1    \\
+    \entita{Prenotazione}           & E & S & 1    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 1 lettura + 1 scrittura $\rightarrow$ 75 accessi al giorno} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella operazione O.18.c}
+  \label{tab:accessi-o18.c}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
+    \toprule
+    \rowcolor{primary!15}
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
+    \midrule
+    \entita{Abbonamento}           & E & L & 1    \\
+    \entita{Abbonamento}           & E & S & 1    \\
+    \midrule
+    \multicolumn{4}{c}{\textbf{Totale:} 1 lettura + 1 scrittura $\rightarrow$ 150 accessi a stagione} \\
     \bottomrule
   \end{tabularx}
 \end{table}
