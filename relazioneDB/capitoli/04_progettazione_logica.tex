@@ -585,7 +585,8 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
         concordato al momento della prenotazione. Questo evita problemi di consistenza
         se le tariffe cambiano.
   \item Per lo stesso motivo della ridondanza precedente viene mantenuto anche
-        l'attributo \attributo{Prezzo} in \entita{Abbonamento}
+        l'attributo \attributo{Prezzo} in \entita{Abbonamento} e l'attributo
+        \attributo{PrezzoTotale} in \entita{NOLEGGIO\_LETTINO}
   \item \textbf{Ridondanza candidata:} l'attributo \attributo{PrezzoAlMomento}
         in \entita{Dettaglio Ordine}.
 
@@ -620,40 +621,42 @@ l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel t
 % -- 4.6 Traduzione in relazioni -----------------------------
 \section{Traduzione di entit\`{a} e associazioni in relazioni}
 
-\begin{longtable}{L{4.3cm} L{10cm}}
-  \caption{Traduzione dello schema E/R in relazioni}
-  \label{tab:traduzione} \\
-  \toprule
-  \rowcolor{primary!15}
-  \textbf{Relazione} & \textbf{Schema (PK sottolineata, FK in corsivo)} \\
-  \midrule
-  \endfirsthead
-  \toprule
-  \rowcolor{primary!15}
-  \textbf{Relazione} & \textbf{Schema} \\
-  \midrule
-  \endhead
-  \bottomrule
-  \endfoot
+PROPRIETARIO(\chiave{idProprietario}, Nome, Cognome, Email, Password, RecapitoTelefonico)
 
-  PROPRIETARIO   & (\chiave{idProprietario}, nome, cognome, email, password) \\[4pt]
-  CLIENTE        & (\chiave{id}, nome, cognome, telefono, email) \\[4pt]
-  OMBRELLONE     & (\chiave{id}, fila, numero, numeroLettini, numeroSedie) \\[4pt]
-  PRENOTAZIONE   & (\chiave{id}, \chiaveest{idCliente}, \chiaveest{idOmbrellone},
-                   dataInizio, dataFine, prezzoTotale) \\[4pt]
-  ABBONAMENTO    & (\chiave{id}, \chiaveest{idCliente}, \chiaveest{idOmbrellone},
-                   dataInizio, dataFine, prezzo, tipo) \\[4pt]
-  DIPENDENTE     & (\chiave{id}, nome, cognome, codiceFiscale, telefono, email) \\[4pt]
-  TURNO          & (\chiave{id}, \chiaveest{idDipendente}, data,
-                   orarioInizio, orarioFine) \\[4pt]
-  CATEGORIA      & (\chiave{CodCategoria}, NomeCategoria, Descrizione*) \\ [4pt]
-  PRODOTTO       & (\chiave{CodProdotto}, nome, quantità, quantitàMinima, \chiaveest{CodCategoria}:CATEGORIA) \\[4pt]
-  FORNITORE      & (\chiave{PartitaIVA}, Nome, Email, RecapitoTelefonico, Indirizzo) \\[4pt]
-  ORDINE         & (\chiave{CodOrdine}, \chiaveest{PartitaIVA}:FORNITORE, \chiaveest{idProprietario}:PROPRIETARIO,
-                   dataOrdine, ConsegnaPrevista, DataConsegna*) \\[4pt]
-  CATALOGO       & (\chiave{\chiaveest{CodProdotto}:PRODOTTO, \chiaveest{PartitaIVA}:FORNITORE}, prezzoUnitario) \\ [4pt]
-  DETTAGLIO\_ORDINE & (\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiaveest{CodOrdine}:ORDINE}, PrezzoAlMomento) \\[4pt]
-\end{longtable}
+CLIENTE(\chiave{IdCliente}, Nome, Cognome, Email, RecapitoTelefonico)
+
+DIPENDENTE(\chiave{idDipendente}, Nome, Cognome, Email, RecapitoTelefonico, CodiceFiscale) 
+
+FILA(\chiave{CodFila}, TariffaGiornaliera, TariffaStagionale)
+
+OMBRELLONE(\chiave{NumOmbrellone, \chiaveest{CodFila}:FILA})
+
+PRENOTAZIONE(\chiave{CodPrenotazione}, DataInizio, DataFine, Prezzo, Sconto, Note*, Pagamento,
+            \chiaveest{IdCliente}:CLIENTE, \chiaveest{(CodFila, NumOmbrellone)}:OMBRELLONE)
+
+ABBONAMENTO(\chiave{\chiaveest{(Codfila, NumOmbrellone)}:OMBRELLONE, Anno}, Prezzo) 
+
+TARIFFE\_NOLEGGIO(\chiave{TipoNoleggio}, Prezzo)
+
+NOLEGGIO\_LETTINO(\chiave{CodNoleggio}, Data, Quantità, PrezzoTotale, Pagamento, \chiaveest{IdCliente}:CLIENTE,
+                \chiaveest{TipoNoleggio}:TARIFFE\_NOLEGGIO)
+
+MANSIONE(\chiave{CodMansione}, NomeMansione, Descrizione*)
+
+TURNO(\chiave{Data, OraInizio, \chiaveest{idDipendente}:DIPENDENTE}, OraFine, \chiaveest{CodMansione}:MANSIONE)
+
+CATEGORIA(\chiave{CodCategoria}, NomeCategoria, Descrizione*) 
+
+PRODOTTO(\chiave{CodProdotto}, nome, quantità, quantitàMinima, \chiaveest{CodCategoria}:CATEGORIA)
+
+FORNITORE(\chiave{PartitaIVA}, Nome, Email, RecapitoTelefonico, Indirizzo) 
+
+ORDINE(\chiave{CodOrdine}, \chiaveest{PartitaIVA}:FORNITORE, \chiaveest{idProprietario}:PROPRIETARIO, dataOrdine, ConsegnaPrevista, DataConsegna*)
+
+CATALOGO(\chiave{\chiaveest{CodProdotto}:PRODOTTO, \chiaveest{PartitaIVA}:FORNITORE}, prezzoUnitario) 
+
+DETTAGLIO\_ORDINE(\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiaveest{CodOrdine}:ORDINE}, PrezzoAlMomento)
+
 
 % -- 4.7 Schema relazionale finale ---------------------------
 \section{Schema relazionale finale}

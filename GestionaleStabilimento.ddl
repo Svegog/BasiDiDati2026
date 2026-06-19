@@ -3,7 +3,7 @@
 -- *--------------------------------------------
 -- * DB-MAIN version: 11.0.2              
 -- * Generator date: Sep 14 2021              
--- * Generation date: Thu Jun 18 18:27:39 2026 
+-- * Generation date: Fri Jun 19 13:07:35 2026 
 -- * LUN file: Z:\home\marco\BasiDati\ProgettoBasi\ProgettoBasi.lun 
 -- * Schema: SchemaLogico/1 
 -- ********************************************* 
@@ -12,8 +12,8 @@
 -- Database Section
 -- ________________ 
 
-create database SchemaLogico;
-use SchemaLogico;
+create database Gestionale;
+use Gestionale;
 
 
 -- Tables Section
@@ -26,7 +26,7 @@ create table ABBONAMENTO (
      Prezzo decimal(8,2) not null,
      Sconto float(1) not null,
      Pagamento char not null,
-     IdCliente char(1) not null,
+     IdCliente int not null,
      constraint IDABBONAMENTO primary key (CodFila, NumOmbrellone, Anno));
 
 create table CATALOGO (
@@ -42,7 +42,7 @@ create table CATEGORIA (
      constraint IDCATEGORIA primary key (CodCategoria));
 
 create table CLIENTE (
-     IdCliente char(1) not null,
+     IdCliente int not null auto_increment,
      Nome varchar(30) not null,
      Cognome varchar(30) not null,
      Email varchar(50) not null,
@@ -58,7 +58,7 @@ create table DETTAGLIO_ORDINE (
      constraint IDDettaglio_Ordine primary key (CodOrdine, PartitaIVA, CodProdotto));
 
 create table DIPENDENTE (
-     IdDipendente char(1) not null,
+     IdDipendente int not null auto_increment,
      Nome varchar(30) not null,
      Cognome varchar(30) not null,
      Email varchar(50) not null,
@@ -69,7 +69,7 @@ create table DIPENDENTE (
 create table FILA (
      CodFila int not null,
      TariffaGiornaliera decimal(8,2) not null,
-     TariffaStagionale char(1) not null,
+     TariffaStagionale decimal(8,2) not null,
      constraint IDFILA primary key (CodFila));
 
 create table FORNITORE (
@@ -83,7 +83,7 @@ create table FORNITORE (
 create table MANSIONE (
      CodMansione int not null auto_increment,
      NomeMansione varchar(40) not null,
-     Descrizione varchar(255) not null,
+     Descrizione varchar(255),
      constraint IDMANSIONE_ID primary key (CodMansione),
      constraint IDMANSIONE_1 unique (NomeMansione));
 
@@ -91,8 +91,9 @@ create table NOLEGGIO_LETTINO (
      CodNoleggio int not null auto_increment,
      Data date not null,
      Quantità int not null,
+     PrezzoTotale decimal(8,2) not null,
      Pagamento char not null,
-     IdCliente char(1) not null,
+     IdCliente int not null,
      TipoNoleggio varchar(15) not null,
      constraint IDNOLEGGIO_LETTINO primary key (CodNoleggio));
 
@@ -118,7 +119,7 @@ create table PRENOTAZIONE (
      Sconto float(1) not null,
      Note varchar(255),
      Pagamento char not null,
-     IdCliente char(1) not null,
+     IdCliente int not null,
      CodFila int not null,
      NumOmbrellone int not null,
      constraint IDPRENOTAZIONE primary key (CodPrenotazione));
@@ -146,7 +147,7 @@ create table TARIFFE_NOLEGGIO (
      constraint IDTARIFFE_NOLEGGIO primary key (TipoNoleggio));
 
 create table TURNO (
-     IdDipendente char(1) not null,
+     IdDipendente int not null,
      Data date not null,
      OraInizio char(5) not null,
      OraFine char(5) not null,
