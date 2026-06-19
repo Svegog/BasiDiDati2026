@@ -338,24 +338,6 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
   \end{tabularx}
 \end{table}
 
-\begin{table}[H]
-  \centering
-  \caption{Tabella operazione O.10}
-  \label{tab:accessi-o10}
-  \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm}}
-    \toprule
-    \rowcolor{primary!15}
-    \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
-    \midrule
-    \entita{Dipendenti}      & E & L & 18    \\
-    \entita{Turno}           & E & L & 18    \\
-    \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 32 letture $\rightarrow$ 160 accessi al giorno} \\
-    \bottomrule
-  \end{tabularx}
-\end{table}
-
 \subsection{O.11 --- Verifica disponibilità ombrelloni per intervallo}
 
 Le grandi dimensioni di questa operazione sono giustificabili dal fatto che, nel caso
@@ -364,7 +346,7 @@ le tuple di \entita{Prenotazioni} e \entita{Abbonamenti}.
 Una possibile ottimizzazione è l'aggiunta di un \textbf{indice} nel database.
 % L'index crea un B-tree che ordina le tuple prima per DataInizio poi per DataFine
 
-\begin{table}[H] % DA FAREEEEEEE
+\begin{table}[H]
   \centering
   \caption{Tabella operazione O.11}
   \label{tab:accessi-o11}
@@ -559,6 +541,33 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
     \bottomrule
   \end{tabularx}
 \end{table}
+
+\subsection{Tabella riassuntiva accessi per operazione}
+
+\begin{table}[H]
+  \centering
+  \caption{Tabella totale accessi}
+  \label{tab:accessi-completo}
+  \rowcolors{2}{rowalt}{white}
+  \begin{tabularx}{\textwidth}{C{1cm} C{0.6cm} C{4.3cm} C{1cm} C{0.6cm} C{4.3cm} C{1cm}}
+  \toprule
+  \rowcolor{primary!15}
+  & \textbf{N.} & \textbf{Frequenza} & & \textbf{N.} & \textbf{Frequenza} & \\
+  \midrule
+   & O.1 & 20 accessi/giorno          & & O.10 & 160 accessi/giorno     & \\
+   & O.2 & 1512 accessi/giorno        & & O.11 & 351.000 accessi/giorno & \\
+   & O.3 & 3025 accessi/stagione      & & O.12 & 1.200 accessi/giorno   & \\
+   & O.4 & 60 accessi/giorno          & & O.13 & 17 accessi/giorno      & \\
+   & O.5 & 12 accessi/stagione        & & O.14 & 27 accessi/stagione    & \\
+   & O.6 & 60 accessi/giorno          & & O.15 & 300 accessi/stagione   & \\
+   & O.7 & 84 accessi/giorno          & & O.16 & 8 accessi/settimana    & \\
+   & O.8 & 364 accessi/stagione       & & O.17 & 120 accessi/giorno     & \\
+   & O.9 & 86 accessi/giorno          & & O.18 & 45 accessi/giorno      & \\
+  \bottomrule
+  \end{tabularx}
+\end{table}
+
+\clearpage
 
 % -- 4.4 Analisi delle ridondanze ----------------------------
 \section{Analisi delle ridondanze}
