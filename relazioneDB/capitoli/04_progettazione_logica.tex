@@ -549,7 +549,7 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
   \caption{Tabella totale accessi}
   \label{tab:accessi-completo}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{C{1cm} C{0.6cm} C{4.3cm} C{1cm} C{0.6cm} C{4.3cm} C{1cm}}
+  \begin{tabularx}{\textwidth}{C{1.1cm} C{0.6cm} C{4.3cm} C{1cm} C{0.6cm} C{4.3cm} C{1.1cm}}
   \toprule
   \rowcolor{primary!15}
   & \textbf{N.} & \textbf{Frequenza} & & \textbf{N.} & \textbf{Frequenza} & \\
@@ -665,25 +665,41 @@ l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel t
   \label{fig:schema-relazionale}
 \end{figure}
 
+\clearpage
+
+% - Inserimento di un cliente
+% - Inserimento di una prenotazione
+% - Inserimento di un abbonamento
+% - Inserimento del noleggio di un lettino
+% - Registrazione nuovi dipendenti
+% - Aggiunta di un nuovo turno di lavoro
+% - Inserimento di un ordine
+% - Aggiunta di un nuovo fornitore con catalogo prodotti
+% - Registrazione consegna e aggiornamento giacenze
+% - Visualizzazione dipendenti in turno per data
+% - Verifica disponibilit\`{a} ombrelloni per intervallo
+% - Controllo giacenze magazzino
+% - Visualizzazione storico cliente
+% - Modifica tariffa lettini
+% - Modifica prezzi per fila
+% - Aggiornamento prezzi catalogo di un fornitore
+% - Aggiornamento giacenze dopo inventario
+% - Inserimento conferma pagamento
+
 % -- 4.8 Query SQL -------------------------------------------
 \section{Traduzione delle operazioni in query SQL}
 
-\subsection{O2 --- Ombrelloni disponibili in un intervallo di date}
+Si è scelto di sostituire valori temporanei generici con il carattere \textbf{?}, inoltre in alcuni
+casi ometteremo i codici perchè il valore impostato del campo è \textit{auto\_increment}.
 
-\begin{lstlisting}[caption={O2: Ombrelloni disponibili per una data}]
--- Parametri: :data_inizio, :data_fine
-SELECT o.id, o.fila, o.numero, o.numeroLettini, o.numeroSedie
-FROM   Ombrellone o
-WHERE  o.id NOT IN (
-    SELECT p.idOmbrellone
-    FROM   Prenotazione p
-    WHERE  p.dataInizio <= :data_fine
-    AND    p.dataFine   >= :data_inizio
-)
-ORDER BY o.fila, o.numero;
+\subsection{O.1 --- Inserimento di un cliente}
+
+\begin{lstlisting}[caption={O.1: Inserimento di un cliente}]
+INSERT INTO CLIENTE (Nome, Cognome, Email, RecapitoTelefonico)
+VALUES (?, ?, ?, ?);
 \end{lstlisting}
 
-\subsection{O3 --- Dipendenti in turno per una data specifica}
+\subsection{O.2: Inserimento di una prenotazione}
 
 \begin{lstlisting}[caption={O3: Dipendenti in turno per una data}]
 -- Parametro: :data
