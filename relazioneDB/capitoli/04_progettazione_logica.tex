@@ -677,14 +677,14 @@ DETTAGLIO\_ORDINE(\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiav
 Si è scelto di sostituire valori temporanei generici con il carattere \textbf{?}, inoltre in alcuni
 casi ometteremo i codici perchè il valore impostato del campo è \textit{auto\_increment}.
 
-\subsection{O.1 --- Inserimento di un cliente}
+\subsection*{O.1 --- Inserimento di un cliente}
 
 \begin{lstlisting}[caption={O.1: Inserimento di un cliente}]
 INSERT INTO CLIENTE (Nome, Cognome, Email, RecapitoTelefonico)
 VALUES (?, ?, ?, ?);
 \end{lstlisting}
 
-\subsection{O.2: Inserimento di una prenotazione}
+\subsection*{O.2: Inserimento di una prenotazione}
 
 Scomponiamo la query in sottoquery che serviranno nell'applicativo, per controllo.
 Per comodità del committente la ricerca del cliente verrà fatta tramite \textit{nome},
@@ -707,7 +707,7 @@ INSERT INTO PRENOTAZIONE (DataInizio, DataFine, Prezzo, Sconto, Note, Pagamento,
 VALUES (?, ?, ?, ?, ?, 'N', ?, ?, ?);
 \end{lstlisting}
 
-\subsection{O.3: Inserimento di un abbonamento}
+\subsection*{O.3: Inserimento di un abbonamento}
 
 \begin{lstlisting}[caption={O3: Inserimento di un abbonamento}]
 SELECT IdCliente FROM CLIENTE 
@@ -725,7 +725,7 @@ INSERT INTO ABBONAMENTO (CodFila, NumOmbrellone, Anno, Prezzo, Sconto, Pagamento
 VALUES (?, ?, ?, ?, ?, 'N', ?);
 \end{lstlisting}
 
-\subsection{O.4: Inserimento del noleggio di un lettino}
+\subsection*{O.4: Inserimento del noleggio di un lettino}
 
 \begin{lstlisting}[caption={O.4: Inserimento del noleggio di un lettino}]
 SELECT IdCliente FROM CLIENTE 
@@ -737,14 +737,14 @@ INSERT INTO NOLEGGIO\_LETTINO (Data, Quantità, Pagamento, IdCliente, TipoNolegg
 VALUES (?, ?, 'N', ?, ?, ?);
 \end{lstlisting}
 
-\subsection{O.5: Registrazione nuovi dipendenti}
+\subsection*{O.5: Registrazione nuovi dipendenti}
 
 \begin{lstlisting}[caption={O.5: Registrazione nuovi dipendenti}]
 INSERT INTO DIPENDENTE (Nome, Cognome, Email, RecapitoTelefonico, CodiceFiscale)
 VALUES (?, ?, ?, ?, ?);
 \end{lstlisting}
 
-\subsection{O.6: Aggiunta di un nuovo turno di lavoro}
+\subsection*{O.6: Aggiunta di un nuovo turno di lavoro}
 
 \begin{lstlisting}[caption={O.6: Aggiunta di un nuovo turno di lavoro}]
 SELECT IdDipendente FROM DIPENDENTE 
@@ -761,7 +761,7 @@ INSERT INTO TURNO (IdDipendente, Data, OraInizio, OraFine, CodMansione)
 VALUES (?, ?, ?, ?, ?);
 \end{lstlisting}
 
-\subsection{O.7: Inserimento di un ordine}
+\subsection*{O.7: Inserimento di un ordine}
 
 \begin{lstlisting}[caption={O.7: Inserimento di un ordine}]
 INSERT INTO ORDINE (DataOrdine, ConsegnaPrevista, DataConsegna, IdProprietario, PartitaIVA)
@@ -773,7 +773,7 @@ VALUES (LAST_INSERT_ID(), ?, ?, ?,
        (SELECT C.PrezzoUnitario FROM CATALOGO C WHERE C.CodProdotto = ? AND C.PartitaIVA = ?));
 \end{lstlisting}
 
-\subsection{O.8: Aggiunta di un nuovo fornitore con catalogo prodotti}
+\subsection*{O.8: Aggiunta di un nuovo fornitore con catalogo prodotti}
 
 \begin{lstlisting}[caption={O.8: Aggiunta di un nuovo fornitore con catalogo prodotti}]
 INSERT INTO FORNITORE (PartitaIVA, Nome, Email, Indirizzo, RecapitoTelefonico)
@@ -784,7 +784,7 @@ INSERT INTO CATALOGO (CodProdotto, PartitaIVA, PrezzoUnitario)
 VALUES (?, ?, ?);
 \end{lstlisting}
 
-\subsection{O.9: Registrazione consegna e aggiornamento giacenze}
+\subsection*{O.9: Registrazione consegna e aggiornamento giacenze}
 
 \begin{lstlisting}[caption={O.9: Registrazione consegna e aggiornamento giacenze}]
 UPDATE ORDINE 
@@ -797,7 +797,7 @@ SET P.QuantitàMagazzino = P.QuantitàMagazzino + DO.Quantità
 WHERE DO.CodOrdine = ?;
 \end{lstlisting}
 
-\subsection{O.10: Visualizzazione dipendenti in turno per data}
+\subsection*{O.10: Visualizzazione dipendenti in turno per data}
 
 \begin{lstlisting}[caption={O.10: Visualizzazione dipendenti in turno per data}]
 SELECT D.Nome, D.Cognome, M.NomeMansione, T.OraInizio, T.OraFine
@@ -807,7 +807,7 @@ JOIN MANSIONE M ON T.CodMansione = M.CodMansione
 WHERE T.Data = ?;
 \end{lstlisting}
 
-\subsection{O.11: Verifica disponibilità ombrelloni per intervallo}
+\subsection*{O.11: Verifica disponibilità ombrelloni per intervallo}
 
 \begin{lstlisting}[caption={O.11: Verifica disponibilità ombrelloni per intervallo}]
 SELECT O.CodFila, O.NumOmbrellone
@@ -824,7 +824,7 @@ AND NOT EXISTS (
 );
 \end{lstlisting}
 
-\subsection{O.12: Controllo giacenze magazzino}
+\subsection*{O.12: Controllo giacenze magazzino}
 
 \begin{lstlisting}[caption={O.12: Controllo giacenze magazzino}]
 SELECT CodProdotto, NomeProdotto, QuantitàMagazzino, QuantitàMinima
@@ -832,7 +832,7 @@ FROM PRODOTTO
 WHERE QuantitàMagazzino < QuantitàMinima;
 \end{lstlisting}
 
-\subsection{O.13: Visualizzazione storico cliente} % CONTROLLARE
+\subsection*{O.13: Visualizzazione storico cliente} % CONTROLLARE
 
 \begin{lstlisting}[caption={O.13: Visualizzazione storico cliente}] 
 SELECT IdCliente FROM CLIENTE WHERE Nome = ? AND Cognome = ? AND Email = ?;
@@ -850,7 +850,7 @@ FROM NOLEGGIO\_LETTINO
 WHERE IdCliente = ? AND Data < CURDATE();
 \end{lstlisting}
 
-\subsection{O.14: Modifica tariffa lettini}
+\subsection*{O.14: Modifica tariffa lettini}
 
 \begin{lstlisting}[caption={O.14: Modifica tariffa lettini}]
 UPDATE TARIFFE\_NOLEGGIO
@@ -858,7 +858,7 @@ SET Prezzo = ?
 WHERE TipoNoleggio = ?;
 \end{lstlisting}
 
-\subsection{O.15: Modifica prezzi per fila}
+\subsection*{O.15: Modifica prezzi per fila}
 
 \begin{lstlisting}[caption={O.15: Modifica prezzi per fila}]
 UPDATE FILA
@@ -866,7 +866,7 @@ SET TariffaGiornaliera = ?, TariffaStagionale = ?
 WHERE CodFila = ?;
 \end{lstlisting}
 
-\subsection{O.16: Aggiornamento prezzi catalogo di un fornitore}
+\subsection*{O.16: Aggiornamento prezzi catalogo di un fornitore}
 
 \begin{lstlisting}[caption={O.16: Aggiornamento prezzi catalogo di un fornitore}]
 UPDATE CATALOGO
@@ -874,7 +874,7 @@ SET PrezzoUnitario = ?
 WHERE PartitaIVA = ? AND CodProdotto = ?;
 \end{lstlisting}
 
-\subsection{O.17: Aggiornamento giacenze dopo inventario}
+\subsection*{O.17: Aggiornamento giacenze dopo inventario}
 
 \begin{lstlisting}[caption={O.17: Aggiornamento giacenze dopo inventario}]
 UPDATE PRODOTTO
@@ -882,7 +882,7 @@ SET QuantitàMagazzino = ?
 WHERE CodProdotto = ?;
 \end{lstlisting}
 
-\subsection{O.18: Inserimento conferma pagamento}
+\subsection*{O.18: Inserimento conferma pagamento}
 
 A seguire le tre query per i tre casi diversi di conferma di pagamento (\textit{Prenotazione}, 
 \textit{Abbonamento} oppure \textit{Noleggio}).
