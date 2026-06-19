@@ -12,7 +12,10 @@
 -- Database Section
 -- ________________ 
 
-create database Gestionale;
+DROP DATABASE IF EXISTS Gestionale;
+
+CREATE DATABASE IF NOT EXISTS Gestionale;
+
 use Gestionale;
 
 
