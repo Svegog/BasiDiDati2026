@@ -1,5 +1,5 @@
 def main():
-    print("Hello from gestionalestabilimento!")
+    print("Hello from appstabilimento!")
 
 
 if __name__ == "__main__":
