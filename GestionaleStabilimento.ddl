@@ -25,7 +25,7 @@ use Gestionale;
 create table ABBONAMENTO (
      CodFila int not null,
      NumOmbrellone int not null,
-     Anno int not null,
+     Anno year not null,
      Prezzo decimal(8,2) not null,
      Sconto float(1) not null,
      Pagamento char not null,
@@ -152,8 +152,8 @@ create table TARIFFE_NOLEGGIO (
 create table TURNO (
      IdDipendente int not null,
      Data date not null,
-     OraInizio char(5) not null,
-     OraFine char(5) not null,
+     OraInizio time not null,
+     OraFine time not null,
      CodMansione int not null,
      constraint IDTURNO primary key (IdDipendente, Data, OraInizio));
 
