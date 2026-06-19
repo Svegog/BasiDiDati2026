@@ -263,9 +263,10 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \entita{Fornitore}            & E & L & 1      \\
     \entita{Catalogo}             & E & L & 10     \\
     \entita{Prodotto}             & E & L & 10     \\
-    \entita{Dettaglio\_Ordine}    & A & S & 10      \\
+    \entita{Ordine}               & E & S & 1      \\
+    \entita{Dettaglio\_Ordine}    & A & S & 10     \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 22 letture + 10 scritture $\rightarrow$ 84 accessi al giorno} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 22 letture + 11 scritture $\rightarrow$ 88 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -560,7 +561,7 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
    & O.4 & 60 accessi/giorno          & & O.13 & 17 accessi/giorno      & \\
    & O.5 & 12 accessi/stagione        & & O.14 & 27 accessi/stagione    & \\
    & O.6 & 60 accessi/giorno          & & O.15 & 300 accessi/stagione   & \\
-   & O.7 & 84 accessi/giorno          & & O.16 & 8 accessi/settimana    & \\
+   & O.7 & 88 accessi/giorno          & & O.16 & 8 accessi/settimana    & \\
    & O.8 & 364 accessi/stagione       & & O.17 & 120 accessi/giorno     & \\
    & O.9 & 86 accessi/giorno          & & O.18 & 45 accessi/giorno      & \\
   \bottomrule
@@ -667,25 +668,6 @@ l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel t
 
 \clearpage
 
-% - Inserimento di un cliente
-% - Inserimento di una prenotazione
-% - Inserimento di un abbonamento
-% - Inserimento del noleggio di un lettino
-% - Registrazione nuovi dipendenti
-% - Aggiunta di un nuovo turno di lavoro
-% - Inserimento di un ordine
-% - Aggiunta di un nuovo fornitore con catalogo prodotti
-% - Registrazione consegna e aggiornamento giacenze
-% - Visualizzazione dipendenti in turno per data
-% - Verifica disponibilit\`{a} ombrelloni per intervallo
-% - Controllo giacenze magazzino
-% - Visualizzazione storico cliente
-% - Modifica tariffa lettini
-% - Modifica prezzi per fila
-% - Aggiornamento prezzi catalogo di un fornitore
-% - Aggiornamento giacenze dopo inventario
-% - Inserimento conferma pagamento
-
 % -- 4.8 Query SQL -------------------------------------------
 \section{Traduzione delle operazioni in query SQL}
 
@@ -701,43 +683,211 @@ VALUES (?, ?, ?, ?);
 
 \subsection{O.2: Inserimento di una prenotazione}
 
-\begin{lstlisting}[caption={O3: Dipendenti in turno per una data}]
--- Parametro: :data
-SELECT d.nome, d.cognome, t.orarioInizio, t.orarioFine
-FROM   Dipendente d
-JOIN   Turno t ON t.idDipendente = d.id
-WHERE  t.data = :data
-ORDER BY t.orarioInizio;
+Scomponiamo la query in sottoquery che serviranno nell'applicativo, per controllo.
+Per comodità del committente la ricerca del cliente verrà fatta tramite \textit{nome},
+\textit{cognome} ed \textit{email}, in modo da non dover memorizzare il \textit{codice}.
+
+\begin{lstlisting}[caption={O2: Inserimento di una prenotazione}]
+SELECT IdCliente FROM CLIENTE 
+WHERE Nome = ? AND Cognome = ? AND Email = ?;
+
+SELECT TariffaGiornaliera FROM FILA WHERE CodFila = ?;
+
+SELECT 1 FROM ABBONAMENTO A 
+WHERE A.CodFila = ? AND A.NumOmbrellone = ? AND A.Anno = YEAR(?)
+UNION
+SELECT 1 FROM PRENOTAZIONE P 
+WHERE P.CodFila = ? AND P.NumOmbrellone = ? 
+AND (? <= P.DataFine AND ? >= P.DataInizio);
+
+INSERT INTO PRENOTAZIONE (DataInizio, DataFine, Prezzo, Sconto, Note, Pagamento, IdCliente, CodFila, NumOmbrellone)
+VALUES (?, ?, ?, ?, ?, 'N', ?, ?, ?);
 \end{lstlisting}
 
-\subsection{O5 --- Prodotti sotto la soglia minima in magazzino}
+\subsection{O.3: Inserimento di un abbonamento}
 
-\begin{lstlisting}[caption={O5: Mancanze in magazzino}]
-SELECT p.nome, p.quantita, p.sogliaMinimaRiordino,
-       (p.sogliaMinimaRiordino - p.quantita) AS quantita_mancante
-FROM   Prodotto p
-WHERE  p.quantita < p.sogliaMinimaRiordino
-ORDER BY quantita_mancante DESC;
+\begin{lstlisting}[caption={O3: Inserimento di un abbonamento}]
+SELECT IdCliente FROM CLIENTE 
+WHERE Nome = ? AND Cognome = ? AND Email = ?;
+
+SELECT TariffaStagionale FROM FILA WHERE CodFila = ?;
+
+SELECT 1 FROM ABBONAMENTO A 
+WHERE A.CodFila = ? AND A.NumOmbrellone = ? AND A.Anno = ?
+UNION
+SELECT 1 FROM PRENOTAZIONE P 
+WHERE P.CodFila = ? AND P.NumOmbrellone = ? AND YEAR(P.DataInizio) = ?;
+
+INSERT INTO ABBONAMENTO (CodFila, NumOmbrellone, Anno, Prezzo, Sconto, Pagamento, IdCliente)
+VALUES (?, ?, ?, ?, ?, 'N', ?);
 \end{lstlisting}
 
-\subsection{O1 --- Inserimento nuova prenotazione}
+\subsection{O.4: Inserimento del noleggio di un lettino}
 
-\begin{lstlisting}[caption={O1: Inserimento prenotazione con calcolo prezzo}]
--- Inserisce una nuova prenotazione
--- Il prezzo totale viene passato dall'applicazione dopo il calcolo
-INSERT INTO Prenotazione (idCliente, idOmbrellone,
-                          dataInizio, dataFine, prezzoTotale)
-VALUES (:id_cliente, :id_ombrellone,
-        :data_inizio, :data_fine, :prezzo_totale);
+\begin{lstlisting}[caption={O.4: Inserimento del noleggio di un lettino}]
+SELECT IdCliente FROM CLIENTE 
+WHERE Nome = ? AND Cognome = ? AND Email = ?;
+
+SELECT Prezzo FROM TARIFFE\_NOLEGGIO WHERE TipoNoleggio = ?;
+
+INSERT INTO NOLEGGIO\_LETTINO (Data, Quantità, Pagamento, IdCliente, TipoNoleggio, Prezzo)
+VALUES (?, ?, 'N', ?, ?, ?);
 \end{lstlisting}
 
-\subsection{O8 --- Storico prenotazioni di un cliente}
+\subsection{O.5: Registrazione nuovi dipendenti}
 
-\begin{lstlisting}[caption={O8: Storico prenotazioni di un cliente}]
--- Parametro: :id_cliente
-SELECT o.fila, o.numero, p.dataInizio, p.dataFine, p.prezzoTotale
-FROM   Prenotazione p
-JOIN   Ombrellone o ON o.id = p.idOmbrellone
-WHERE  p.idCliente = :id_cliente
-ORDER BY p.dataInizio DESC;
+\begin{lstlisting}[caption={O.5: Registrazione nuovi dipendenti}]
+INSERT INTO DIPENDENTE (Nome, Cognome, Email, RecapitoTelefonico, CodiceFiscale)
+VALUES (?, ?, ?, ?, ?);
+\end{lstlisting}
+
+\subsection{O.6: Aggiunta di un nuovo turno di lavoro}
+
+\begin{lstlisting}[caption={O.6: Aggiunta di un nuovo turno di lavoro}]
+SELECT IdDipendente FROM DIPENDENTE 
+WHERE Nome = ? AND Cognome = ? AND Email = ?;
+
+SELECT CodMansione FROM MANSIONE WHERE NomeMansione = ?;
+
+-- Verifica non sovrapposizione del Dipendente sul turno
+SELECT 1 FROM TURNO T 
+WHERE T.IdDipendente = ? AND T.Data = ? 
+AND (T.OraInizio < ? AND T.OraFine > ?);
+
+INSERT INTO TURNO (IdDipendente, Data, OraInizio, OraFine, CodMansione)
+VALUES (?, ?, ?, ?, ?);
+\end{lstlisting}
+
+\subsection{O.7: Inserimento di un ordine}
+
+\begin{lstlisting}[caption={O.7: Inserimento di un ordine}]
+INSERT INTO ORDINE (DataOrdine, ConsegnaPrevista, DataConsegna, IdProprietario, PartitaIVA)
+VALUES (?, ?, NULL, ?, ?);
+
+-- Da eseguire per ciascun prodotto dell'ordine
+INSERT INTO DETTAGLIO\_ORDINE (CodOrdine, PartitaIVA, CodProdotto, Quantità, PrezzoAlMomento)
+VALUES (LAST_INSERT_ID(), ?, ?, ?, 
+       (SELECT C.PrezzoUnitario FROM CATALOGO C WHERE C.CodProdotto = ? AND C.PartitaIVA = ?));
+\end{lstlisting}
+
+\subsection{O.8: Aggiunta di un nuovo fornitore con catalogo prodotti}
+
+\begin{lstlisting}[caption={O.8: Aggiunta di un nuovo fornitore con catalogo prodotti}]
+INSERT INTO FORNITORE (PartitaIVA, Nome, Email, Indirizzo, RecapitoTelefonico)
+VALUES (?, ?, ?, ?, ?);
+
+-- Da eseguire per ciascun prodotto associato al fornitore
+INSERT INTO CATALOGO (CodProdotto, PartitaIVA, PrezzoUnitario)
+VALUES (?, ?, ?);
+\end{lstlisting}
+
+\subsection{O.9: Registrazione consegna e aggiornamento giacenze}
+
+\begin{lstlisting}[caption={O.9: Registrazione consegna e aggiornamento giacenze}]
+UPDATE ORDINE 
+SET DataConsegna = ? 
+WHERE CodOrdine = ?;
+
+UPDATE PRODOTTO P
+JOIN DETTAGLIO\_ORDINE DO ON P.CodProdotto = DO.CodProdotto
+SET P.QuantitàMagazzino = P.QuantitàMagazzino + DO.Quantità
+WHERE DO.CodOrdine = ?;
+\end{lstlisting}
+
+\subsection{O.10: Visualizzazione dipendenti in turno per data}
+
+\begin{lstlisting}[caption={O.10: Visualizzazione dipendenti in turno per data}]
+SELECT D.Nome, D.Cognome, M.NomeMansione, T.OraInizio, T.OraFine
+FROM TURNO T
+JOIN DIPENDENTE D ON T.IdDipendente = D.IdDipendente
+JOIN MANSIONE M ON T.CodMansione = M.CodMansione
+WHERE T.Data = ?;
+\end{lstlisting}
+
+\subsection{O.11: Verifica disponibilità ombrelloni per intervallo}
+
+\begin{lstlisting}[caption={O.11: Verifica disponibilità ombrelloni per intervallo}]
+SELECT O.CodFila, O.NumOmbrellone
+FROM OMBRELLONE O
+WHERE NOT EXISTS (
+    SELECT 1 FROM ABBONAMENTO A
+    WHERE A.CodFila = O.CodFila AND A.NumOmbrellone = O.NumOmbrellone
+    AND A.Anno = YEAR(?)
+)
+AND NOT EXISTS (
+    SELECT 1 FROM PRENOTAZIONE P
+    WHERE P.CodFila = O.CodFila AND P.NumOmbrellone = O.NumOmbrellone
+    AND (P.DataInizio <= ? AND P.DataFine >= ?)
+);
+\end{lstlisting}
+
+\subsection{O.12: Controllo giacenze magazzino}
+
+\begin{lstlisting}[caption={O.12: Controllo giacenze magazzino}]
+SELECT CodProdotto, NomeProdotto, QuantitàMagazzino, QuantitàMinima
+FROM PRODOTTO
+WHERE QuantitàMagazzino < QuantitàMinima;
+\end{lstlisting}
+
+\subsection{O.13: Visualizzazione storico cliente} % CONTROLLARE
+
+\begin{lstlisting}[caption={O.13: Visualizzazione storico cliente}] 
+SELECT IdCliente FROM CLIENTE WHERE Nome = ? AND Cognome = ? AND Email = ?;
+
+SELECT 'Prenotazione' AS TIPO, DataInizio, DataFine, Prezzo 
+FROM PRENOTAZIONE 
+WHERE IdCliente = ? AND DataFine < CURDATE();
+
+SELECT 'Abbonamento' AS TIPO, Anno AS DataInizio, NULL AS DataFine, Prezzo 
+FROM ABBONAMENTO 
+WHERE IdCliente = ?;
+
+SELECT 'Noleggio Lettini' AS TIPO, Data AS DataInizio, NULL AS DataFine, Prezzo 
+FROM NOLEGGIO\_LETTINO 
+WHERE IdCliente = ? AND Data < CURDATE();
+\end{lstlisting}
+
+\subsection{O.14: Modifica tariffa lettini}
+
+\begin{lstlisting}[caption={O.14: Modifica tariffa lettini}]
+UPDATE TARIFFE\_NOLEGGIO
+SET Prezzo = ?
+WHERE TipoNoleggio = ?;
+\end{lstlisting}
+
+\subsection{O.15: Modifica prezzi per fila}
+
+\begin{lstlisting}[caption={O.15: Modifica prezzi per fila}]
+UPDATE FILA
+SET TariffaGiornaliera = ?, TariffaStagionale = ?
+WHERE CodFila = ?;
+\end{lstlisting}
+
+\subsection{O.16: Aggiornamento prezzi catalogo di un fornitore}
+
+\begin{lstlisting}[caption={O.16: Aggiornamento prezzi catalogo di un fornitore}]
+UPDATE CATALOGO
+SET PrezzoUnitario = ?
+WHERE PartitaIVA = ? AND CodProdotto = ?;
+\end{lstlisting}
+
+\subsection{O.17: Aggiornamento giacenze dopo inventario}
+
+\begin{lstlisting}[caption={O.17: Aggiornamento giacenze dopo inventario}]
+UPDATE PRODOTTO
+SET QuantitàMagazzino = ?
+WHERE CodProdotto = ?;
+\end{lstlisting}
+
+\subsection{O.18: Inserimento conferma pagamento}
+
+A seguire le tre query per i tre casi diversi di conferma di pagamento (\textit{Prenotazione}, 
+\textit{Abbonamento} oppure \textit{Noleggio}).
+
+\begin{lstlisting}[caption={O.18: Inserimento conferma pagamento}]
+UPDATE PRENOTAZIONE SET Pagamento = 'S' WHERE CodPrenotazione = ?;
+
+UPDATE ABBONAMENTO SET Pagamento = 'S' WHERE CodFila = ? AND NumOmbrellone = ? AND Anno = ?;
+
+UPDATE NOLEGGIO\_LETTINO SET Pagamento = 'S' WHERE CodNoleggio = ?;
 \end{lstlisting}
