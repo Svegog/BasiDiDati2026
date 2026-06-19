@@ -63,8 +63,8 @@ la stima seguente è calcolata su un lasso di tempo di 5 anni.
     Appartenenza          & 1:N     & 600     & = \entita{Prodotto} \\
     Acquisto              & 1:N     & 7.500   & = \entita{Noleggio\_lettino} \\
     Tipologia             & 1:N     & 7.500   & = \entita{Noleggio\_lettino} \\
-    Richiesta             & 1:N     & 7.500   & = \entita{Prenotazione} \\
-    Riguarda              & N:M     & 9.000   & $\sim$ 1.2 \entita{Ombrelloni} per prenotazione \\
+    Richiesta             & 1:N     & 11.250  & = \entita{Prenotazione} \\
+    Riguarda              & 1:N     & 11.250  & = \entita{Prenotazione} \\
     Sottoscrizione        & 1:N     & 250     & = \entita{Abbonamento} \\
     Riservazione          & 1:N     & 250     & = \entita{Abbonamento} \\
     Locazione\_ombrellone & 1:N     & 200     & = \entita{Ombrellone} \\
@@ -148,7 +148,7 @@ mentre quelle più complesse avranno la loro sezione specifica.
   \end{tabularx}
 \end{table}
 
-\subsection{O.2, O.3 --- Inserimento prenotazione, abbonamento}
+\subsection*{O.2, O.3 --- Inserimento prenotazione, abbonamento}
 
 Questa operazione inserisce uno dei tre servizi relativi ad un singolo cliente. Nel caso di 
 \entita{Prenotazione} e \entita{Abbonamento} bisogna verificare anche che l'ombrellone sia libero
@@ -271,7 +271,7 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
   \end{tabularx}
 \end{table}
 
-\subsection{O.8 --- Aggiunta fornitore con catalogo prodotti}
+\subsection*{O.8 --- Aggiunta fornitore con catalogo prodotti}
 
 L'aggiunta di un fornitore richiede anche l'aggiunta del suo catalogo al Database, che però conterrà
 già il prodotto corrispondente al catalogo.
@@ -295,7 +295,7 @@ già il prodotto corrispondente al catalogo.
   \end{tabularx}
 \end{table}
 
-\subsection{O.9 --- Registrazione consegna e aggiornamento giacenze}
+\subsection*{O.9 --- Registrazione consegna e aggiornamento giacenze}
 
 Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} in quanto il 
 \textit{CodProdotto} è già ottenuto dalla letture in \entita{Dettaglio\_Ordine}. 
@@ -339,7 +339,7 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
   \end{tabularx}
 \end{table}
 
-\subsection{O.11 --- Verifica disponibilità ombrelloni per intervallo}
+\subsection*{O.11 --- Verifica disponibilità ombrelloni per intervallo}
 
 Le grandi dimensioni di questa operazione sono giustificabili dal fatto che, nel caso
 peggiore, la visualizzazione di ombrelloni disponibili richiederebbe la lettura di tutte
@@ -441,7 +441,7 @@ Una possibile ottimizzazione è l'aggiunta di un \textbf{indice} nel database.
 
 \clearpage
 
-\subsection{O.16, O.17 --- Aggiornamento prezzi catalogo di un fornitore e giacenze dopo inventario}
+\subsection*{O.16, O.17 --- Aggiornamento prezzi catalogo di un fornitore e giacenze dopo inventario}
 
 L'aggiornamento del prezzo del catalogo viene fatto un prodotto alla volta, cos\`{i} come
 per la giacenza di un prodotto dopo l'inventario.
@@ -483,7 +483,7 @@ per la giacenza di un prodotto dopo l'inventario.
   \end{tabularx}
 \end{table}
 
-\subsection{O.18 --- Inserimento conferma pagamento}
+\subsection*{O.18 --- Inserimento conferma pagamento}
 
 La conferma del pagamento deve avvenire nel caso di \textit{noleggio}, 
 \textit{prenotazioni} ed \textit{abbonamenti}, visto la similitudine concettuale sono 
@@ -677,7 +677,10 @@ DETTAGLIO\_ORDINE(\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiav
 Si è scelto di sostituire valori temporanei generici con il carattere \textbf{?}, inoltre in alcuni
 casi ometteremo i codici perchè il valore impostato del campo è \textit{auto\_increment}.
 
-\subsection*{O.1 --- Inserimento di un cliente}
+In caso di query complesse, esse verrano scomposte in sottoquery che serviranno nell'applicativo, 
+per controllo.
+
+\subsection*{O.1 --- Inserimento di un cliente} % TOGLIERE TRATTINI
 
 \begin{lstlisting}[caption={O.1: Inserimento di un cliente}]
 INSERT INTO CLIENTE (Nome, Cognome, Email, RecapitoTelefonico)
@@ -686,9 +689,8 @@ VALUES (?, ?, ?, ?);
 
 \subsection*{O.2: Inserimento di una prenotazione}
 
-Scomponiamo la query in sottoquery che serviranno nell'applicativo, per controllo.
-Per comodità del committente la ricerca del cliente verrà fatta tramite \textit{nome},
-\textit{cognome} ed \textit{email}, in modo da non dover memorizzare il \textit{codice}.
+Per comodità del committente la ricerca del cliente (da qui alle prossime query) verrà fatta 
+tramite \textit{nome}, \textit{cognome} ed \textit{email}, in modo da non dover memorizzare il \textit{codice}.
 
 \begin{lstlisting}[caption={O2: Inserimento di una prenotazione}]
 SELECT IdCliente FROM CLIENTE 
@@ -725,17 +727,19 @@ INSERT INTO ABBONAMENTO (CodFila, NumOmbrellone, Anno, Prezzo, Sconto, Pagamento
 VALUES (?, ?, ?, ?, ?, 'N', ?);
 \end{lstlisting}
 
-\subsection*{O.4: Inserimento del noleggio di un lettino}
+\subsection*{O.4: Inserimento del noleggio di un lettino} % SELECT LIST DENTRO INSERT
 
 \begin{lstlisting}[caption={O.4: Inserimento del noleggio di un lettino}]
 SELECT IdCliente FROM CLIENTE 
 WHERE Nome = ? AND Cognome = ? AND Email = ?;
 
-SELECT Prezzo FROM TARIFFE\_NOLEGGIO WHERE TipoNoleggio = ?;
+SELECT Prezzo FROM TARIFFE_NOLEGGIO WHERE TipoNoleggio = ?;
 
-INSERT INTO NOLEGGIO\_LETTINO (Data, Quantità, Pagamento, IdCliente, TipoNoleggio, Prezzo)
+INSERT INTO NOLEGGIO_LETTINO (Data, Quantità, Pagamento, IdCliente, TipoNoleggio, Prezzo)
 VALUES (?, ?, 'N', ?, ?, ?);
 \end{lstlisting}
+
+\clearpage
 
 \subsection*{O.5: Registrazione nuovi dipendenti}
 
@@ -761,14 +765,16 @@ INSERT INTO TURNO (IdDipendente, Data, OraInizio, OraFine, CodMansione)
 VALUES (?, ?, ?, ?, ?);
 \end{lstlisting}
 
+\clearpage
+
 \subsection*{O.7: Inserimento di un ordine}
 
 \begin{lstlisting}[caption={O.7: Inserimento di un ordine}]
 INSERT INTO ORDINE (DataOrdine, ConsegnaPrevista, DataConsegna, IdProprietario, PartitaIVA)
-VALUES (?, ?, NULL, ?, ?);
+VALUES (CURDATE(), ?, NULL, ?, ?);
 
 -- Da eseguire per ciascun prodotto dell'ordine
-INSERT INTO DETTAGLIO\_ORDINE (CodOrdine, PartitaIVA, CodProdotto, Quantità, PrezzoAlMomento)
+INSERT INTO DETTAGLIO_ORDINE (CodOrdine, PartitaIVA, CodProdotto, Quantità, PrezzoAlMomento)
 VALUES (LAST_INSERT_ID(), ?, ?, ?, 
        (SELECT C.PrezzoUnitario FROM CATALOGO C WHERE C.CodProdotto = ? AND C.PartitaIVA = ?));
 \end{lstlisting}
@@ -788,11 +794,11 @@ VALUES (?, ?, ?);
 
 \begin{lstlisting}[caption={O.9: Registrazione consegna e aggiornamento giacenze}]
 UPDATE ORDINE 
-SET DataConsegna = ? 
+SET DataConsegna = CURDATE() 
 WHERE CodOrdine = ?;
 
 UPDATE PRODOTTO P
-JOIN DETTAGLIO\_ORDINE DO ON P.CodProdotto = DO.CodProdotto
+JOIN DETTAGLIO_ORDINE DO ON P.CodProdotto = DO.CodProdotto
 SET P.QuantitàMagazzino = P.QuantitàMagazzino + DO.Quantità
 WHERE DO.CodOrdine = ?;
 \end{lstlisting}
@@ -804,7 +810,8 @@ SELECT D.Nome, D.Cognome, M.NomeMansione, T.OraInizio, T.OraFine
 FROM TURNO T
 JOIN DIPENDENTE D ON T.IdDipendente = D.IdDipendente
 JOIN MANSIONE M ON T.CodMansione = M.CodMansione
-WHERE T.Data = ?;
+WHERE T.Data = ?
+ORDER BY OraInizio;
 \end{lstlisting}
 
 \subsection*{O.11: Verifica disponibilità ombrelloni per intervallo}
@@ -820,40 +827,52 @@ WHERE NOT EXISTS (
 AND NOT EXISTS (
     SELECT 1 FROM PRENOTAZIONE P
     WHERE P.CodFila = O.CodFila AND P.NumOmbrellone = O.NumOmbrellone
-    AND (P.DataInizio <= ? AND P.DataFine >= ?)
-);
+    AND (P.DataInizio <= ? AND P.DataFine >= ?))
+ORDER BY O.CodFila, O.NumOmbrellone;
 \end{lstlisting}
+
+\clearpage
 
 \subsection*{O.12: Controllo giacenze magazzino}
 
 \begin{lstlisting}[caption={O.12: Controllo giacenze magazzino}]
-SELECT CodProdotto, NomeProdotto, QuantitàMagazzino, QuantitàMinima
+SELECT CodProdotto, NomeProdotto, QuantitàMagazzino, QuantitàMinima,
+  (QuantitàMinima - QuantitàMagazzino) AS QuantitàMancante
 FROM PRODOTTO
-WHERE QuantitàMagazzino < QuantitàMinima;
+WHERE QuantitàMagazzino < QuantitàMinima
+ORDER BY QuantitàMancante DESC;
 \end{lstlisting}
 
 \subsection*{O.13: Visualizzazione storico cliente} % CONTROLLARE
+
+Per unire le tabelle abbiamo scelto di dare come nome \textit{DataInizio} anche
+all'anno, in modo da poter unire le tabelle, di conseguenza impostando a \textit{NULL}
+i campi impossibili da tradurre (il campo \textit{Anno}).
 
 \begin{lstlisting}[caption={O.13: Visualizzazione storico cliente}] 
 SELECT IdCliente FROM CLIENTE WHERE Nome = ? AND Cognome = ? AND Email = ?;
 
 SELECT 'Prenotazione' AS TIPO, DataInizio, DataFine, Prezzo 
 FROM PRENOTAZIONE 
-WHERE IdCliente = ? AND DataFine < CURDATE();
+WHERE IdCliente = ? AND DataFine < CURDATE()
 
-SELECT 'Abbonamento' AS TIPO, Anno AS DataInizio, NULL AS DataFine, Prezzo 
+UNION ALL
+
+SELECT 'Abbonamento' AS TIPO, CAST(Anno AS DATE) AS DataInizio, NULL AS DataFine, Prezzo 
 FROM ABBONAMENTO 
-WHERE IdCliente = ?;
+WHERE IdCliente = ?
+
+UNION ALL
 
 SELECT 'Noleggio Lettini' AS TIPO, Data AS DataInizio, NULL AS DataFine, Prezzo 
-FROM NOLEGGIO\_LETTINO 
+FROM NOLEGGIO_LETTINO 
 WHERE IdCliente = ? AND Data < CURDATE();
 \end{lstlisting}
 
 \subsection*{O.14: Modifica tariffa lettini}
 
 \begin{lstlisting}[caption={O.14: Modifica tariffa lettini}]
-UPDATE TARIFFE\_NOLEGGIO
+UPDATE TARIFFE_NOLEGGIO
 SET Prezzo = ?
 WHERE TipoNoleggio = ?;
 \end{lstlisting}
@@ -882,15 +901,20 @@ SET QuantitàMagazzino = ?
 WHERE CodProdotto = ?;
 \end{lstlisting}
 
+\clearpage
+
 \subsection*{O.18: Inserimento conferma pagamento}
 
 A seguire le tre query per i tre casi diversi di conferma di pagamento (\textit{Prenotazione}, 
 \textit{Abbonamento} oppure \textit{Noleggio}).
 
 \begin{lstlisting}[caption={O.18: Inserimento conferma pagamento}]
-UPDATE PRENOTAZIONE SET Pagamento = 'S' WHERE CodPrenotazione = ?;
+UPDATE PRENOTAZIONE SET Pagamento = 'S' 
+WHERE CodPrenotazione = ?;
 
-UPDATE ABBONAMENTO SET Pagamento = 'S' WHERE CodFila = ? AND NumOmbrellone = ? AND Anno = ?;
+UPDATE ABBONAMENTO SET Pagamento = 'S' 
+WHERE CodFila = ? AND NumOmbrellone = ? AND Anno = ?;
 
-UPDATE NOLEGGIO\_LETTINO SET Pagamento = 'S' WHERE CodNoleggio = ?;
+UPDATE NOLEGGIO_LETTINO SET Pagamento = 'S' 
+WHERE CodNoleggio = ?;
 \end{lstlisting}
