@@ -34,7 +34,7 @@ def inserisci_cliente_view(request):
         except Exception as e:
             messages.error(request, f"Errore critico di database: {str(e)}")
             
-    return render(request, 'spiaggia/inserimento_cliente.html')
+    return render(request, 'spiaggia/partials/form_cliente.html')
 
 
 # O.2 --- Inserimento di una prenotazione
@@ -80,7 +80,7 @@ def inserisci_prenotazione_view(request):
         except Exception as e:
             messages.error(request, f"Errore di sistema nell'inserimento: {str(e)}")
             
-    return render(request, 'spiaggia/inserimento_prenotazione.html')
+    return render(request, 'spiaggia/partials/form_prenotazione.html')
 
 
 # O.3 --- Inserimento di un abbonamento
@@ -115,7 +115,7 @@ def inserisci_abbonamento_view(request):
         except Exception as e:
             messages.error(request, f"Errore di persistenza: {str(e)}")
             
-    return render(request, 'spiaggia/inserimento_abbonamento.html')
+    return render(request, 'spiaggia/partials/form_abbonamento.html')
 
 
 # O.4 --- Inserimento del noleggio di un lettino
@@ -150,7 +150,7 @@ def inserisci_noleggio_view(request):
         except Exception as e:
             messages.error(request, f"Errore esecuzione: {str(e)}")
             
-    return render(request, 'spiaggia/inserimento_noleggio.html')
+    return render(request, 'spiaggia/partials/form_noleggio.html')
 
 
 # O.11 --- Verifica disponibilità ombrelloni per intervallo (Controllo HTMX)
@@ -168,7 +168,7 @@ def verifica_disponibilita_view(request):
             messages.error(request, "Nessun ombrellone disponibile per l'intervallo selezionato.")
             
     # Restituisce solo il frammento parziale che comparirà a destra dello schermo
-    return render(request, 'spiaggia/partials/_risultato_disponibilita.html', {'ombrelloni': risultati})
+    return render(request, 'spiaggia/partials/form_disponibilita.html', {'ombrelloni': risultati})
 
 
 # O.13 --- Visualizzazione storico cliente (Controllo HTMX)
@@ -190,7 +190,7 @@ def storico_cliente_view(request):
             if not storico:
                 messages.error(request, "Il cliente non ha nessuna prenotazione o noleggio in storico.")
                 
-    return render(request, 'spiaggia/partials/_risultato_storico.html', {'storico': storico})
+    return render(request, 'spiaggia/partials/form_storico.html', {'storico': storico})
 
 
 # O.14 --- Modifica tariffa lettini
@@ -209,7 +209,7 @@ def modifica_tariffa_lettini_view(request):
             messages.success(request, "Tariffa lettini aggiornata con successo.")
         return redirect('spiaggia_dashboard')
         
-    return render(request, 'spiaggia/modifica_tariffa.html')
+    return render(request, 'spiaggia/partials/form_tariffa_lettini.html')
 
 
 # O.15 --- Modifica prezzi per fila
@@ -229,7 +229,7 @@ def modifica_prezzi_fila_view(request):
             messages.success(request, "Prezzi della fila modificati correttamente.")
         return redirect('spiaggia_dashboard')
         
-    return render(request, 'spiaggia/modifica_prezzi_fila.html')
+    return render(request, 'spiaggia/partials/form_prezzi_fila.html')
 
 
 # O.18 --- Inserimento conferma pagamento (Diviso logicamente per tipo)
@@ -259,4 +259,4 @@ def conferma_pagamento_spiaggia_view(request):
             messages.success(request, "Stato del pagamento aggiornato in 'Saldato'.")
         return redirect('spiaggia_dashboard')
         
-    return render(request, 'spiaggia/conferma_pagamento.html')
+    return render(request, 'spiaggia/partials/form_pagamento.html')
