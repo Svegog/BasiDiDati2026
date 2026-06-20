@@ -36,3 +36,8 @@ def dashboard_view(request):
     if 'proprietario_id' not in request.session:
         return redirect('login')
     return render(request, 'dashboard.html')
+
+def logout_view(request):
+    request.session.flush()
+    messages.success(request, "Logout effettuato.")
+    return redirect('login')

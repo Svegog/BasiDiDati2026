@@ -21,6 +21,7 @@ from .views import auth, spiaggia, turni, ordini
 urlpatterns = [
     # Parte fondamentale, core e autenticazione
     path('', auth.login_view, name='login'),
+    path('logout/', auth.logout_view, name='logout'),
     path('dashboard/', auth.dashboard_view, name='dashboard'),
 
     # Parti generiche

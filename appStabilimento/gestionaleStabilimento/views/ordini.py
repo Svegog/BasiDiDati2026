@@ -2,6 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .. import queriesSQLtoDjango
 
+def dashboard_view(request):
+    # CONTROLLO OBBLIGATORIO
+    if 'proprietario_id' not in request.session:
+        return redirect('login') 
+    
+    return render(request, 'dashboard.html')
+
 def main_view(request):
     return render(request, 'ordini/main.html')
 
