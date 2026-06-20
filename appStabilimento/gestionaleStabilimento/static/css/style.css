@@ -39,7 +39,7 @@ body {
 }
 
 /* PANNELLO SINISTRO (Fisso) */
-.menu-laterale {
+.pannello-sinistro {
     flex: 0 0 280px; /* Larghezza fissa a 280px */
     background: var(--sfondo-pannelli);
     padding: 20px;

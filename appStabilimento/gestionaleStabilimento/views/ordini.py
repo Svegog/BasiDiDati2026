@@ -32,7 +32,7 @@ def inserisci_ordine_view(request):
             queriesSQLtoDjango.inserisci_dettaglio_ordine(partitaiva, codprodotto, quantita)
             
             messages.success(request, "Ordine inviato al fornitore e registrato a sistema.")
-            return redirect('ordini_dashboard')
+            return redirect('ordini-view')
         except Exception as e:
             messages.error(request, f"Errore nell'esecuzione della catena d'ordine: {str(e)}")
             
@@ -58,7 +58,7 @@ def aggiungi_fornitore_view(request):
             queriesSQLtoDjango.inserisci_fornitore(partitaiva, nome, email, indirizzo, telefono)
             queriesSQLtoDjango.inserisci_catalogo(codprodotto, partitaiva, prezzounitario)
             messages.success(request, "Fornitore inserito e catalogo iniziale associato.")
-            return redirect('ordini_dashboard')
+            return redirect('ordini-view')
         except Exception as e:
             messages.error(request, f"Errore creazione anagrafica fornitore: {str(e)}")
             
@@ -81,7 +81,7 @@ def registra_consegna_view(request):
         # Aggiornamento magazzino conseguente
         queriesSQLtoDjango.aggiorna_giacenze_da_ordine(codordine)
         messages.success(request, "Consegna registrata. Giacenze di magazzino incrementate.")
-        return redirect('ordini_dashboard')
+        return redirect('ordini-view')
         
     return render(request, 'ordini/registra_consegna.html')
 
@@ -114,7 +114,7 @@ def aggiorna_prezzo_catalogo_view(request):
             messages.error(request, "Errore: Associazione prodotto-fornitore non trovata nel catalogo.")
         else:
             messages.success(request, "Prezzo di catalogo fornitore modificato con successo.")
-        return redirect('ordini_dashboard')
+        return redirect('ordini-view')
         
     return render(request, 'ordini/aggiorna_prezzo_catalogo.html')
 
@@ -133,6 +133,6 @@ def aggiorna_giacenze_inventario_view(request):
             messages.error(request, "Errore: Codice prodotto inesistente. Impossibile allineare l'inventario.")
         else:
             messages.success(request, "Giacenza di magazzino forzata dall'inventario aggiornata.")
-        return redirect('ordini_dashboard')
+        return redirect('ordini-view')
         
     return render(request, 'ordini/aggiorna_inventario.html')

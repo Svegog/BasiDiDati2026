@@ -30,7 +30,7 @@ def inserisci_cliente_view(request):
         try:
             queriesSQLtoDjango.inserisci_cliente(nome, cognome, email, telefono)
             messages.success(request, "Cliente inserito con successo!")
-            return redirect('spiaggia_dashboard')
+            return redirect('spiaggia-view')
         except Exception as e:
             messages.error(request, f"Errore critico di database: {str(e)}")
             
@@ -76,7 +76,7 @@ def inserisci_prenotazione_view(request):
         try:
             queriesSQLtoDjango.inserisci_prenotazione(data_inizio, data_fine, prezzo, sconto, note, idcliente, codfila, numombrellone)
             messages.success(request, "Prenotazione inserita con successo!")
-            return redirect('spiaggia_dashboard')
+            return redirect('spiaggia-view')
         except Exception as e:
             messages.error(request, f"Errore di sistema nell'inserimento: {str(e)}")
             
@@ -111,7 +111,7 @@ def inserisci_abbonamento_view(request):
         try:
             queriesSQLtoDjango.inserisci_abbonamento(codfila, numombrellone, anno, prezzo_stagionale, sconto, idcliente)
             messages.success(request, "Abbonamento stagionale registrato.")
-            return redirect('spiaggia_dashboard')
+            return redirect('spiaggia-view')
         except Exception as e:
             messages.error(request, f"Errore di persistenza: {str(e)}")
             
@@ -146,7 +146,7 @@ def inserisci_noleggio_view(request):
         try:
             queriesSQLtoDjango.inserisci_noleggio_lettino(data, quantita, idcliente, tiponoleggio, prezzo_totale)
             messages.success(request, "Noleggio lettino registrato correttamente.")
-            return redirect('spiaggia_dashboard')
+            return redirect('spiaggia-view')
         except Exception as e:
             messages.error(request, f"Errore esecuzione: {str(e)}")
             
@@ -207,7 +207,7 @@ def modifica_tariffa_lettini_view(request):
             messages.error(request, "Errore: Tipo noleggio non trovato. Nessuna tariffa aggiornata.")
         else:
             messages.success(request, "Tariffa lettini aggiornata con successo.")
-        return redirect('spiaggia_dashboard')
+        return redirect('spiaggia-view')
         
     return render(request, 'spiaggia/modifica_tariffa.html')
 
@@ -227,7 +227,7 @@ def modifica_prezzi_fila_view(request):
             messages.error(request, "Errore: Codice fila inesistente.")
         else:
             messages.success(request, "Prezzi della fila modificati correttamente.")
-        return redirect('spiaggia_dashboard')
+        return redirect('spiaggia-view')
         
     return render(request, 'spiaggia/modifica_prezzi_fila.html')
 
@@ -257,6 +257,6 @@ def conferma_pagamento_spiaggia_view(request):
             messages.error(request, "Errore: Nessun record corrispondente trovato. Stato non aggiornato.")
         else:
             messages.success(request, "Stato del pagamento aggiornato in 'Saldato'.")
-        return redirect('spiaggia_dashboard')
+        return redirect('spiaggia-view')
         
     return render(request, 'spiaggia/conferma_pagamento.html')
