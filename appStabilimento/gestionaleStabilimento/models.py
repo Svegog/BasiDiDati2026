@@ -7,11 +7,17 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
+# Le FK verso modelli con chiave primaria composta vanno messi campi semplici dentro Django a quanto pare
+
+# Dove c'era una ForeignKey verso un modello con PK composta 
+# (es. Abbonamento → Ombrellone, DettaglioOrdine → Catalogo), ora è un campo semplice. 
+# Il vincolo di integrità referenziale resta nel database solo che Django non genererà automaticamente 
+# il join. Per quelle relazioni dovremo filtrare a mano.
 
 class Abbonamento(models.Model):
-    pk = models.CompositePrimaryKey('CodFila', 'NumOmbrellone', 'Anno')
-    codfila = models.ForeignKey('Ombrellone', models.DO_NOTHING, db_column='CodFila')  # Field name made lowercase.
-    numombrellone = models.ForeignKey('Ombrellone', models.DO_NOTHING, db_column='NumOmbrellone', to_field='NumOmbrellone', related_name='abbonamento_numombrellone_set')  # Field name made lowercase.
+    pk = models.CompositePrimaryKey('codfila', 'numombrellone', 'anno')
+    codfila = models.IntegerField(db_column='CodFila')
+    numombrellone = models.IntegerField(db_column='NumOmbrellone')
     anno = models.TextField(db_column='Anno')  # Field name made lowercase. This field type is a guess.
     prezzo = models.DecimalField(db_column='Prezzo', max_digits=8, decimal_places=2)  # Field name made lowercase.
     sconto = models.FloatField(db_column='Sconto')  # Field name made lowercase.
@@ -24,7 +30,7 @@ class Abbonamento(models.Model):
 
 
 class Catalogo(models.Model):
-    pk = models.CompositePrimaryKey('PartitaIVA', 'CodProdotto')
+    pk = models.CompositePrimaryKey('partitaiva', 'codprodotto')
     codprodotto = models.ForeignKey('Prodotto', models.DO_NOTHING, db_column='CodProdotto')  # Field name made lowercase.
     partitaiva = models.ForeignKey('Fornitore', models.DO_NOTHING, db_column='PartitaIVA')  # Field name made lowercase.
     prezzounitario = models.DecimalField(db_column='PrezzoUnitario', max_digits=8, decimal_places=2)  # Field name made lowercase.
@@ -57,10 +63,10 @@ class Cliente(models.Model):
 
 
 class DettaglioOrdine(models.Model):
-    pk = models.CompositePrimaryKey('CodOrdine', 'PartitaIVA', 'CodProdotto')
+    pk = models.CompositePrimaryKey('codordine', 'partitaiva', 'codprodotto')
     codordine = models.ForeignKey('Ordine', models.DO_NOTHING, db_column='CodOrdine')  # Field name made lowercase.
-    partitaiva = models.ForeignKey(Catalogo, models.DO_NOTHING, db_column='PartitaIVA')  # Field name made lowercase.
-    codprodotto = models.ForeignKey(Catalogo, models.DO_NOTHING, db_column='CodProdotto', to_field='CodProdotto', related_name='dettaglioordine_codprodotto_set')  # Field name made lowercase.
+    partitaiva = models.CharField(db_column='PartitaIVA', max_length=11)
+    codprodotto = models.IntegerField(db_column='CodProdotto')
     quantità = models.IntegerField(db_column='Quantità')  # Field name made lowercase.
     prezzoalmomento = models.DecimalField(db_column='PrezzoAlMomento', max_digits=8, decimal_places=2)  # Field name made lowercase.
 
@@ -129,7 +135,7 @@ class NoleggioLettino(models.Model):
 
 
 class Ombrellone(models.Model):
-    pk = models.CompositePrimaryKey('CodFila', 'NumOmbrellone')
+    pk = models.CompositePrimaryKey('codfila', 'numombrellone')
     codfila = models.ForeignKey(Fila, models.DO_NOTHING, db_column='CodFila')  # Field name made lowercase.
     numombrellone = models.IntegerField(db_column='NumOmbrellone')  # Field name made lowercase.
 
@@ -203,7 +209,7 @@ class TariffeNoleggio(models.Model):
 
 
 class Turno(models.Model):
-    pk = models.CompositePrimaryKey('IdDipendente', 'Data', 'OraInizio')
+    pk = models.CompositePrimaryKey('iddipendente', 'data', 'orainizio')
     iddipendente = models.IntegerField(db_column='IdDipendente')  # Field name made lowercase.
     data = models.DateField(db_column='Data')  # Field name made lowercase.
     orainizio = models.TimeField(db_column='OraInizio')  # Field name made lowercase.
