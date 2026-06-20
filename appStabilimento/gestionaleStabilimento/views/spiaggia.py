@@ -166,9 +166,11 @@ def verifica_disponibilita_view(request):
         risultati = queriesSQLtoDjango.ombrelloni_disponibili(data_inizio, data_fine)
         if not risultati:
             messages.error(request, "Nessun ombrellone disponibile per l'intervallo selezionato.")
+        else:
+            return render(request, 'spiaggia/partials/risultato_disponibilita.html', {'ombrelloni': risultati})
             
     # Restituisce solo il frammento parziale che comparirà a destra dello schermo
-    return render(request, 'spiaggia/partials/form_disponibilita.html', {'ombrelloni': risultati})
+    return render(request, 'spiaggia/partials/form_disponibilita.html')
 
 
 # O.13 --- Visualizzazione storico cliente (Controllo HTMX)
@@ -192,7 +194,7 @@ def storico_cliente_view(request):
             else:
                 return render(request, 'spiaggia/partials/risultato_storico.html', {'storico': storico})
                 
-    return render(request, 'spiaggia/partials/form_storico.html', {'storico': storico})
+    return render(request, 'spiaggia/partials/form_storico.html')
 
 
 # O.14 --- Modifica tariffa lettini
