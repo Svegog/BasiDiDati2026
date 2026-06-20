@@ -27,7 +27,7 @@ def registra_dipendente_view(request):
         try:
             queriesSQLtoDjango.inserisci_dipendente(nome, cognome, email, telefono, cf)
             messages.success(request, "Nuovo dipendente contrattualizzato e registrato.")
-            return redirect('turni_dashboard')
+            return redirect('turni-view')
         except Exception as e:
             messages.error(request, f"Errore inserimento anagrafica: {str(e)}")
             
@@ -65,7 +65,7 @@ def aggiungi_turno_view(request):
         try:
             queriesSQLtoDjango.inserisci_turno(iddipendente, data, orainizio, orafine, codmansione)
             messages.success(request, "Turno di lavoro assegnato con successo.")
-            return redirect('turni_dashboard')
+            return redirect('turni-view')
         except Exception as e:
             messages.error(request, f"Errore inserimento turno: {str(e)}")
             
