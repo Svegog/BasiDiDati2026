@@ -36,7 +36,7 @@ def inserisci_ordine_view(request):
         except Exception as e:
             messages.error(request, f"Errore nell'esecuzione della catena d'ordine: {str(e)}")
             
-    return render(request, 'ordini/inserimento_ordine.html')
+    return render(request, 'ordini/partials/form_ordine.html')
 
 
 # O.8 --- Aggiunta di un nuovo fornitore con catalogo prodotti
@@ -62,7 +62,7 @@ def aggiungi_fornitore_view(request):
         except Exception as e:
             messages.error(request, f"Errore creazione anagrafica fornitore: {str(e)}")
             
-    return render(request, 'ordini/aggiungi_fornitore.html')
+    return render(request, 'ordini/partials/form_fornitore.html')
 
 
 # O.9 --- Registrazione consegna e aggiornamento giacenze
@@ -83,7 +83,7 @@ def registra_consegna_view(request):
         messages.success(request, "Consegna registrata. Giacenze di magazzino incrementate.")
         return redirect('ordini_dashboard')
         
-    return render(request, 'ordini/registra_consegna.html')
+    return render(request, 'ordini/partials/form_consegna.html')
 
 
 # O.12 --- Controllo giacenze magazzino (Controllo HTMX)
@@ -96,7 +96,7 @@ def controllo_giacenze_view(request):
     if not sotto_scorta:
         messages.error(request, "Tutti i prodotti sono sopra la soglia minima. Nessuna mancanza rilevata.")
         
-    return render(request, 'ordini/partials/_risultato_magazzino.html', {'prodotti': sotto_scorta})
+    return render(request, 'ordini/partials/risultato_magazzino.html', {'prodotti': sotto_scorta})
 
 
 # O.16 --- Aggiornamento prezzi catalogo di un fornitore
@@ -116,7 +116,7 @@ def aggiorna_prezzo_catalogo_view(request):
             messages.success(request, "Prezzo di catalogo fornitore modificato con successo.")
         return redirect('ordini_dashboard')
         
-    return render(request, 'ordini/aggiorna_prezzo_catalogo.html')
+    return render(request, 'ordini/partials/form_prezzo_catalogo.html')
 
 
 # O.17 --- Aggiornamento giacenze dopo inventario
@@ -135,4 +135,4 @@ def aggiorna_giacenze_inventario_view(request):
             messages.success(request, "Giacenza di magazzino forzata dall'inventario aggiornata.")
         return redirect('ordini_dashboard')
         
-    return render(request, 'ordini/aggiorna_inventario.html')
+    return render(request, 'ordini/partials/form_inventario.html')
