@@ -84,5 +84,7 @@ def visualizza_dipendenti_turno_view(request):
         turni = queriesSQLtoDjango.dipendenti_in_turno(data)
         if not turni:
             messages.error(request, "Nessun dipendente è in turno nella data selezionata.")
+        else:
+            return render(request, 'turni/partials/risultato_turni.html', {'turni': turni})
             
-    return render(request, 'turni/partials/form_ricerca_turni.html', {'turni': turni})
+    return render(request, 'turni/partials/form_ricerca_turni.html')
