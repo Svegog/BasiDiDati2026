@@ -1,7 +1,6 @@
 <div class="form-panel">
-    <h3>Registra Nuovo Cliente</h3>
-    <form action="{% url 'inserisci_cliente' %}" method="POST">
-        {% csrf_token %}
+    <h3>Visualizza Storico Cliente</h3>
+    <form hx-get="{% url 'storico_cliente' %}" hx-target="#risultati-query">
         <div class="form-group">
             <label>Nome:</label>
             <input type="text" name="nome" required>
@@ -14,10 +13,6 @@
             <label>Email:</label>
             <input type="email" name="email" required>
         </div>
-        <div class="form-group">
-            <label>Recapito Telefonico:</label>
-            <input type="text" name="recapito_telefonico" required>
-        </div>
-        <button type="submit" class="btn-primary">Registra Cliente</button>
+        <button type="submit" class="btn-info">Estrai Storico</button>
     </form>
 </div>

@@ -1,0 +1,10 @@
+<div class="form-panel">
+    <h3>Aggiorna Prezzo Listino Fornitore</h3>
+    <form action="{% url 'aggiorna_prezzo_catalogo' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="partitaiva" placeholder="P.IVA Fornitore" required>
+        <input type="text" name="codprodotto" placeholder="Codice Prodotto" required>
+        <input type="number" step="0.01" name="prezzounitario" placeholder="Nuovo Prezzo (€)" required>
+        <button type="submit">Aggiorna Catalogo</button>
+    </form>
+</div>

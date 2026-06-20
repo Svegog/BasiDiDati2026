@@ -1,0 +1,14 @@
+<div class="form-panel">
+    <h3>Controlla Disponibilità Ombrelloni</h3>
+    <form hx-get="{% url 'verifica_disponibilita' %}" hx-target="#risultati-query">
+        <div class="form-group">
+            <label>Data Inizio:</label>
+            <input type="date" name="data_inizio" required>
+        </div>
+        <div class="form-group">
+            <label>Data Fine:</label>
+            <input type="date" name="data_fine" required>
+        </div>
+        <button type="submit" class="btn-info">Cerca Ombrelloni Liberi</button>
+    </form>
+</div>

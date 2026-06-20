@@ -1,0 +1,28 @@
+<div class="risultato-panel">
+    <h3>Allarme Scorte Magazzino</h3>
+    {% if prodotti %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Prodotto</th>
+                    <th>Giacenza</th>
+                    <th>Minimo</th>
+                    <th>Mancanti</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in prodotti %}
+                <tr style="color: red;">
+                    <td>{{ p.0 }} - {{ p.1 }}</td>
+                    <td>{{ p.2 }}</td>
+                    <td>{{ p.3 }}</td>
+                    <td><strong>{{ p.4 }}</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="color: green;">Tutti i prodotti sono sopra la soglia minima di scorta.</p>
+    {% endif %}
+    <button onclick="document.getElementById('risultati-query').innerHTML=''">Chiudi</button>
+</div>

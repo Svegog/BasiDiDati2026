@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .. import queries
+from .. import queriesSQLtoDjango
+
+def main_view(request):
+    return render(request, 'turni/main.html')
 
 # O.5 --- Registrazione nuovi dipendenti
 def registra_dipendente_view(request):
@@ -15,7 +18,7 @@ def registra_dipendente_view(request):
         cf = request.POST.get('codice_fiscale')
         
         try:
-            queries.inserisci_dipendente(nome, cognome, email, telefono, cf)
+            queriesSQLtoDjango.inserisci_dipendente(nome, cognome, email, telefono, cf)
             messages.success(request, "Nuovo dipendente contrattualizzato e registrato.")
             return redirect('turni_dashboard')
         except Exception as e:
@@ -38,22 +41,22 @@ def aggiungi_turno_view(request):
         orafine = request.POST.get('orafine')
         nomemansione = request.POST.get('nomemansione')
         
-        iddipendente = queries.trova_dipendente(nome, cognome, email)
+        iddipendente = queriesSQLtoDjango.trova_dipendente(nome, cognome, email)
         if not iddipendente:
             messages.error(request, "Errore: Dipendente non individuato nell'organico.")
             return render(request, 'turni/aggiungi_turno.html')
             
-        codmansione = queries.trova_mansione(nomemansione)
+        codmansione = queriesSQLtoDjango.trova_mansione(nomemansione)
         if not codmansione:
             messages.error(request, "Errore: Mansione specificata non esistente.")
             return render(request, 'turni/aggiungi_turno.html')
             
-        if queries.turno_sovrapposto(iddipendente, data, orainizio, orafine):
+        if queriesSQLtoDjango.turno_sovrapposto(iddipendente, data, orainizio, orafine):
             messages.error(request, "Errore pianificazione: Il dipendente ha già un turno assegnato in questa fascia oraria.")
             return render(request, 'turni/aggiungi_turno.html')
             
         try:
-            queries.inserisci_turno(iddipendente, data, orainizio, orafine, codmansione)
+            queriesSQLtoDjango.inserisci_turno(iddipendente, data, orainizio, orafine, codmansione)
             messages.success(request, "Turno di lavoro assegnato con successo.")
             return redirect('turni_dashboard')
         except Exception as e:
@@ -71,7 +74,7 @@ def visualizza_dipendenti_turno_view(request):
     turni = []
     
     if data:
-        turni = queries.dipendenti_in_turno(data)
+        turni = queriesSQLtoDjango.dipendenti_in_turno(data)
         if not turni:
             messages.error(request, "Nessun dipendente è in turno nella data selezionata.")
             

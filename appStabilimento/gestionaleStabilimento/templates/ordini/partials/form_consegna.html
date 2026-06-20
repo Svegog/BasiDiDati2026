@@ -1,0 +1,8 @@
+<div class="form-panel">
+    <h3>Registra Consegna Merce</h3>
+    <form action="{% url 'registra_consegna' %}" method="POST">
+        {% csrf_token %}
+        <input type="number" name="codordine" placeholder="Codice Ordine Ricevuto" required>
+        <button type="submit">Conferma Ricezione e Aggiorna Magazzino</button>
+    </form>
+</div>

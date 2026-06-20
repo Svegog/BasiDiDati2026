@@ -1,0 +1,25 @@
+<div class="form-panel">
+    <h3>Registra Noleggio Lettini/Sdraio</h3>
+    <form action="{% url 'inserisci_noleggio' %}" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Identificazione Cliente</legend>
+            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="text" name="cognome" placeholder="Cognome" required>
+            <input type="email" name="email" placeholder="Email" required>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Dettagli Noleggio</legend>
+            <label>Data Utilizzo:</label>
+            <input type="date" name="data" required>
+            
+            <label>Quantità:</label>
+            <input type="number" name="quantita" min="1" required>
+            
+            <label>Tipo (Es. Singolo, Matrimoniale):</label>
+            <input type="text" name="tiponoleggio" required>
+        </fieldset>
+        <button type="submit" class="btn-primary">Registra Noleggio</button>
+    </form>
+</div>

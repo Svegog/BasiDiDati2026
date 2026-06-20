@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .. import queries
+from .. import queriesSQLtoDjango
+
+def main_view(request):
+    return render(request, 'ordini/main.html')
 
 # O.7 --- Inserimento di un ordine
 def inserisci_ordine_view(request):
@@ -18,8 +21,8 @@ def inserisci_ordine_view(request):
         
         try:
             # Transazione logica sequenziale
-            queries.inserisci_ordine(consegna_prevista, idproprietario, partitaiva)
-            queries.inserisci_dettaglio_ordine(partitaiva, codprodotto, quantita)
+            queriesSQLtoDjango.inserisci_ordine(consegna_prevista, idproprietario, partitaiva)
+            queriesSQLtoDjango.inserisci_dettaglio_ordine(partitaiva, codprodotto, quantita)
             
             messages.success(request, "Ordine inviato al fornitore e registrato a sistema.")
             return redirect('ordini_dashboard')
@@ -45,8 +48,8 @@ def aggiungi_fornitore_view(request):
         prezzounitario = request.POST.get('prezzounitario')
         
         try:
-            queries.inserisci_fornitore(partitaiva, nome, email, indirizzo, telefono)
-            queries.inserisci_catalogo(codprodotto, partitaiva, prezzounitario)
+            queriesSQLtoDjango.inserisci_fornitore(partitaiva, nome, email, indirizzo, telefono)
+            queriesSQLtoDjango.inserisci_catalogo(codprodotto, partitaiva, prezzounitario)
             messages.success(request, "Fornitore inserito e catalogo iniziale associato.")
             return redirect('ordini_dashboard')
         except Exception as e:
@@ -63,13 +66,13 @@ def registra_consegna_view(request):
     if request.method == 'POST':
         codordine = request.POST.get('codordine')
         
-        righe_ordine = queries.registra_consegna_ordine(codordine)
+        righe_ordine = queriesSQLtoDjango.registra_consegna_ordine(codordine)
         if righe_ordine == 0:
             messages.error(request, "Errore: Codice ordine inesistente o già consegnato.")
             return render(request, 'ordini/registra_consegna.html')
             
         # Aggiornamento magazzino conseguente
-        queries.aggiorna_giacenze_da_ordine(codordine)
+        queriesSQLtoDjango.aggiorna_giacenze_da_ordine(codordine)
         messages.success(request, "Consegna registrata. Giacenze di magazzino incrementate.")
         return redirect('ordini_dashboard')
         
@@ -82,7 +85,7 @@ def controllo_giacenze_view(request):
         return redirect('login')
         
     # Questa query di controllo rileva i prodotti sotto-scorta
-    sotto_scorta = queries.prodotti_sotto_scorta()
+    sotto_scorta = queriesSQLtoDjango.prodotti_sotto_scorta()
     if not sotto_scorta:
         messages.error(request, "Tutti i prodotti sono sopra la soglia minima. Nessuna mancanza rilevata.")
         
@@ -99,7 +102,7 @@ def aggiorna_prezzo_catalogo_view(request):
         partitaiva = request.POST.get('partitaiva')
         codprodotto = request.POST.get('codprodotto')
         
-        righe = queries.aggiorna_prezzo_catalogo(prezzounitario, partitaiva, codprodotto)
+        righe = queriesSQLtoDjango.aggiorna_prezzo_catalogo(prezzounitario, partitaiva, codprodotto)
         if righe == 0:
             messages.error(request, "Errore: Associazione prodotto-fornitore non trovata nel catalogo.")
         else:
@@ -118,7 +121,7 @@ def aggiorna_giacenze_inventario_view(request):
         quantita_magazzino = request.POST.get('quantita_magazzino')
         codprodotto = request.POST.get('codprodotto')
         
-        righe = queries.aggiorna_giacenza_prodotto(quantita_magazzino, codprodotto)
+        righe = queriesSQLtoDjango.aggiorna_giacenza_prodotto(quantita_magazzino, codprodotto)
         if righe == 0:
             messages.error(request, "Errore: Codice prodotto inesistente. Impossibile allineare l'inventario.")
         else:

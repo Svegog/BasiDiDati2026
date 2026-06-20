@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="ordini-grid-container">
+    <aside class="menu-laterale">
+        <h2>Area Ordini</h2>
+        <div class="gruppo-comandi">
+            <h3>Servizi</h3>
+            <button hx-get="{% url 'inserisci_ordine' %}" hx-target="#area-lavoro">Nuovo Ordine</button>
+            <button hx-get="{% url 'aggiungi_fornitore' %}" hx-target="#area-lavoro">Nuovo Fornitore</button>
+            <button hx-get="{% url 'registra_consegna' %}" hx-target="#area-lavoro">Registra Consegna</button>
+            <button hx-get="{% url 'aggiorna_prezzo_catalogo' %}" hx-target="#area-lavoro">Modifica Prezzi Catalogo</button>
+            <button hx-get="{% url 'aggiorna_giacenze_inventario' %}" hx-target="#area-lavoro">Rettifica Inventario</button>
+        </div>
+        <div class="gruppo-comandi">
+            <h3>Controlli</h3>
+            <button hx-get="{% url 'controllo_giacenze' %}" hx-target="#risultati-query">Prodotti Sotto Scorta</button>
+        </div>
+        <div class="navigazione-ritorno">
+            <a href="{% url 'dashboard' %}">Torna alla Dashboard</a>
+        </div>
+    </aside>
+
+    <section id="area-lavoro" class="pannello-operativo">
+        <p>Seleziona un'operazione dal menu per iniziare.</p>
+    </section>
+
+    <section id="risultati-query" class="pannello-risultati"></section>
+</div>
+{% endblock %}

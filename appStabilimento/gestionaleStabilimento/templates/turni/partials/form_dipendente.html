@@ -1,0 +1,12 @@
+<div class="form-panel">
+    <h3>Registrazione Nuovo Dipendente</h3>
+    <form action="{% url 'registra_dipendente' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="nome" placeholder="Nome" required>
+        <input type="text" name="cognome" placeholder="Cognome" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="telefono" placeholder="Telefono" required>
+        <input type="text" name="codice_fiscale" placeholder="Codice Fiscale" required>
+        <button type="submit">Contratualizza Dipendente</button>
+    </form>
+</div>

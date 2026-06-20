@@ -1,0 +1,9 @@
+<div class="form-panel">
+    <h3>Rettifica Giacenza (Inventario Manuale)</h3>
+    <form action="{% url 'aggiorna_giacenze_inventario' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="codprodotto" placeholder="Codice Prodotto" required>
+        <input type="number" name="quantita_magazzino" placeholder="Nuova Quantità Reale" required>
+        <button type="submit" class="btn-warning">Allinea Magazzino</button>
+    </form>
+</div>

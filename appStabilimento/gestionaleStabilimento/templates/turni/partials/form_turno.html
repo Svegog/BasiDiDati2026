@@ -1,0 +1,20 @@
+<div class="form-panel">
+    <h3>Assegnazione Turno di Lavoro</h3>
+    <form action="{% url 'aggiungi_turno' %}" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Identificazione Dipendente</legend>
+            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="text" name="cognome" placeholder="Cognome" required>
+            <input type="email" name="email" placeholder="Email" required>
+        </fieldset>
+        <fieldset>
+            <legend>Orari e Mansione</legend>
+            <label>Data:</label> <input type="date" name="data" required>
+            <label>Inizio:</label> <input type="time" name="orainizio" required>
+            <label>Fine:</label> <input type="time" name="orafine" required>
+            <label>Mansione:</label> <input type="text" name="nomemansione" placeholder="Es. Bagnino" required>
+        </fieldset>
+        <button type="submit">Inserisci Turno</button>
+    </form>
+</div>

@@ -19,7 +19,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -108,26 +107,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
-
-Inserimento di un cliente
-Inserimento di una prenotazione
-Inserimento di un abbonamento
-Inserimento del noleggio di un lettino
-Verifica disponibilità ombrelloni per intervallo
-Visualizzazione storico cliente
-Modifica tariffa lettini
-Modifica prezzi per fila
-
-Registrazione nuovi dipendenti
-Aggiunta di un nuovo turno di lavoro
-Visualizzazione dipendenti in turno per data
-
-Inserimento di un ordine
-Aggiunta di un nuovo fornitore con catalogo prodotti
-Registrazione consegna e aggiornamento giacenze
-Controllo giacenze magazzino
-Aggiornamento prezzi catalogo di un fornitore
-Aggiornamento giacenze dopo inventario
-Inserimento conferma pagamento
 

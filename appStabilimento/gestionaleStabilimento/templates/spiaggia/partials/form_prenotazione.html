@@ -1,0 +1,34 @@
+<div class="form-panel">
+    <h3>Nuova Prenotazione Ombrellone</h3>
+    <form action="{% url 'inserisci_prenotazione' %}" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Dati Cliente (Già registrato)</legend>
+            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="text" name="cognome" placeholder="Cognome" required>
+            <input type="email" name="email" placeholder="Email" required>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Dettagli Prenotazione</legend>
+            <label>Codice Fila:</label>
+            <input type="text" name="codfila" required>
+            
+            <label>Numero Ombrellone:</label>
+            <input type="number" name="numombrellone" required>
+            
+            <label>Data Inizio:</label>
+            <input type="date" name="data_inizio" required>
+            
+            <label>Data Fine:</label>
+            <input type="date" name="data_fine" required>
+            
+            <label>Sconto Applicato (€):</label>
+            <input type="number" step="0.01" name="sconto" value="0">
+            
+            <label>Note aggiuntive:</label>
+            <textarea name="note"></textarea>
+        </fieldset>
+        <button type="submit" class="btn-primary">Conferma Prenotazione</button>
+    </form>
+</div>

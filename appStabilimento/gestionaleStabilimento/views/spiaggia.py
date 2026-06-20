@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .. import queries
+from .. import queriesSQLtoDjango
+
+def main_view(request):
+    return render(request, 'spiaggia/main.html')
 
 # O.1 --- Inserimento di un cliente
 def inserisci_cliente_view(request):
@@ -18,7 +21,7 @@ def inserisci_cliente_view(request):
             return render(request, 'spiaggia/inserimento_cliente.html')
             
         try:
-            queries.inserisci_cliente(nome, cognome, email, telefono)
+            queriesSQLtoDjango.inserisci_cliente(nome, cognome, email, telefono)
             messages.success(request, "Cliente inserito con successo!")
             return redirect('spiaggia_dashboard')
         except Exception as e:
@@ -44,18 +47,18 @@ def inserisci_prenotazione_view(request):
         note = request.POST.get('note', '')
         
         # 1. Trova il cliente
-        idcliente = queries.trova_cliente(nome, cognome, email)
+        idcliente = queriesSQLtoDjango.trova_cliente(nome, cognome, email)
         if not idcliente:
             messages.error(request, "Errore: Cliente non trovato. Registrare prima il cliente.")
             return render(request, 'spiaggia/inserimento_prenotazione.html')
             
         # 2. Verifica occupazione
-        if queries.ombrellone_occupato_per_prenotazione(codfila, numombrellone, data_inizio, data_fine):
+        if queriesSQLtoDjango.ombrellone_occupato_per_prenotazione(codfila, numombrellone, data_inizio, data_fine):
             messages.error(request, "Errore: L'ombrellone selezionato è già occupato nel periodo indicato.")
             return render(request, 'spiaggia/inserimento_prenotazione.html')
             
         # 3. Calcolo prezzo in base alla tariffa della fila
-        tariffa = queries.tariffa_giornaliera_fila(codfila)
+        tariffa = queriesSQLtoDjango.tariffa_giornaliera_fila(codfila)
         if not tariffa:
             messages.error(request, "Errore: Tariffa della fila non configurata.")
             return render(request, 'spiaggia/inserimento_prenotazione.html')
@@ -64,7 +67,7 @@ def inserisci_prenotazione_view(request):
         prezzo = tariffa  # Logica estendibile con la differenza tra date
         
         try:
-            queries.inserisci_prenotazione(data_inizio, data_fine, prezzo, sconto, note, idcliente, codfila, numombrellone)
+            queriesSQLtoDjango.inserisci_prenotazione(data_inizio, data_fine, prezzo, sconto, note, idcliente, codfila, numombrellone)
             messages.success(request, "Prenotazione inserita con successo!")
             return redirect('spiaggia_dashboard')
         except Exception as e:
@@ -87,19 +90,19 @@ def inserisci_abbonamento_view(request):
         anno = request.POST.get('anno')
         sconto = request.POST.get('sconto', 0)
         
-        idcliente = queries.trova_cliente(nome, cognome, email)
+        idcliente = queriesSQLtoDjango.trova_cliente(nome, cognome, email)
         if not idcliente:
             messages.error(request, "Errore: Cliente inserito inesistente.")
             return render(request, 'spiaggia/inserimento_abbonamento.html')
             
-        if queries.ombrellone_occupato_per_abbonamento(codfila, numombrellone, anno):
+        if queriesSQLtoDjango.ombrellone_occupato_per_abbonamento(codfila, numombrellone, anno):
             messages.error(request, "Errore: Ombrellone già impegnato per la stagione selezionata.")
             return render(request, 'spiaggia/inserimento_abbonamento.html')
             
-        prezzo_stagionale = queries.tariffa_stagionale_fila(codfila)
+        prezzo_stagionale = queriesSQLtoDjango.tariffa_stagionale_fila(codfila)
         
         try:
-            queries.inserisci_abbonamento(codfila, numombrellone, anno, prezzo_stagionale, sconto, idcliente)
+            queriesSQLtoDjango.inserisci_abbonamento(codfila, numombrellone, anno, prezzo_stagionale, sconto, idcliente)
             messages.success(request, "Abbonamento stagionale registrato.")
             return redirect('spiaggia_dashboard')
         except Exception as e:
@@ -121,12 +124,12 @@ def inserisci_noleggio_view(request):
         quantita = request.POST.get('quantita')
         tiponoleggio = request.POST.get('tiponoleggio')
         
-        idcliente = queries.trova_cliente(nome, cognome, email)
+        idcliente = queriesSQLtoDjango.trova_cliente(nome, cognome, email)
         if not idcliente:
             messages.error(request, "Errore: Cliente non identificato.")
             return render(request, 'spiaggia/inserimento_noleggio.html')
             
-        prezzo_unitario = queries.prezzo_tariffa_noleggio(tiponoleggio)
+        prezzo_unitario = queriesSQLtoDjango.prezzo_tariffa_noleggio(tiponoleggio)
         if not prezzo_unitario:
             messages.error(request, "Errore: Tipo noleggio non valido o tariffa assente.")
             return render(request, 'spiaggia/inserimento_noleggio.html')
@@ -134,7 +137,7 @@ def inserisci_noleggio_view(request):
         prezzo_totale = float(prezzo_unitario) * int(quantita)
         
         try:
-            queries.inserisci_noleggio_lettino(data, quantita, idcliente, tiponoleggio, prezzo_totale)
+            queriesSQLtoDjango.inserisci_noleggio_lettino(data, quantita, idcliente, tiponoleggio, prezzo_totale)
             messages.success(request, "Noleggio lettino registrato correttamente.")
             return redirect('spiaggia_dashboard')
         except Exception as e:
@@ -153,7 +156,7 @@ def verifica_disponibilita_view(request):
     
     risultati = []
     if data_inizio and data_fine:
-        risultati = queries.ombrelloni_disponibili(data_inizio, data_fine)
+        risultati = queriesSQLtoDjango.ombrelloni_disponibili(data_inizio, data_fine)
         if not risultati:
             messages.error(request, "Nessun ombrellone disponibile per l'intervallo selezionato.")
             
@@ -172,11 +175,11 @@ def storico_cliente_view(request):
     
     storico = []
     if nome and cognome and email:
-        idcliente = queries.trova_cliente(nome, cognome, email)
+        idcliente = queriesSQLtoDjango.trova_cliente(nome, cognome, email)
         if not idcliente:
             messages.error(request, "Errore: Cliente non trovato nei nostri archivi.")
         else:
-            storico = queries.storico_cliente(idcliente)
+            storico = queriesSQLtoDjango.storico_cliente(idcliente)
             if not storico:
                 messages.error(request, "Il cliente non ha nessuna prenotazione o noleggio in storico.")
                 
@@ -192,7 +195,7 @@ def modifica_tariffa_lettini_view(request):
         prezzo = request.POST.get('prezzo')
         tiponoleggio = request.POST.get('tiponoleggio')
         
-        righe_aggiornate = queries.modifica_tariffa_noleggio(prezzo, tiponoleggio)
+        righe_aggiornate = queriesSQLtoDjango.modifica_tariffa_noleggio(prezzo, tiponoleggio)
         if righe_aggiornate == 0:
             messages.error(request, "Errore: Tipo noleggio non trovato. Nessuna tariffa aggiornata.")
         else:
@@ -212,7 +215,7 @@ def modifica_prezzi_fila_view(request):
         tariffa_stagionale = request.POST.get('tariffa_stagionale')
         codfila = request.POST.get('codfila')
         
-        righe = queries.modifica_prezzi_fila(tariffa_giornaliera, tariffa_stagionale, codfila)
+        righe = queriesSQLtoDjango.modifica_prezzi_fila(tariffa_giornaliera, tariffa_stagionale, codfila)
         if righe == 0:
             messages.error(request, "Errore: Codice fila inesistente.")
         else:
@@ -233,15 +236,15 @@ def conferma_pagamento_spiaggia_view(request):
         righe = 0
         if tipo_pagamento == 'prenotazione':
             cod = request.POST.get('codprenotazione')
-            righe = queries.conferma_pagamento_prenotazione(cod)
+            righe = queriesSQLtoDjango.conferma_pagamento_prenotazione(cod)
         elif tipo_pagamento == 'abbonamento':
             codfila = request.POST.get('codfila')
             num = request.POST.get('numombrellone')
             anno = request.POST.get('anno')
-            righe = queries.conferma_pagamento_abbonamento(codfila, num, anno)
+            righe = queriesSQLtoDjango.conferma_pagamento_abbonamento(codfila, num, anno)
         elif tipo_pagamento == 'noleggio':
             cod = request.POST.get('codnoleggio')
-            righe = queries.conferma_pagamento_noleggio(cod)
+            righe = queriesSQLtoDjango.conferma_pagamento_noleggio(cod)
             
         if righe == 0:
             messages.error(request, "Errore: Nessun record corrispondente trovato. Stato non aggiornato.")

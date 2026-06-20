@@ -1,0 +1,19 @@
+<div class="form-panel">
+    <h3>Modifica Tariffe Fila Ombrelloni</h3>
+    <form action="{% url 'modifica_prezzi_fila' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Codice Fila:</label>
+            <input type="text" name="codfila" required>
+        </div>
+        <div class="form-group">
+            <label>Nuova Tariffa Giornaliera (€):</label>
+            <input type="number" step="0.01" name="tariffa_giornaliera" required>
+        </div>
+        <div class="form-group">
+            <label>Nuova Tariffa Stagionale (€):</label>
+            <input type="number" step="0.01" name="tariffa_stagionale" required>
+        </div>
+        <button type="submit" class="btn-warning">Aggiorna Prezzi Fila</button>
+    </form>
+</div>

@@ -1,0 +1,26 @@
+<div class="risultato-panel">
+    <h3>Dipendenti in Servizio</h3>
+    {% if turni %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Dipendente</th>
+                    <th>Mansione</th>
+                    <th>Orario</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in turni %}
+                <tr>
+                    <td><strong>{{ t.0 }} {{ t.1 }}</strong></td>
+                    <td>{{ t.2 }}</td>
+                    <td>{{ t.3 }} - {{ t.4 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nessun turno pianificato per questa giornata.</p>
+    {% endif %}
+    <button onclick="document.getElementById('risultati-query').innerHTML=''">Chiudi</button>
+</div>

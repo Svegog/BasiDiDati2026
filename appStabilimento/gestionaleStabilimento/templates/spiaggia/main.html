@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="spiaggia-grid-container">
+    
+    <aside class="menu-laterale">
+        <h2>Area Spiaggia</h2>
+        
+        <div class="gruppo-comandi">
+            <h3>Servizi</h3>
+            <button hx-get="{% url 'inserisci_cliente' %}" hx-target="#area-lavoro">Inserimento Cliente</button>
+            <button hx-get="{% url 'inserisci_prenotazione' %}" hx-target="#area-lavoro">Prenotazione</button>
+            <button hx-get="{% url 'inserisci_abbonamento' %}" hx-target="#area-lavoro">Abbonamento</button>
+            <button hx-get="{% url 'inserisci_noleggio' %}" hx-target="#area-lavoro">Noleggio Lettino</button>
+            <button hx-get="{% url 'modifica_tariffa_lettini' %}" hx-target="#area-lavoro">Modifica Prezzo Lettini</button>
+            <button hx-get="{% url 'modifica_prezzi_fila' %}" hx-target="#area-lavoro">Modifica Prezzo File</button>
+            <button hx-get="{% url 'conferma_pagamento_spiaggia' %}" hx-target="#area-lavoro">Aggiorna Stato Pagamento</button>
+        </div>
+        
+        <div class="gruppo-comandi">
+            <h3>Controlli</h3>
+            <button hx-get="{% url 'storico_cliente' %}" hx-target="#risultati-query">Storico Cliente</button>
+            <button hx-get="{% url 'verifica_disponibilita' %}" hx-target="#risultati-query">Stato Occupazione Ombrellone</button>
+        </div>
+        
+        <div class="navigazione-ritorno">
+            <a href="{% url 'dashboard' %}" class="btn-link">Torna alla Dashboard</a>
+        </div>
+    </aside>
+
+    <section id="area-lavoro" class="pannello-operativo">
+        <div class="stato-vuoto">
+            <p>Seleziona un'operazione dal menu "Servizi" per visualizzare l'interfaccia di inserimento.</p>
+        </div>
+    </section>
+
+    <section id="risultati-query" class="pannello-risultati">
+        </section>
+
+</div>
+{% endblock %}

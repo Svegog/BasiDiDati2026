@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="turni-grid-container">
+    <aside class="menu-laterale">
+        <h2>Area Turni</h2>
+        <div class="gruppo-comandi">
+            <h3>Servizi</h3>
+            <button hx-get="{% url 'registra_dipendente' %}" hx-target="#area-lavoro">Nuovo Dipendente</button>
+            <button hx-get="{% url 'aggiungi_turno' %}" hx-target="#area-lavoro">Assegna Turno</button>
+        </div>
+        <div class="gruppo-comandi">
+            <h3>Controlli</h3>
+            <button hx-get="{% url 'visualizza_dipendenti_turno' %}" hx-target="#area-lavoro">Dipendenti in Turno</button>
+        </div>
+        <div class="navigazione-ritorno">
+            <a href="{% url 'dashboard' %}">Torna alla Dashboard</a>
+        </div>
+    </aside>
+
+    <section id="area-lavoro" class="pannello-operativo">
+        <p>Seleziona un'operazione dal menu per iniziare.</p>
+    </section>
+
+    <section id="risultati-query" class="pannello-risultati"></section>
+</div>
+{% endblock %}

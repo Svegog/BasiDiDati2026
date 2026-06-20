@@ -1,0 +1,39 @@
+<div class="risultato-panel">
+    <h3>Storico Operazioni Cliente</h3>
+    
+    {% if storico %}
+        <table class="table-risultati">
+            <thead>
+                <tr>
+                    <th>Tipo Servizio</th>
+                    <th>Data Inizio / Anno</th>
+                    <th>Data Fine</th>
+                    <th>Prezzo Saldato</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in storico %}
+                <tr>
+                    <td><span class="badge-tipo">{{ record.0 }}</span></td>
+                    
+                    <td>{{ record.1|date:"d/m/Y"|default:record.1 }}</td>
+                    
+                    <td>
+                        {% if record.2 %}
+                            {{ record.2|date:"d/m/Y" }}
+                        {% else %}
+                            <span class="text-muted">N/A</span>
+                        {% endif %}
+                    </td>
+                    
+                    <td>€ {{ record.3 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-muted">Il cliente selezionato non ha ancora effettuato operazioni.</p>
+    {% endif %}
+
+    <button onclick="document.getElementById('risultati-query').innerHTML=''" class="btn-chiudi mt-3">Chiudi Storico</button>
+</div>

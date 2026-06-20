@@ -1,0 +1,31 @@
+<div class="form-panel">
+    <h3>Conferma Pagamento</h3>
+    <form action="{% url 'conferma_pagamento_spiaggia' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Seleziona tipo di servizio saldato:</label>
+            <select name="tipo_pagamento" required>
+                <option value="prenotazione">Prenotazione</option>
+                <option value="abbonamento">Abbonamento</option>
+                <option value="noleggio">Noleggio Lettini</option>
+            </select>
+        </div>
+        
+        <p><small><i>Compila solo i campi relativi al servizio selezionato:</i></small></p>
+        
+        <fieldset>
+            <legend>Per Prenotazioni/Noleggi</legend>
+            <input type="number" name="codprenotazione" placeholder="Codice Prenotazione">
+            <input type="number" name="codnoleggio" placeholder="Codice Noleggio">
+        </fieldset>
+        
+        <fieldset>
+            <legend>Per Abbonamenti</legend>
+            <input type="text" name="codfila" placeholder="Codice Fila">
+            <input type="number" name="numombrellone" placeholder="Numero Ombrellone">
+            <input type="number" name="anno" placeholder="Anno">
+        </fieldset>
+        
+        <button type="submit" class="btn-success">Imposta come "Saldato"</button>
+    </form>
+</div>
