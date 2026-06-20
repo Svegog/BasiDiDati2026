@@ -31,7 +31,7 @@ def registra_dipendente_view(request):
         except Exception as e:
             messages.error(request, f"Errore inserimento anagrafica: {str(e)}")
             
-    return render(request, 'turni/registrazione_dipendente.html')
+    return render(request, 'turni/partials/form_dipendente.html')
 
 
 # O.6 --- Aggiunta di un nuovo turno di lavoro
@@ -69,7 +69,7 @@ def aggiungi_turno_view(request):
         except Exception as e:
             messages.error(request, f"Errore inserimento turno: {str(e)}")
             
-    return render(request, 'turni/aggiungi_turno.html')
+    return render(request, 'turni/partials/form_turno.html')
 
 
 # O.10 --- Visualizzazione dipendenti in turno per data (Controllo HTMX)
@@ -85,4 +85,4 @@ def visualizza_dipendenti_turno_view(request):
         if not turni:
             messages.error(request, "Nessun dipendente è in turno nella data selezionata.")
             
-    return render(request, 'turni/partials/_risultato_turni.html', {'turni': turni})
+    return render(request, 'turni/partials/form_ricerca_turni.html', {'turni': turni})
