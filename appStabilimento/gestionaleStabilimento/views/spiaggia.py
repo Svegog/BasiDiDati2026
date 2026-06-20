@@ -189,6 +189,8 @@ def storico_cliente_view(request):
             storico = queriesSQLtoDjango.storico_cliente(idcliente)
             if not storico:
                 messages.error(request, "Il cliente non ha nessuna prenotazione o noleggio in storico.")
+            else:
+                return render(request, 'spiaggia/partials/risultato_storico.html', {'storico': storico})
                 
     return render(request, 'spiaggia/partials/form_storico.html', {'storico': storico})
 
