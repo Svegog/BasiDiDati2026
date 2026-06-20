@@ -378,7 +378,7 @@ def storico_cliente(idcliente):
 
             UNION ALL
 
-            SELECT 'Noleggio Lettini' AS TIPO, Data AS DataInizio, NULL AS DataFine, Prezzo
+            SELECT 'Noleggio Lettini' AS TIPO, Data AS DataInizio, NULL AS DataFine, PrezzoTotale AS Prezzo
             FROM NOLEGGIO_LETTINO
             WHERE IdCliente = %s AND Data < CURDATE()
             """,
