@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-nav">
+    <h1>Gestione Stabilimento</h1>
+    <div class="menu-buttons">
+        <button hx-get="{% url 'spiaggia-view' %}" hx-target="#main-content">Spiaggia</button>
+        <button hx-get="{% url 'ordini-view' %}" hx-target="#main-content">Ordini</button>
+        <button hx-get="{% url 'turni-view' %}" hx-target="#main-content">Turni</button>
+    </div>
+</div>
+{% endblock %}
