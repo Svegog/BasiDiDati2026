@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import HttpResponse
+from django.urls import reverse
 from .. import queriesSQLtoDjango
 
 def dashboard_view(request):
@@ -30,6 +32,7 @@ def registra_dipendente_view(request):
             return redirect('turni-view')
         except Exception as e:
             messages.error(request, f"Errore inserimento anagrafica: {str(e)}")
+            return redirect('turni-view')
             
     return render(request, 'turni/partials/form_dipendente.html')
 
@@ -51,16 +54,16 @@ def aggiungi_turno_view(request):
         iddipendente = queriesSQLtoDjango.trova_dipendente(nome, cognome, email)
         if not iddipendente:
             messages.error(request, "Errore: Dipendente non individuato nell'organico.")
-            return render(request, 'turni/form_turno.html')
+            return redirect('turni-view')
             
         codmansione = queriesSQLtoDjango.trova_mansione(nomemansione)
         if not codmansione:
             messages.error(request, "Errore: Mansione specificata non esistente.")
-            return render(request, 'turni/form_turno.html')
+            return redirect('turni-view')
             
         if queriesSQLtoDjango.turno_sovrapposto(iddipendente, data, orainizio, orafine):
             messages.error(request, "Errore pianificazione: Il dipendente ha già un turno assegnato in questa fascia oraria.")
-            return render(request, 'turni/form_turno.html')
+            return redirect('turni-view')
             
         try:
             queriesSQLtoDjango.inserisci_turno(iddipendente, data, orainizio, orafine, codmansione)
@@ -68,6 +71,7 @@ def aggiungi_turno_view(request):
             return redirect('turni-view')
         except Exception as e:
             messages.error(request, f"Errore inserimento turno: {str(e)}")
+            return redirect('turni-view')
             
     return render(request, 'turni/partials/form_turno.html')
 
@@ -84,6 +88,9 @@ def visualizza_dipendenti_turno_view(request):
         turni = queriesSQLtoDjango.dipendenti_in_turno(data)
         if not turni:
             messages.error(request, "Nessun dipendente è in turno nella data selezionata.")
+            response = HttpResponse()
+            response['HX-Redirect'] = reverse('turni-view')
+            return response
         else:
             return render(request, 'turni/partials/risultato_turni.html', {'turni': turni})
             
