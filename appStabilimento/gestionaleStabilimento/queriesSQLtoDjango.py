@@ -277,7 +277,7 @@ def inserisci_catalogo(codprodotto, partitaiva, prezzounitario):
 def registra_consegna_ordine(codordine):
     with connection.cursor() as cursor:
         cursor.execute(
-            "UPDATE ORDINE SET DataConsegna = CURDATE() WHERE CodOrdine = %s",
+            "UPDATE ORDINE SET DataConsegna = CURDATE() WHERE CodOrdine = %s AND DataConsegna IS NULL",
             [codordine]
         )
         return cursor.rowcount
