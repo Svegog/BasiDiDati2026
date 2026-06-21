@@ -10,12 +10,38 @@
             <input type="text" name="indirizzo" placeholder="Indirizzo" required>
             <input type="text" name="telefono" placeholder="Telefono" required>
         </fieldset>
-        <fieldset>
-            <legend>Primo Prodotto a Catalogo</legend>
-            <input type="text" name="codprodotto" placeholder="Codice Prodotto" required>
-            <input type="number" step="0.01" name="prezzounitario" placeholder="Prezzo Unitario (€)" required>
-        </fieldset>
+        <div id="prodotti-container">
+            <fieldset class="dettaglio-prodotto">
+                <legend>Primo Prodotto a Catalogo</legend>
+                <input type="text" name="codprodotto" placeholder="Codice Prodotto" required>
+                <input type="number" step="0.01" name="prezzounitario" placeholder="Prezzo Unitario (€)" required>
+            </fieldset>
+        </div>
+
+        <button type="button" class="btn-dashboard" id="btn-aggiunta">+ Aggiungi Prodotto</button>
         <button class="btn-dashboard" type="submit">Salva Fornitore</button>
     </form>
 </div>
+
+<script>
+    document.getElementById('btn-aggiunta').addEventListener('click', function() {
+        const container = document.getElementById('prodotti-container');
+        const fieldset = document.querySelector('.dettaglio-prodotto').cloneNode(true);
+        
+        // Svuota i valori clonati
+        fieldset.querySelectorAll('input').forEach(input => input.value = '');
+        
+        // Bottone di rimozione riga
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn-dashboard';
+        removeBtn.textContent = 'Rimuovi';
+        removeBtn.style.marginTop = '10px';
+        removeBtn.onclick = function() { fieldset.remove(); };
+        fieldset.appendChild(removeBtn);
+        
+        container.appendChild(fieldset);
+    });
+</script>
+
 {% include "partials/_toast_oob.html" %}

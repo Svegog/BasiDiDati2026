@@ -255,7 +255,7 @@ def inserisci_fornitore(partitaiva, nome, email, indirizzo, recapito_telefonico)
             """,
             [partitaiva, nome, email, indirizzo, recapito_telefonico]
         )
-        return cursor.rowcount
+        return cursor.lastrowid
 
 
 def inserisci_catalogo(codprodotto, partitaiva, prezzounitario):
