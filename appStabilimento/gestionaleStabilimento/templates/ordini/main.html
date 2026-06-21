@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="ordini-grid-container">
-    <aside class="pannello-sinistro">
+    <aside class="pannello-sinistro menu-laterale">
         
         <h2>Area Ordini</h2>
         <div class="gruppo-comandi">
@@ -13,12 +13,14 @@
             <button hx-get="{% url 'aggiorna_prezzo_catalogo' %}" hx-target="#pannello-form">Modifica Prezzi Catalogo</button>
             <button hx-get="{% url 'aggiorna_giacenze_inventario' %}" hx-target="#pannello-form">Rettifica Inventario</button>
         </div>
+
         <div class="gruppo-comandi">
             <h3>Controlli</h3>
             <button hx-get="{% url 'controllo_giacenze' %}" hx-target="#risultati-query">Prodotti Sotto Scorta</button>
         </div>
+
         <div class="navigazione-ritorno">
-            <a href="{% url 'dashboard' %}">Torna alla Dashboard</a>
+            <a href="{% url 'dashboard' %}" class="btn-dashboard">Torna alla Dashboard</a>
         </div>
     </aside>
 

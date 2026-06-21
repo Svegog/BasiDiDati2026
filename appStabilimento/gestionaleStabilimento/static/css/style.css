@@ -108,7 +108,8 @@ body {
     margin-bottom: 25px;
 }
 .menu-buttons button {
-    padding: 36px 90px;
+    padding: 36px 20px;
+    min-width: 260px;
     font-size: 1.8rem;
     border-radius: 24px;
     border: 2px solid var(--colore-primario);
@@ -127,7 +128,24 @@ body {
 
 .btn-logout {
     display: inline-block;
+    padding: 16px 32px;
+    font-size: 1.2rem;
+    background-color: var(--colore-accento);
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-weight: bold;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.btn-logout:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+.btn-dashboard {
+    display: inline-block;
     padding: 8px 18px;
+    font-size: 1rem;
     background-color: var(--colore-accento);
     color: white;
     text-decoration: none;
