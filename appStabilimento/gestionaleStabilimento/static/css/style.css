@@ -156,6 +156,24 @@ body {
     background-color: var(--colore-primario); color: white; border-color: var(--colore-primario);
 }
 
+/* Login */
+.login-card {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 30px;
+    background: var(--sfondo-pannelli);
+    border: 1px solid var(--bordo-sabbia);
+    border-radius: 16px;
+    box-shadow: var(--ombra);
+}
+.login-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--colore-primario-dark);
+}
+.login-card .form-panel label { margin: 0 0 5px; }
+.login-card .form-panel input { margin-bottom: 15px; }
+
 /* Form di inserimento */
 .form-panel fieldset { border: 1px solid var(--bordo-sabbia); padding: 15px; margin-bottom: 20px; border-radius: 12px; }
 .form-panel legend { font-weight: bold; padding: 0 8px; color: var(--colore-primario-dark); }
