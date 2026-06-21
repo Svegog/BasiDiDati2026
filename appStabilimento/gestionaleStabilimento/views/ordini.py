@@ -36,6 +36,7 @@ def inserisci_ordine_view(request):
             return redirect('ordini-view')
         except Exception as e:
             messages.error(request, f"Errore nell'esecuzione della catena d'ordine: {str(e)}")
+            return redirect('ordini-view')
             
     return render(request, 'ordini/partials/form_ordine.html')
 
@@ -63,7 +64,8 @@ def aggiungi_fornitore_view(request):
             messages.success(request, "Fornitore inserito e catalogo iniziale associato.")
             return redirect('ordini-view')
         except Exception as e:
-            messages.error(request, f"Errore creazione anagrafica fornitore: {str(e)}")
+            messages.error(request, f"Errore creazione catalogo fornitore: {str(e)}")
+            return redirect('ordini-view')
             
     return render(request, 'ordini/partials/form_fornitore.html')
 
