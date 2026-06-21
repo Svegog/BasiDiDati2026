@@ -52,12 +52,14 @@ def aggiungi_fornitore_view(request):
         indirizzo = request.POST.get('indirizzo')
         telefono = request.POST.get('telefono')
         
-        codprodotto = request.POST.get('codprodotto')
-        prezzounitario = request.POST.get('prezzounitario')
+        codprodotti = request.POST.getlist('codprodotto')
+        prezziunitari = request.POST.getlist('prezzounitario')
         
         try:
-            queriesSQLtoDjango.inserisci_fornitore(partitaiva, nome, email, indirizzo, telefono)
-            queriesSQLtoDjango.inserisci_catalogo(codprodotto, partitaiva, prezzounitario)
+            codFornitore = queriesSQLtoDjango.inserisci_fornitore(partitaiva, nome, email, indirizzo, telefono)
+            for codprodotto, prezzounitario in zip(codprodotti, prezziunitari):
+                queriesSQLtoDjango.inserisci_catalogo(codprodotto, partitaiva, prezzounitario)
+                
             messages.success(request, "Fornitore inserito e catalogo iniziale associato.")
             return redirect('ordini-view')
         except Exception as e:
