@@ -230,7 +230,6 @@ def inserisci_ordine(consegna_prevista, idproprietario, partitaiva):
 def inserisci_dettaglio_ordine(codordine, partitaiva, codprodotto, quantita):
     """
     Da chiamare per ciascun prodotto dell'ordine, subito dopo inserisci_ordine().
-    Usa LAST_INSERT_ID() per recuperare il CodOrdine appena creato nella stessa connessione.
     """
     with connection.cursor() as cursor:
         cursor.execute(
