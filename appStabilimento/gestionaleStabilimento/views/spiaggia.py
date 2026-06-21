@@ -64,18 +64,18 @@ def inserisci_prenotazione_view(request):
         idcliente = queriesSQLtoDjango.trova_cliente(nome, cognome, email)
         if not idcliente:
             messages.error(request, "Errore: Cliente non trovato. Registrare prima il cliente.")
-            return render(request, 'spiaggia/inserimento_prenotazione.html')
+            return redirect('spiaggia-view')
             
         # 2. Verifica occupazione
         if queriesSQLtoDjango.ombrellone_occupato_per_prenotazione(codfila, numombrellone, data_inizio, data_fine):
             messages.error(request, "Errore: L'ombrellone selezionato è già occupato nel periodo indicato.")
-            return render(request, 'spiaggia/inserimento_prenotazione.html')
+            return redirect('spiaggia-view')
             
         # 3. Calcolo prezzo in base alla tariffa della fila
         tariffa = queriesSQLtoDjango.tariffa_giornaliera_fila(codfila)
         if not tariffa:
             messages.error(request, "Errore: Tariffa della fila non configurata.")
-            return render(request, 'spiaggia/inserimento_prenotazione.html')
+            return redirect('spiaggia-view')
             
         # Calcolo della durata in giorni per il prezzo
         ndays = (d_fine - d_inizio).days + 1
@@ -87,6 +87,7 @@ def inserisci_prenotazione_view(request):
             return redirect('spiaggia-view')
         except Exception as e:
             messages.error(request, f"Errore di sistema nell'inserimento: {str(e)}")
+            redirect('spiaggia-view')
             
     return render(request, 'spiaggia/partials/form_prenotazione.html')
 
