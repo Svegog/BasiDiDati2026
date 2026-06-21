@@ -8,21 +8,10 @@
 L'applicazione segue un'architettura \textbf{client-server a tre livelli}:
 
 \begin{enumerate}
-  \item \textbf{Presentation layer} --- interfaccia web accessibile tramite browser
-  \item \textbf{Application layer} --- Applicazione Django
-  \item \textbf{Data layer} --- DBMS MySQL
+  \item \textbf{Presentation layer}: interfaccia web con interattivit\`{a} parziale tramite \textit{HTMX}
+  \item \textbf{Application layer}: Applicazione Django
+  \item \textbf{Data layer}: DBMS MySQL
 \end{enumerate}
-
-\begin{figure}[H]
-  \centering
-  % \includegraphics[width=0.75\textwidth]{immagini/architettura.png}
-  \fbox{\parbox{0.75\textwidth}{\centering\vspace{2.5cm}
-    \textit{[Inserire diagramma architettura]}\\
-    Browser $\longrightarrow$ Flask/Python $\longrightarrow$ PostgreSQL
-  \vspace{2.5cm}}}
-  \caption{Architettura a tre livelli dell'applicazione}
-  \label{fig:architettura}
-\end{figure}
 
 \section{Tecnologie utilizzate}
 
@@ -31,84 +20,93 @@ L'applicazione segue un'architettura \textbf{client-server a tre livelli}:
   \caption{Stack tecnologico}
   \label{tab:stack}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{L{3cm} L{3.5cm} L{7cm}}
+  \begin{tabularx}{\textwidth}{L{3cm} L{3.5cm} L{8.2cm}}
     \toprule
     \rowcolor{primary!15}
     \textbf{Livello} & \textbf{Tecnologia} & \textbf{Ruolo} \\
     \midrule
-    Database     & PostgreSQL 15   & DBMS relazionale, gestione dati \\
-    Backend      & Python 3.11     & Linguaggio applicativo principale \\
-    Framework    & Flask 3.x       & Routing HTTP, gestione sessioni, template \\
-    ORM          & psycopg2        & Connettore Python--PostgreSQL \\
-    Frontend     & HTML5 + CSS3    & Interfaccia utente \\
-    Stile        & Bootstrap 5     & Componenti UI responsivi \\
+    Database     & MySQL            & DBMS relazionale, gestione dati \\
+    Connettore   & mysqlclient      & Driver di connessione Python $\rightarrow$ MySQL \\
+    Backend      & Python 3.13      & Linguaggio applicativo principale \\
+    Framework    & Django 6.0       & Routing HTTP, gestione sessioni, template engine \\
+    Accesso dati & Query SQL pure   & Interrogazioni dirette al database, senza ORM \\
+    Frontend     & HTML5 + CSS3     & Interfaccia utente \\
+    Interattivit\`{a} & HTMX 1.9    & Aggiornamento parziale della pagina via richieste AJAX, senza framework JS pesanti \\
+    Stile        & CSS custom       & Tema grafico personalizzato, nessun framework di terze parti \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
+\clearpage
+
 \section{Struttura del progetto}
 
 \begin{verbatim}
-stabilimento/
-|---- app.py                 # Entry point Flask
-|---- config.py              # Configurazione DB e parametri
-|---- db/
-|   |---- schema.sql         # CREATE TABLE + vincoli
-|   `---- seed.sql           # Dati di esempio
-|---- routes/
-|   |---- auth.py            # Login/logout
-|   |---- clienti.py         # CRUD clienti
-|   |---- prenotazioni.py    # Prenotazioni e abbonamenti
-|   |---- dipendenti.py      # CRUD dipendenti e turni
-|   `---- magazzino.py       # Prodotti, fornitori e ordini
-|---- templates/
-|   |---- base.html          # Layout comune
-|   |---- login.html
-|   |---- dashboard.html
-|   `---- ...                # Una template per sezione
-`---- static/
-    |---- css/
-    `---- js/
+appStabilimento/
+|---- manage.py                      # Entry point Django
+|---- pyproject.toml / uv.lock       # Gestione dipendenze (uv)
+`---- gestionaleStabilimento/
+    |---- settings.py                # Configurazione DB, static, sessioni
+    |---- urls.py                    # Definizione di tutte le rotte
+    |---- views/
+    |   |---- auth.py                # Login/logout/dashboard
+    |   |---- spiaggia.py            # Clienti, prenotazioni, abbonamenti, noleggi
+    |   |---- ordini.py              # Fornitori, ordini, magazzino
+    |   `---- turni.py               # Dipendenti e turni
+    |---- templates/
+    |   |---- base.html              # Layout comune, da estendere
+    |   |---- login.html
+    |   |---- dashboard.html
+    |   |---- partials/
+    |   |   `---- _toast_oob.html    # Notifiche riusabili (successo/errore)
+    |   |---- spiaggia/
+    |   |   |---- main.html
+    |   |   `---- partials/          # Form e risultati query dell'area spiaggia
+    |   |---- ordini/
+    |   |   |---- main.html
+    |   |   `---- partials/
+    |   `---- turni/
+    |       |---- main.html
+    |       `---- partials/
+    `---- static/
+        |---- css/style.css          # Stile globale, layout, animazioni
+        |---- js/                    # toast.js, lateral-toggle.js
+        `---- images/                # logo
 \end{verbatim}
+
+\clearpage
 
 \section{Funzionalit\`{a} implementate}
 
 \subsection{Autenticazione}
-Il proprietario accede al sistema tramite email e password. La password
-viene conservata come hash (bcrypt). La sessione viene mantenuta tramite
-cookie firmati di Flask.
+Il proprietario accede al sistema tramite email e password, verificate con una
+query SQL diretta sulla tabella \texttt{PROPRIETARIO}. La password \`{e}
+confrontata in chiaro, scelta effettuata per un database locale e semplicità di implementazione. \\
 
-\subsection{Gestione clienti}
-\begin{itemize}
-  \item Inserimento nuovo cliente con validazione email univoca
-  \item Modifica e cancellazione (con controllo su prenotazioni esistenti)
-  \item Ricerca per nome/cognome
-  \item Visualizzazione storico prenotazioni del cliente
-\end{itemize}
+La sessione viene mantenuta tramite il framework di sessioni di
+Django (cookie), configurato per scadere alla chiusura del browser. Ogni form
+\`{e} protetto da CSRF tramite il token integrato di Django.
 
-\subsection{Prenotazioni e abbonamenti}
-\begin{itemize}
-  \item Selezione cliente e ombrellone con verifica disponibilit\`{a} in tempo reale
-  \item Calcolo automatico del prezzo in base a durata e posizione
-  \item Inserimento prenotazione con controllo di sovrapposizione date
-  \item Gestione degli abbonamenti stagionali
-\end{itemize}
+\subsection{Interfaccia e navigazione}
+La dashboard espone le tre aree applicative (Spiaggia, Ordini, Turni) tramite
+pulsanti che caricano la relativa pagina via HTMX. \\
+All'interno di ciascuna area, un menu laterale distingue le operazioni di inserimento/modifica
+(``Servizi'') dalle query di controllo (``Controlli''): le prime vengono
+mostrate in un pannello centrale, le seconde in un pannello laterale che
+appare solo quando contiene un risultato. Un riclic sullo stesso pulsante
+richiude il pannello corrispondente, riportando l'interfaccia allo stato
+iniziale.
 
-\subsection{Gestione dipendenti e turni}
-\begin{itemize}
-  \item Anagrafica dipendenti
-  \item Inserimento e modifica turni con controllo sovrapposizioni
-  \item Vista calendario: visualizzazione dipendenti per giornata
-\end{itemize}
+\subsection{Operazioni implementate}
+Sono state implementate le stesse operazioni descritte nella sezione~\ref{sec:operazioniPrincipali}, 
+con qualche aggiunta effettuata per comodità come:
+\begin{enumerate}
+  \item Check del \entita{Catalogo} di dato un \entita{Fornitore}
+  \item Modifica di inserimento ordine e nuovo fornitore per aggiungere più prodotti alla volta 
+  (l'aggiunta di un solo elemento a richiesta risultava ripetitivo)
+\end{enumerate} 
 
-\subsection{Magazzino e ordini}
-\begin{itemize}
-  \item Lista prodotti con indicazione delle mancanze (sotto soglia)
-  \item Inserimento ordine verso fornitore (multi-prodotto)
-  \item Aggiornamento automatico giacenze al momento della conferma consegna
-\end{itemize}
-
-% -- 5.5 Screenshot ------------------------------------------
+% -- 5.6 Screenshot ------------------------------------------
 \section{Screenshot dell'interfaccia}
 
 \begin{figure}[H]
@@ -127,18 +125,18 @@ cookie firmati di Flask.
   \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
     \textit{[Screenshot: dashboard principale]}
   \vspace{3cm}}}
-  \caption{Dashboard --- riepilogo giornaliero}
+  \caption{Dashboard --- accesso alle tre aree applicative}
   \label{fig:screen-dashboard}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=0.9\textwidth]{immagini/screen_prenotazioni.png}
+  % \includegraphics[width=0.9\textwidth]{immagini/screen_spiaggia.png}
   \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
-    \textit{[Screenshot: gestione prenotazioni]}
+    \textit{[Screenshot: area spiaggia]}
   \vspace{3cm}}}
-  \caption{Pagina gestione prenotazioni con mappa ombrelloni}
-  \label{fig:screen-prenotazioni}
+  \caption{Area Spiaggia --- pannello operazioni e risultati query}
+  \label{fig:screen-spiaggia}
 \end{figure}
 
 \begin{figure}[H]
@@ -147,7 +145,7 @@ cookie firmati di Flask.
   \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
     \textit{[Screenshot: gestione turni]}
   \vspace{3cm}}}
-  \caption{Vista turni dipendenti per giornata}
+  \caption{Area Turni --- dipendenti e assegnazione turni}
   \label{fig:screen-turni}
 \end{figure}
 
@@ -157,6 +155,6 @@ cookie firmati di Flask.
   \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
     \textit{[Screenshot: magazzino]}
   \vspace{3cm}}}
-  \caption{Pagina magazzino con evidenza prodotti sotto soglia}
+  \caption{Area Ordini --- controllo prodotti sotto scorta}
   \label{fig:screen-magazzino}
 \end{figure}
