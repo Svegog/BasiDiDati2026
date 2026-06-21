@@ -227,7 +227,7 @@ def inserisci_ordine(consegna_prevista, idproprietario, partitaiva):
         return cursor.lastrowid
 
 
-def inserisci_dettaglio_ordine(partitaiva, codprodotto, quantita):
+def inserisci_dettaglio_ordine(codordine, partitaiva, codprodotto, quantita):
     """
     Da chiamare per ciascun prodotto dell'ordine, subito dopo inserisci_ordine().
     Usa LAST_INSERT_ID() per recuperare il CodOrdine appena creato nella stessa connessione.
@@ -236,10 +236,10 @@ def inserisci_dettaglio_ordine(partitaiva, codprodotto, quantita):
         cursor.execute(
             """
             INSERT INTO DETTAGLIO_ORDINE (CodOrdine, PartitaIVA, CodProdotto, Quantità, PrezzoAlMomento)
-            VALUES (LAST_INSERT_ID(), %s, %s, %s,
+            VALUES (%s, %s, %s, %s,
                    (SELECT C.PrezzoUnitario FROM CATALOGO C WHERE C.CodProdotto = %s AND C.PartitaIVA = %s))
             """,
-            [partitaiva, codprodotto, quantita, codprodotto, partitaiva]
+            [codordine, partitaiva, codprodotto, quantita, codprodotto, partitaiva]
         )
         return cursor.rowcount
 
