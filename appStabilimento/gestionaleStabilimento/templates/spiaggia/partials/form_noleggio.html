@@ -17,8 +17,13 @@
             <label>Quantità:</label>
             <input type="number" name="quantita" min="1" required>
             
-            <label>Tipo (Es. Singolo, Matrimoniale):</label>
-            <input type="text" name="tiponoleggio" required>
+            <label>Tipo Noleggio:</label>
+            <select name="tiponoleggio" required>
+                <option value="" disabled selected>-- Seleziona tipo --</option>
+                <option value="Mattina">🌅 Mattina</option>
+                <option value="Pomeriggio">☀️ Pomeriggio</option>
+                <option value="Giornata">🏖️ Giornata Completa</option>
+            </select>
         </fieldset>
         <button type="submit" class="btn-primary">Registra Noleggio</button>
     </form>
