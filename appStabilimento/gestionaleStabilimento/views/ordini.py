@@ -23,13 +23,14 @@ def inserisci_ordine_view(request):
         idproprietario = request.session['proprietario_id']
         
         # Campi del prodotto per il dettaglio (assumendo un inserimento singolo o ciclico da form)
-        codprodotto = request.POST.get('codprodotto')
-        quantita = request.POST.get('quantita')
+        codprodotti = request.POST.getlist('codprodotto')
+        quantita_list = request.POST.getlist('quantita')
         
         try:
             # Transazione logica sequenziale
-            queriesSQLtoDjango.inserisci_ordine(consegna_prevista, idproprietario, partitaiva)
-            queriesSQLtoDjango.inserisci_dettaglio_ordine(partitaiva, codprodotto, quantita)
+            codordine = queriesSQLtoDjango.inserisci_ordine(consegna_prevista, idproprietario, partitaiva)
+            for codprodotto, quantita in zip(codprodotti, quantita_list):
+                queriesSQLtoDjango.inserisci_dettaglio_ordine(codordine, partitaiva, codprodotto, quantita)
             
             messages.success(request, "Ordine inviato al fornitore e registrato a sistema.")
             return redirect('ordini-view')

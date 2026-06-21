@@ -3,7 +3,7 @@
     <form action="{% url 'registra_consegna' %}" method="POST">
         {% csrf_token %}
         <input type="number" name="codordine" placeholder="Codice Ordine Ricevuto" required>
-        <button type="submit">Conferma Ricezione e Aggiorna Magazzino</button>
+        <button class="btn-dashboard" type="submit">Conferma Ricezione e Aggiorna Magazzino</button>
     </form>
 </div>
 {% include "partials/_toast_oob.html" %}
