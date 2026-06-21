@@ -32,7 +32,7 @@ def inserisci_ordine_view(request):
             for codprodotto, quantita in zip(codprodotti, quantita_list):
                 queriesSQLtoDjango.inserisci_dettaglio_ordine(codordine, partitaiva, codprodotto, quantita)
             
-            messages.success(request, "Ordine inviato al fornitore e registrato a sistema.")
+            messages.success(request, f"Ordine numero {str(codordine)} inviato al fornitore e registrato a sistema.")
             return redirect('ordini-view')
         except Exception as e:
             messages.error(request, f"Errore nell'esecuzione della catena d'ordine: {str(e)}")
@@ -61,7 +61,7 @@ def aggiungi_fornitore_view(request):
             for codprodotto, prezzounitario in zip(codprodotti, prezziunitari):
                 queriesSQLtoDjango.inserisci_catalogo(codprodotto, partitaiva, prezzounitario)
                 
-            messages.success(request, "Fornitore inserito e catalogo iniziale associato.")
+            messages.success(request, f"Fornitore {str(codFornitore)} inserito e catalogo iniziale associato.")
             return redirect('ordini-view')
         except Exception as e:
             messages.error(request, f"Errore creazione catalogo fornitore: {str(e)}")
@@ -85,7 +85,7 @@ def registra_consegna_view(request):
             
         # Aggiornamento magazzino conseguente
         queriesSQLtoDjango.aggiorna_giacenze_da_ordine(codordine)
-        messages.success(request, "Consegna registrata. Giacenze di magazzino incrementate.")
+        messages.success(request, f"Consegna {str(codordine)} registrata. Giacenze di magazzino incrementate.")
         return redirect('ordini-view')
         
     return render(request, 'ordini/partials/form_consegna.html')
@@ -100,6 +100,7 @@ def controllo_giacenze_view(request):
     sotto_scorta = queriesSQLtoDjango.prodotti_sotto_scorta()
     if not sotto_scorta:
         messages.error(request, "Tutti i prodotti sono sopra la soglia minima. Nessuna mancanza rilevata.")
+        return redirect('ordini-view')
         
     return render(request, 'ordini/partials/risultato_magazzino.html', {'prodotti': sotto_scorta})
 
