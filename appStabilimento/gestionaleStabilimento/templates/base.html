@@ -3,10 +3,21 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestione Stabilimento</title>
+
     <!-- Includiamo HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="{% static 'js/toast.js' %}"></script>
+
+    <!-- FONT: Nunito + Quicksand (Google Fonts).
+         Per tornare al font di sistema precedente: rimuovi questi 3 tag <link>
+         e in style.css ripristina font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         su entrambe le regole "*" e "h1, h2, h3". -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>

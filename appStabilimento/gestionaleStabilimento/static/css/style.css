@@ -19,7 +19,16 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Trebuchet MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* FONT ATTUALE: Nunito (richiede il link Google Fonts in base.html) */
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* FONT PRECEDENTE - decommenta questa riga e commenta quella sopra per tornare indietro:
+    font-family: 'Trebuchet MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+}
+
+h1, h2, h3 {
+    /* Font più arrotondato per i titoli, richiede il link Google Fonts */
+    font-family: 'Quicksand', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
 }
 
 body {
@@ -161,6 +170,28 @@ body {
 .btn-dashboard:hover {
     transform: translateY(-1px);
     opacity: 0.9;
+}
+
+.pannello-operativo .stato-vuoto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 420px;
+    text-align: center;
+    color: #8a9a93;
+}
+.pannello-operativo .stato-vuoto img {
+    width: 110px;
+    opacity: 0.85;
+    margin-bottom: 20px;
+}
+.pannello-operativo .stato-vuoto p {
+    font-size: 1.15rem;
+    max-width: 320px;
+    line-height: 1.5;
+    text-align: center;
 }
 
 .gruppo-comandi { margin-bottom: 25px; }

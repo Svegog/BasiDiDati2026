@@ -372,7 +372,7 @@ def storico_cliente(idcliente):
 
             UNION ALL
 
-            SELECT 'Abbonamento' AS TIPO, CAST(Anno AS DATE) AS DataInizio, NULL AS DataFine, Prezzo
+            SELECT 'Abbonamento' AS TIPO, Anno AS DataInizio, NULL AS DataFine, Prezzo
             FROM ABBONAMENTO
             WHERE IdCliente = %s
 
