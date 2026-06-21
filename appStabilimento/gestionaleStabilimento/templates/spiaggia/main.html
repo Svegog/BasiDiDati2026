@@ -1,28 +1,28 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <div class="spiaggia-grid-container">
-    
+
     <aside class="pannello-sinistro menu-laterale">
         <h2>Area Spiaggia</h2>
-        
+
         <div class="gruppo-comandi">
             <h3>Servizi</h3>
-            <button hx-get="{% url 'inserisci_cliente' %}" hx-target="#pannello-form">Inserimento Cliente</button>
-            <button hx-get="{% url 'inserisci_prenotazione' %}" hx-target="#pannello-form">Prenotazione</button>
-            <button hx-get="{% url 'inserisci_abbonamento' %}" hx-target="#pannello-form">Abbonamento</button>
-            <button hx-get="{% url 'inserisci_noleggio' %}" hx-target="#pannello-form">Noleggio Lettino</button>
-            <button hx-get="{% url 'modifica_tariffa_lettini' %}" hx-target="#pannello-form">Modifica Prezzo Lettini</button>
-            <button hx-get="{% url 'modifica_prezzi_fila' %}" hx-target="#pannello-form">Modifica Prezzo File</button>
-            <button hx-get="{% url 'conferma_pagamento_spiaggia' %}" hx-target="#pannello-form">Aggiorna Stato Pagamento</button>
+            <button class="toggle-btn" data-url="{% url 'inserisci_cliente' %}" data-target="#pannello-form">Inserimento Cliente</button>
+            <button class="toggle-btn" data-url="{% url 'inserisci_prenotazione' %}" data-target="#pannello-form">Prenotazione</button>
+            <button class="toggle-btn" data-url="{% url 'inserisci_abbonamento' %}" data-target="#pannello-form">Abbonamento</button>
+            <button class="toggle-btn" data-url="{% url 'inserisci_noleggio' %}" data-target="#pannello-form">Noleggio Lettino</button>
+            <button class="toggle-btn" data-url="{% url 'modifica_tariffa_lettini' %}" data-target="#pannello-form">Modifica Prezzo Lettini</button>
+            <button class="toggle-btn" data-url="{% url 'modifica_prezzi_fila' %}" data-target="#pannello-form">Modifica Prezzo File</button>
+            <button class="toggle-btn" data-url="{% url 'conferma_pagamento_spiaggia' %}" data-target="#pannello-form">Aggiorna Stato Pagamento</button>
         </div>
-        
+
         <div class="gruppo-comandi">
             <h3>Controlli</h3>
-            <button hx-get="{% url 'storico_cliente' %}" hx-target="#risultati-query">Storico Cliente</button>
-            <button hx-get="{% url 'verifica_disponibilita' %}" hx-target="#risultati-query">Stato Occupazione Ombrellone</button>
+            <button class="toggle-btn" data-url="{% url 'storico_cliente' %}" data-target="#risultati-query">Storico Cliente</button>
+            <button class="toggle-btn" data-url="{% url 'verifica_disponibilita' %}" data-target="#risultati-query">Stato Occupazione Ombrellone</button>
         </div>
-        
+
         <div class="navigazione-ritorno">
             <a href="{% url 'dashboard' %}" class="btn-dashboard">Torna alla Dashboard</a>
         </div>
@@ -34,8 +34,9 @@
         </div>
     </section>
 
-    <section id="risultati-query" class="pannello-risultati">
-        </section>
+    <section id="risultati-query" class="pannello-risultati"></section>
 
 </div>
+
+<script src="{% static 'js/lateral-toggle.js' %}"></script>
 {% endblock %}

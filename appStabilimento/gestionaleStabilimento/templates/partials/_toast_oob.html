@@ -1,0 +1,7 @@
+<div id="toast-container" class="toast-container" hx-swap-oob="true">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="toast {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>

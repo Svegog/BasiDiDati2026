@@ -1,33 +1,30 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <div class="ordini-grid-container">
     <aside class="pannello-sinistro menu-laterale">
-        
         <h2>Area Ordini</h2>
         <div class="gruppo-comandi">
             <h3>Servizi</h3>
-            <button hx-get="{% url 'inserisci_ordine' %}" hx-target="#pannello-form">Nuovo Ordine</button>
-            <button hx-get="{% url 'aggiungi_fornitore' %}" hx-target="#pannello-form">Nuovo Fornitore</button>
-            <button hx-get="{% url 'registra_consegna' %}" hx-target="#pannello-form">Registra Consegna</button>
-            <button hx-get="{% url 'aggiorna_prezzo_catalogo' %}" hx-target="#pannello-form">Modifica Prezzi Catalogo</button>
-            <button hx-get="{% url 'aggiorna_giacenze_inventario' %}" hx-target="#pannello-form">Rettifica Inventario</button>
+            <button class="toggle-btn" data-url="{% url 'inserisci_ordine' %}" data-target="#pannello-form">Nuovo Ordine</button>
+            <button class="toggle-btn" data-url="{% url 'aggiungi_fornitore' %}" data-target="#pannello-form">Nuovo Fornitore</button>
+            <button class="toggle-btn" data-url="{% url 'registra_consegna' %}" data-target="#pannello-form">Registra Consegna</button>
+            <button class="toggle-btn" data-url="{% url 'aggiorna_prezzo_catalogo' %}" data-target="#pannello-form">Modifica Prezzi Catalogo</button>
+            <button class="toggle-btn" data-url="{% url 'aggiorna_giacenze_inventario' %}" data-target="#pannello-form">Rettifica Inventario</button>
         </div>
-
         <div class="gruppo-comandi">
             <h3>Controlli</h3>
-            <button hx-get="{% url 'controllo_giacenze' %}" hx-target="#risultati-query">Prodotti Sotto Scorta</button>
+            <button class="toggle-btn" data-url="{% url 'controllo_giacenze' %}" data-target="#risultati-query">Prodotti Sotto Scorta</button>
         </div>
-
         <div class="navigazione-ritorno">
             <a href="{% url 'dashboard' %}" class="btn-dashboard">Torna alla Dashboard</a>
         </div>
     </aside>
-
     <section id="pannello-form" class="pannello-operativo">
         <p>Seleziona un'operazione dal menu per iniziare.</p>
     </section>
-
     <section id="risultati-query" class="pannello-risultati"></section>
 </div>
+
+<script src="{% static 'js/lateral-toggle.js' %}"></script>
 {% endblock %}
