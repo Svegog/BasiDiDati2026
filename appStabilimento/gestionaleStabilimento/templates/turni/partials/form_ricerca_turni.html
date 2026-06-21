@@ -2,7 +2,7 @@
     <h3>Seleziona Data per Controllo Turni</h3>
     <form hx-get="{% url 'visualizza_dipendenti_turno' %}" hx-target="#risultati-query">
         <input type="date" name="data" required>
-        <button type="submit">Estrai Tabellone Turni</button>
+        <button class="btn-dashboard" type="submit">Estrai Tabellone Turni</button>
     </form>
 </div>
 {% include "partials/_toast_oob.html" %}

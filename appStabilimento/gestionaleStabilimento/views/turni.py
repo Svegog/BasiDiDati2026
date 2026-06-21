@@ -51,16 +51,16 @@ def aggiungi_turno_view(request):
         iddipendente = queriesSQLtoDjango.trova_dipendente(nome, cognome, email)
         if not iddipendente:
             messages.error(request, "Errore: Dipendente non individuato nell'organico.")
-            return render(request, 'turni/aggiungi_turno.html')
+            return render(request, 'turni/form_turno.html')
             
         codmansione = queriesSQLtoDjango.trova_mansione(nomemansione)
         if not codmansione:
             messages.error(request, "Errore: Mansione specificata non esistente.")
-            return render(request, 'turni/aggiungi_turno.html')
+            return render(request, 'turni/form_turno.html')
             
         if queriesSQLtoDjango.turno_sovrapposto(iddipendente, data, orainizio, orafine):
             messages.error(request, "Errore pianificazione: Il dipendente ha già un turno assegnato in questa fascia oraria.")
-            return render(request, 'turni/aggiungi_turno.html')
+            return render(request, 'turni/form_turno.html')
             
         try:
             queriesSQLtoDjango.inserisci_turno(iddipendente, data, orainizio, orafine, codmansione)

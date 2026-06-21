@@ -2,8 +2,8 @@
     <h3>Inserimento Nuovo Ordine</h3>
     <form action="{% url 'inserisci_ordine' %}" method="POST">
         {% csrf_token %}
-        <input type="text" name="partitaiva" placeholder="P.IVA Fornitore">
-        <input type="date" name="consegna_prevista" title="Data di consegna prevista">
+        <input type="text" name="partitaiva" placeholder="P.IVA Fornitore" required>
+        <input type="date" name="consegna_prevista" title="Data di consegna prevista" required>
         
         <div id="prodotti-container">
             <fieldset class="dettaglio-prodotto">
@@ -14,7 +14,7 @@
         </div>
         
         <button type="button" class="btn-dashboard" id="btn-aggiunta">+ Aggiungi Prodotto</button>
-        <button type="submit">Invia Ordine</button>
+        <button class="btn-dashboard" type="submit">Invia Ordine</button>
     </form>
 </div>
 
