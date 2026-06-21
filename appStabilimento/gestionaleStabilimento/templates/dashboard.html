@@ -1,12 +1,15 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <div class="dashboard-nav">
+    <img src="{% static 'images/logo.png' %}" alt="Logo Stabilimento" class="logo-header"> 
     <h1>Gestione Stabilimento</h1>
     <div class="menu-buttons">
         <button hx-get="{% url 'spiaggia-view' %}" hx-target="#main-content">Spiaggia</button>
         <button hx-get="{% url 'ordini-view' %}" hx-target="#main-content">Ordini</button>
         <button hx-get="{% url 'turni-view' %}" hx-target="#main-content">Turni</button>
-        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
     </div>
+    <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
 </div>
 {% endblock %}
