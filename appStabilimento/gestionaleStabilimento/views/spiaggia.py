@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .. import queriesSQLtoDjango
+from datetime import datetime
+import decimal
 
 def dashboard_view(request):
     # CONTROLLO OBBLIGATORIO
@@ -52,6 +54,11 @@ def inserisci_prenotazione_view(request):
         data_fine = request.POST.get('data_fine')
         sconto = request.POST.get('sconto', 0)
         note = request.POST.get('note', '')
+
+        sconto = float(sconto) / 100
+        
+        d_inizio = datetime.strptime(data_inizio, '%Y-%m-%d').date()
+        d_fine = datetime.strptime(data_fine, '%Y-%m-%d').date()
         
         # 1. Trova il cliente
         idcliente = queriesSQLtoDjango.trova_cliente(nome, cognome, email)
@@ -70,8 +77,9 @@ def inserisci_prenotazione_view(request):
             messages.error(request, "Errore: Tariffa della fila non configurata.")
             return render(request, 'spiaggia/inserimento_prenotazione.html')
             
-        # Calcolo puramente indicativo della durata in giorni per il prezzo
-        prezzo = tariffa  # Logica estendibile con la differenza tra date
+        # Calcolo della durata in giorni per il prezzo
+        ndays = (d_fine - d_inizio).days + 1
+        prezzo = (tariffa * ndays * decimal.Decimal(1 - sconto))
         
         try:
             queriesSQLtoDjango.inserisci_prenotazione(data_inizio, data_fine, prezzo, sconto, note, idcliente, codfila, numombrellone)
