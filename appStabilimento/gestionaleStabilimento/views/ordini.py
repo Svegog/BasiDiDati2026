@@ -77,7 +77,7 @@ def registra_consegna_view(request):
         righe_ordine = queriesSQLtoDjango.registra_consegna_ordine(codordine)
         if righe_ordine == 0:
             messages.error(request, "Errore: Codice ordine inesistente o già consegnato.")
-            return render(request, 'ordini/registra_consegna.html')
+            return redirect('ordini-view')
             
         # Aggiornamento magazzino conseguente
         queriesSQLtoDjango.aggiorna_giacenze_da_ordine(codordine)
