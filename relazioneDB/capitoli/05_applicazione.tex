@@ -7,11 +7,11 @@
 
 L'applicazione segue un'architettura \textbf{client-server a tre livelli}:
 
-\begin{enumerate}
+\begin{itemize}
   \item \textbf{Presentation layer}: interfaccia web con interattivit\`{a} parziale tramite \textit{HTMX}
   \item \textbf{Application layer}: Applicazione Django
   \item \textbf{Data layer}: DBMS MySQL
-\end{enumerate}
+\end{itemize}
 
 \section{Tecnologie utilizzate}
 
@@ -100,61 +100,92 @@ iniziale.
 \subsection{Operazioni implementate}
 Sono state implementate le stesse operazioni descritte nella sezione~\ref{sec:operazioniPrincipali}, 
 con qualche aggiunta effettuata per comodità come:
-\begin{enumerate}
+\begin{itemize}
   \item Check del \entita{Catalogo} di dato un \entita{Fornitore}
-  \item Modifica di inserimento ordine e nuovo fornitore per aggiungere più prodotti alla volta 
+  \item Modifica di inserimento \entita{Ordine} e nuovo fornitore per aggiungere più \entita{Prodotti} alla volta 
   (l'aggiunta di un solo elemento a richiesta risultava ripetitivo)
-\end{enumerate} 
+\end{itemize} 
+
+\clearpage
 
 % -- 5.6 Screenshot ------------------------------------------
 \section{Screenshot dell'interfaccia}
 
+Di seguito saranno inserite, oltre a \textit{Login} e \textit{Dashboard}, solo una delle tre aree, in
+quanto la struttura e il funzionamento sono identiche tra loro.
+\begin{center}
+  \textit{Le immagini possono essere ingrandite tramite click sinistro su di esse}
+\end{center}
+
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=0.9\textwidth]{immagini/screen_login.png}
-  \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
-    \textit{[Screenshot: pagina di login]}
-  \vspace{3cm}}}
+  \href{run:immagini/05/login.png}{%
+    \includegraphics[width=0.9\textwidth]{immagini/05/login.png}%
+  }
   \caption{Pagina di login}
   \label{fig:screen-login}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=0.9\textwidth]{immagini/screen_dashboard.png}
-  \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
-    \textit{[Screenshot: dashboard principale]}
-  \vspace{3cm}}}
-  \caption{Dashboard --- accesso alle tre aree applicative}
+  \href{run:immagini/05/dashboardNoMessage.png}{%
+    \includegraphics[width=0.9\textwidth]{immagini/05/dashboardNoMessage.png}%
+  }
+  \caption{Dashboard: accesso alle tre aree applicative}
   \label{fig:screen-dashboard}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=0.9\textwidth]{immagini/screen_spiaggia.png}
-  \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
-    \textit{[Screenshot: area spiaggia]}
-  \vspace{3cm}}}
-  \caption{Area Spiaggia --- pannello operazioni e risultati query}
+  \href{run:immagini/05/areaSpiaggia.png}{%
+    \includegraphics[width=0.9\textwidth]{immagini/05/areaSpiaggia.png}%
+  }
+  \caption{Area Spiaggia}
   \label{fig:screen-spiaggia}
 \end{figure}
 
-\begin{figure}[H]
-  \centering
-  % \includegraphics[width=0.9\textwidth]{immagini/screen_turni.png}
-  \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
-    \textit{[Screenshot: gestione turni]}
-  \vspace{3cm}}}
-  \caption{Area Turni --- dipendenti e assegnazione turni}
-  \label{fig:screen-turni}
-\end{figure}
+\clearpage
+
+\subsection{Descrizione Front-End}
+
+Come mostrato nella figura sottostante, si è deciso di dividere l'applicativo in tre aree:
+\begin{itemize}
+  \item \textbf{Area operazioni} (laterale sinistra)\textbf{:} contiene una breve descrizione 
+  dell'operazione da effettuare e il pulsante associato, che sono state divise in:
+  \begin{enumerate}
+    \item \textbf{Servizi:} query di inserimento
+    \item \textbf{Controlli:} query di ricerca
+  \end{enumerate}
+  \item \textbf{Area form} (centrale)\textbf{:} contiene il form mostrato all'utente dove 
+  inserire i valori necessari alle query
+  \item \textbf{Area risultati} (laterale destro)\textbf{:} mostra il risultato di query di 
+  consultazione, principalmente sotto forma di tabelle formattate con CSS. Se nessuna opzione
+  di consultazione viene selezionata, quest'area collassa lasciando spazio ai form.
+\end{itemize}
+
+Form di inserimento e consultazione possono essere aperti in contemporanea: questa scelta
+è stata inserita per risolvere problemi come: \textit{Quali ombrelloni posso prenotare?} \\
+Basta visualizzare nell'area risultati gli ombrelloni disponibili, inserendo nel form 
+di prenotazione \textit{CodFila} e \textit{NumOmbrellone} ottenuti. \\ \\
+I vari errori, warning o successi sono gestiti con pop-up in basso a destra ( \textit{Toast JS} ) 
+per notificare l'utente se un'operazione è andata a buon fine oppure no.
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=0.9\textwidth]{immagini/screen_magazzino.png}
-  \fbox{\parbox{0.9\textwidth}{\centering\vspace{3cm}
-    \textit{[Screenshot: magazzino]}
-  \vspace{3cm}}}
-  \caption{Area Ordini --- controllo prodotti sotto scorta}
-  \label{fig:screen-magazzino}
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \href{run:immagini/05/areaSpiaggiaCompleta.png}{%
+      \includegraphics[width=\textwidth]{immagini/05/areaSpiaggiaCompleta.png}%
+    }
+    \caption{Area con selezione}
+    \label{fig:screen-area}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \href{run:immagini/05/areaSpiaggiaConQuery.png}{%
+      \includegraphics[width=\textwidth]{immagini/05/areaSpiaggiaConQuery.png}%
+    }
+    \caption{Area con query visualizzata}
+    \label{fig:screen-areaConQuery}
+  \end{minipage}
 \end{figure}
