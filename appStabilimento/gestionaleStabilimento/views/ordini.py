@@ -137,3 +137,20 @@ def aggiorna_giacenze_inventario_view(request):
         return redirect('ordini-view')
         
     return render(request, 'ordini/partials/form_inventario.html')
+
+# Nuova Op Temp --- Check Catalogo per fornitore
+def mostra_form_catalogo_view(request):
+    if 'proprietario_id' not in request.session:
+        return redirect('login')
+    return render(request, 'ordini/partials/form_catalogofornitore.html')
+
+def controllo_catalogo_view(request):
+    if 'proprietario_id' not in request.session:
+        return redirect('login')
+    
+    partitaiva = request.GET.get('partitaiva')
+    prodotti = []
+    if partitaiva:
+        prodotti = queriesSQLtoDjango.ottieni_catalogo_fornitore(partitaiva)
+
+    return render(request, 'ordini/partials/risultato_catalogofornitore.html', {'prodotti': prodotti})

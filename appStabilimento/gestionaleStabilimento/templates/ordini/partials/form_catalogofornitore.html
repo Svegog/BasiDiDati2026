@@ -1,0 +1,11 @@
+<div class="form-panel">
+    <h3>Visualizza Catalogo Fornitore</h3>
+    <form hx-get="{% url 'controllo_catalogo' %}" hx-target="#risultati-query">
+        <div class="form-group">
+            <label>Partita IVA Fornitore:</label>
+            <input type="text" name="partitaiva" placeholder="Inserisci P.IVA Fornitore" required>
+        </div>
+        <button type="submit" class="btn-info">Cerca Catalogo</button>
+    </form>
+</div>
+{% include "partials/_toast_oob.html" %}

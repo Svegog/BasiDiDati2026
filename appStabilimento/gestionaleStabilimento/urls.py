@@ -58,4 +58,6 @@ urlpatterns = [
     
     # Parte HTMX, restituiscono blocchi di testo
     path('ordini/controllo/giacenze/', ordini.controllo_giacenze_view, name='controllo_giacenze'),
+    path('ordini/catalogo-fornitore/', ordini.mostra_form_catalogo_view, name='mostra_form_catalogo'),
+    path('ordini/controllo-catalogo/', ordini.controllo_catalogo_view, name='controllo_catalogo')
 ]

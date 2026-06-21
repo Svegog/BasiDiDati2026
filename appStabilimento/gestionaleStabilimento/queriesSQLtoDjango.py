@@ -463,3 +463,17 @@ def conferma_pagamento_noleggio(codnoleggio):
             [codnoleggio]
         )
         return cursor.rowcount
+    
+# =========================================================
+# Nuova Op Temporanea --- Check Catalogo per fornitore
+# =========================================================
+def ottieni_catalogo_fornitore(partitaiva):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT C.CodProdotto, C.PrezzoUnitario FROM CATALOGO C
+            WHERE C.PartitaIVA = %s
+            """,
+            [partitaiva]
+        )
+        return cursor.fetchall()
