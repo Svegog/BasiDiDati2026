@@ -157,11 +157,12 @@ def inserisci_noleggio_view(request):
         prezzo_totale = float(prezzo_unitario) * int(quantita)
         
         try:
-            queriesSQLtoDjango.inserisci_noleggio_lettino(data, quantita, idcliente, tiponoleggio, prezzo_totale)
-            messages.success(request, "Noleggio lettino registrato correttamente.")
+            idNoleggio = queriesSQLtoDjango.inserisci_noleggio_lettino(data, quantita, idcliente, tiponoleggio, prezzo_totale)
+            messages.success(request, f"Noleggio lettino numero {str(idNoleggio)} registrato correttamente.")
             return redirect('spiaggia-view')
         except Exception as e:
             messages.error(request, f"Errore esecuzione: {str(e)}")
+            return redirect('spiaggia-view')
             
     return render(request, 'spiaggia/partials/form_noleggio.html')
 

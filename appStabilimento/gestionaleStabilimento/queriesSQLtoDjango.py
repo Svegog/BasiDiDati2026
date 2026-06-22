@@ -137,7 +137,7 @@ def inserisci_noleggio_lettino(data, quantita, idcliente, tiponoleggio, prezzo):
     with connection.cursor() as cursor:
         cursor.execute(
             """
-            INSERT INTO NOLEGGIO_LETTINO (Data, Quantità, Pagamento, IdCliente, TipoNoleggio, Prezzo)
+            INSERT INTO NOLEGGIO_LETTINO (Data, Quantità, Pagamento, IdCliente, TipoNoleggio, PrezzoTotale)
             VALUES (%s, %s, 'N', %s, %s, %s)
             """,
             [data, quantita, idcliente, tiponoleggio, prezzo]
