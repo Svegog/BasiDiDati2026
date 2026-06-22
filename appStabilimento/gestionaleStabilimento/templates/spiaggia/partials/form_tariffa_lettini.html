@@ -3,8 +3,13 @@
     <form action="{% url 'modifica_tariffa_lettini' %}" method="POST">
         {% csrf_token %}
         <div class="form-group">
-            <label>Tipo Noleggio da modificare:</label>
-            <input type="text" name="tiponoleggio" placeholder="Es. Lettino Singolo" required>
+            <label>Tipologia di Noleggio da modificare:</label>
+            <select name="tiponoleggio" required>
+                <option value="" disabled selected>-- Seleziona un opzione --</option>
+                <option value='Mattina'>Mattina</option>
+                <option value="Pomeriggio">Pomeriggio</option>
+                <option value="Giornata">Giornata Completa</option>
+            </select>
         </div>
         <div class="form-group">
             <label>Nuovo Prezzo (€):</label>

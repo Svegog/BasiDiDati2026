@@ -74,7 +74,7 @@ def inserisci_prenotazione_view(request):
         # 3. Calcolo prezzo in base alla tariffa della fila
         tariffa = queriesSQLtoDjango.tariffa_giornaliera_fila(codfila)
         if not tariffa:
-            messages.error(request, "Errore: Tariffa della fila non configurata.")
+            messages.error(request, "Errore: Fila non esistente o tariffa della fila non configurata.")
             return redirect('spiaggia-view')
             
         # Calcolo della durata in giorni per il prezzo
@@ -87,7 +87,7 @@ def inserisci_prenotazione_view(request):
             return redirect('spiaggia-view')
         except Exception as e:
             messages.error(request, f"Errore di sistema nell'inserimento: {str(e)}")
-            redirect('spiaggia-view')
+            return redirect('spiaggia-view')
             
     return render(request, 'spiaggia/partials/form_prenotazione.html')
 
@@ -109,13 +109,16 @@ def inserisci_abbonamento_view(request):
         idcliente = queriesSQLtoDjango.trova_cliente(nome, cognome, email)
         if not idcliente:
             messages.error(request, "Errore: Cliente inserito inesistente.")
-            return render(request, 'spiaggia/inserimento_abbonamento.html')
+            return redirect('spiaggia-view')
             
         if queriesSQLtoDjango.ombrellone_occupato_per_abbonamento(codfila, numombrellone, anno):
             messages.error(request, "Errore: Ombrellone già impegnato per la stagione selezionata.")
-            return render(request, 'spiaggia/inserimento_abbonamento.html')
+            return redirect('spiaggia-view')
             
         prezzo_stagionale = queriesSQLtoDjango.tariffa_stagionale_fila(codfila)
+        if not prezzo_stagionale:
+            messages.error(request, "Errore: Fila non esistente o tariffa della fila non configurata.")
+            return redirect('spiaggia-view')
         
         try:
             queriesSQLtoDjango.inserisci_abbonamento(codfila, numombrellone, anno, prezzo_stagionale, sconto, idcliente)
@@ -123,6 +126,7 @@ def inserisci_abbonamento_view(request):
             return redirect('spiaggia-view')
         except Exception as e:
             messages.error(request, f"Errore di persistenza: {str(e)}")
+            return redirect('spiaggia-view')
             
     return render(request, 'spiaggia/partials/form_abbonamento.html')
 
@@ -143,12 +147,12 @@ def inserisci_noleggio_view(request):
         idcliente = queriesSQLtoDjango.trova_cliente(nome, cognome, email)
         if not idcliente:
             messages.error(request, "Errore: Cliente non identificato.")
-            return render(request, 'spiaggia/inserimento_noleggio.html')
+            return redirect('spiaggia-view')
             
         prezzo_unitario = queriesSQLtoDjango.prezzo_tariffa_noleggio(tiponoleggio)
         if not prezzo_unitario:
             messages.error(request, "Errore: Tipo noleggio non valido o tariffa assente.")
-            return render(request, 'spiaggia/inserimento_noleggio.html')
+            return redirect('spiaggia-view')
             
         prezzo_totale = float(prezzo_unitario) * int(quantita)
         
