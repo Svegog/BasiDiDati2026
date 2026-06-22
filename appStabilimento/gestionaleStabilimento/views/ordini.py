@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import HttpResponse
+from django.urls import reverse
 from .. import queriesSQLtoDjango
 
 def dashboard_view(request):
@@ -100,7 +102,9 @@ def controllo_giacenze_view(request):
     sotto_scorta = queriesSQLtoDjango.prodotti_sotto_scorta()
     if not sotto_scorta:
         messages.error(request, "Tutti i prodotti sono sopra la soglia minima. Nessuna mancanza rilevata.")
-        return redirect('ordini-view')
+        response = HttpResponse()
+        response['HX-Redirect'] = reverse('ordini-view')
+        return response
         
     return render(request, 'ordini/partials/risultato_magazzino.html', {'prodotti': sotto_scorta})
 
