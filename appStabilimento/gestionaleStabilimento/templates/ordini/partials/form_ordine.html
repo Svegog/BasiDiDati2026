@@ -3,6 +3,7 @@
     <form action="{% url 'inserisci_ordine' %}" method="POST">
         {% csrf_token %}
         <input type="text" name="partitaiva" placeholder="P.IVA Fornitore" required>
+        <label for="consegna_prevista">Data di consegna prevista</label>
         <input type="date" name="consegna_prevista" title="Data di consegna prevista" required>
         
         <div id="prodotti-container">
