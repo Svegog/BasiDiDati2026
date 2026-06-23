@@ -137,7 +137,7 @@ mentre quelle più complesse avranno la loro sezione specifica.
   \caption{Tabella operazione O.1}
   \label{tab:accessi-o1}
   \rowcolors{2}{rowalt}{white}
-  \begin{tabularx}{\textwidth}{C{5cm} C{2cm} C{2cm} C{2cm} C{3cm}}
+  \begin{tabularx}{\textwidth}{C{5cm} C{2.7cm} C{2.7cm} C{4cm} }
     \toprule
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
@@ -168,6 +168,7 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \entita{Cliente}      & E & L & 1      \\
     \entita{Prenotazione} & E & L & 56,25  \\
     \entita{Abbonamento}  & E & L & 1,25   \\
+    \entita{Fila}         &  &  &       \\
     \entita{Prenotazione} & E & S & 1      \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 58,5 letture + 1 scrittura $\rightarrow$ 1512,5 accessi al giorno} \\
@@ -188,6 +189,7 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \entita{Cliente}      & E & L & 1      \\
     \entita{Prenotazione} & E & L & 56,25  \\
     \entita{Abbonamento}  & E & L & 1,25   \\
+    \entita{Fila}         &  &  &         \\
     \entita{Abbonamento}  & E & S & 1      \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 58,5 letture + 1 scrittura $\rightarrow$ 3025 accessi a stagione} \\
@@ -243,6 +245,7 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \midrule
     \entita{Dipendente} & E & L & 1      \\
     \entita{Mansione}   & E & L & 1      \\
+    \entita{Turno}      &  & L &         \\
     \entita{Turno}      & E & S & 1      \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 2 letture + 1 scrittura $\rightarrow$ 60 accessi al giorno} \\
@@ -260,10 +263,10 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Proprietario}         & E & L & 1      \\
-    \entita{Fornitore}            & E & L & 1      \\
+    \entita{Proprietario} dalla sessione         & E & L & 1      \\
+    \entita{Fornitore} P IVA            & E & L & 1      \\
     \entita{Catalogo}             & E & L & 10     \\
-    \entita{Prodotto}             & E & L & 10     \\
+    \entita{Prodotto} CodProdotto            & E & L & 10     \\
     \entita{Ordine}               & E & S & 1      \\
     \entita{Dettaglio\_Ordine}    & A & S & 10     \\
     \midrule
@@ -288,7 +291,7 @@ già il prodotto corrispondente al catalogo.
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
     \entita{Catalogo}         & E & S & 60    \\
-    \entita{Prodotto}         & E & L & 60    \\
+    \entita{Prodotto} CodProdotto        & E & L & 60    \\
     \entita{Fornitore}        & E & S & 1     \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 60 letture + 61 scritture $\rightarrow$ 364 accessi a stagione} \\
@@ -334,6 +337,7 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
     \midrule
     \entita{Dipendenti}      & E & L & 18    \\
     \entita{Turno}           & E & L & 18    \\
+    \entita{Mansione}        &  & L &       \\ 
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 32 letture $\rightarrow$ 160 accessi al giorno} \\
     \bottomrule
@@ -414,8 +418,8 @@ Una possibile ottimizzazione è l'aggiunta di un \textbf{indice} nel database.
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Tariffe\_Lettino}            & E & L & 3    \\
-    \entita{Tariffe\_Lettino}            & E & S & 3    \\
+    \entita{Tariffe\_Lettino}            & E & L & 1    \\
+    \entita{Tariffe\_Lettino}            & E & S & 1    \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 3 letture + 3 scritture $\rightarrow$ 27 accessi a stagione} \\
     \bottomrule
@@ -432,8 +436,8 @@ Una possibile ottimizzazione è l'aggiunta di un \textbf{indice} nel database.
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Fila}            & E & L & 10    \\
-    \entita{Fila}            & E & S & 10    \\
+    \entita{Fila}            & E & L & 1    \\
+    \entita{Fila}            & E & S & 1    \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 10 letture + 10 scritture $\rightarrow$ 300 accessi a stagione} \\
     \bottomrule
@@ -457,7 +461,7 @@ per la giacenza di un prodotto dopo l'inventario.
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Fornitore}           & E & L & 1    \\
+    \entita{Fornitore} P IVA           & E & L & 1    \\
     \entita{Catalogo}            & E & L & 1    \\
     \entita{Catalogo}            & E & S & 1    \\
     \midrule
