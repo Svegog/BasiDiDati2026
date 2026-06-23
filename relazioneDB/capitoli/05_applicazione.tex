@@ -71,19 +71,30 @@ appStabilimento/
 \subsection{Autenticazione}
 Il proprietario accede al sistema tramite email e password, verificate con una
 query SQL diretta sulla tabella \texttt{PROPRIETARIO}. La password \`{e}
-confrontata in chiaro, scelta effettuata per un database locale e semplicità di implementazione. \\
+confrontata in chiaro, scelta effettuata per un database locale e semplicità di implementazione.
+
+Non viene utilizzato il sistema utenti integrato di Django \textbf{django.contrib.auth.User}, ma 
+la lettura della tabella \entita{PROPRIETARIO} nel database con query SQL diretta.
 
 La sessione viene mantenuta tramite il framework di sessioni di
 Django (cookie), configurato per scadere alla chiusura del browser. Ogni form
 \`{e} protetto da CSRF tramite il token integrato di Django.
 
 \subsection{Interfaccia e navigazione}
+
+Ogni pagina non principale (come le sezioni adibite alle query) estende \textbf{base.html} e 
+aggiunge un \textit{block content}.
+
+I partial delle singole azioni (form, risultati query) vengono caricati 
+dentro un'area specifica via HTMX, senza ricaricare tutta la pagina.
+
 La dashboard espone le tre aree applicative (Spiaggia, Ordini, Turni) tramite
-pulsanti che caricano la relativa pagina via HTMX. \\
+pulsanti che caricano la relativa pagina via HTMX.
+
 All'interno di ciascuna area, un menu laterale distingue le operazioni di inserimento/modifica
-(``Servizi'') dalle query di controllo (``Controlli''): le prime vengono
+\textit{Servizi} dalle query di controllo \textit{Controlli}: le prime vengono
 mostrate in un pannello centrale, le seconde in un pannello laterale che
-appare solo quando contiene un risultato. Un riclic sullo stesso pulsante
+appare solo quando contiene un risultato. Un clic sullo stesso pulsante
 richiude il pannello corrispondente, riportando l'interfaccia allo stato
 iniziale.
 
