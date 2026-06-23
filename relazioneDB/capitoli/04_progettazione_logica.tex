@@ -130,7 +130,14 @@ A seguito le operazioni principali richieste dal committente sul database.
 \section{Schemi di navigazione e tabelle degli accessi} % ONGOING
 
 Di seguito mostreremo solo tramite la tabella degli accessi le operazioni più \textit{banali}, 
-mentre quelle più complesse avranno la loro sezione specifica. 
+mentre quelle più complesse avranno la loro sezione specifica. \\
+\textbf{Note:}
+\begin{itemize}
+  \item Al fine del calcolo degli accessi, le operazioni di scrittura varranno \textbf{il doppio} rispetto alle letture
+  \item Gli schemi di navigazione non sono stati riportati singolarmente per ciascuna operazione perch\'{e} la maggior parte delle operazioni coinvolge un numero limitato di entità 
+  collegate da un percorso diretto e univoco, deducibile senza ambiguità dalla sola tabella degli accessi. Per le operazioni con percorsi più articolati o non chiari, 
+  il percorso di navigazione viene descritto testualmente nella riga introduttiva della rispettiva tabella, indicando l'ordine di attraversamento delle entità coinvolte.
+\end{itemize} 
 
 \begin{table}[H]
   \centering
@@ -155,6 +162,11 @@ Questa operazione inserisce uno dei tre servizi relativi ad un singolo cliente. 
 \entita{Prenotazione} e \entita{Abbonamento} bisogna verificare anche che l'ombrellone sia libero
 nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un singolo ombrellone.
 
+\begin{notabox}[Schema di navigazione O.2]
+  \entita{Cliente} $\rightarrow$ \entita{Fila} $\rightarrow$ \entita{Abbonamento} (verifica) + \entita{Prenotazione} (verifica) 
+  \\ $\rightarrow$ \entita{Prenotazione} (inserimento)
+\end{notabox}
+
 \begin{table}[H]
   \centering
   \caption{Tabella operazione O.2}
@@ -166,15 +178,20 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
     \entita{Cliente}      & E & L & 1      \\
-    \entita{Prenotazione} & E & L & 56,25  \\
-    \entita{Abbonamento}  & E & L & 1,25   \\
     \entita{Fila}         & E & L & 1      \\
+    \entita{Abbonamento}  & E & L & 1,25   \\
+    \entita{Prenotazione} & E & L & 56,25  \\
     \entita{Prenotazione} & E & S & 1      \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 59,5 letture + 1 scrittura $\rightarrow$ 1537,5 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
+
+\begin{notabox}[Schema di navigazione O.3]
+  \entita{Cliente} $\rightarrow$ \entita{Fila} $\rightarrow$ \entita{Abbonamento} (verifica) + \entita{Prenotazione} (verifica) 
+  \\ $\rightarrow$ \entita{Abbonamento} (inserimento)
+\end{notabox}
 
 \begin{table}[H]
   \centering
@@ -187,9 +204,9 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
     \entita{Cliente}      & E & L & 1      \\
+    \entita{Fila}         & E & L & 1      \\
     \entita{Prenotazione} & E & L & 56,25  \\
     \entita{Abbonamento}  & E & L & 1,25   \\
-    \entita{Fila}         & E & L & 1      \\
     \entita{Abbonamento}  & E & S & 1      \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 59,5 letture + 1 scrittura $\rightarrow$ 3075 accessi a stagione} \\
@@ -233,6 +250,15 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
   \end{tabularx}
 \end{table}
 
+\subsection*{O.6 --- Inserimento di un nuovo turno}
+
+Questa operazione richiede di verificare prima che il \entita{Dipendente} non abbia turni sovrapposti. Rimane comunque
+disponibile la possibilità di effettuare turni spezzati (gestiti a discrezione del \entita{Proprietario}).
+
+\begin{notabox}[Schema di navigazione O.6]
+  \entita{Dipendente} $\rightarrow$ \entita{Mansione} $\rightarrow$ \entita{Turno} (verifica) $\rightarrow$ \entita{Turno} (inserimento) 
+\end{notabox}
+
 \begin{table}[H]
   \centering
   \caption{Tabella operazione O.6}
@@ -263,8 +289,8 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Catalogo}             & E & L & 10     \\
     \entita{Ordine}               & E & S & 1      \\
+    \entita{Catalogo}             & E & L & 10     \\
     \entita{Dettaglio\_Ordine}    & A & S & 10     \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 10 letture + 11 scritture $\rightarrow$ 64 accessi al giorno} \\
@@ -287,10 +313,10 @@ già il prodotto corrispondente al catalogo.
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Catalogo}         & E & L & 60    \\
     \entita{Fornitore}        & E & S & 1     \\
+    \entita{Catalogo}         & E & S & 60    \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 60 letture + 1 scrittura $\rightarrow$ 124 accessi a stagione} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 61 scritture $\rightarrow$ 244 accessi a stagione} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -298,7 +324,12 @@ già il prodotto corrispondente al catalogo.
 \subsection*{O.9 --- Registrazione consegna e aggiornamento giacenze}
 
 Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} in quanto il 
-\textit{CodProdotto} è già ottenuto dalla letture in \entita{Dettaglio\_Ordine}. 
+\textit{CodProdotto} è già ottenuto dalla lettura in \entita{Dettaglio\_Ordine}. 
+
+\begin{notabox}[Schema di navigazione O.9]
+  \entita{Ordine} (lettura) $\rightarrow$ \entita{Ordine} (scrittura) $\rightarrow$ \entita{Dettaglio\_Ordine} \\ 
+  $\rightarrow$ (per ogni prodotto) $\rightarrow$ \entita{Prodotto} (lettura) $\rightarrow$ \entita{Prodotto} (scrittura) 
+\end{notabox}
 
 \begin{table}[H]
   \centering
@@ -313,8 +344,8 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
     \entita{Ordine}             & E & L & 1    \\
     \entita{Ordine}             & E & S & 1    \\
     \entita{Dettaglio\_Ordine}  & A & L & 10   \\
-    \entita{Prodotto}           & E & S & 10   \\
     \entita{Prodotto}           & E & L & 10   \\
+    \entita{Prodotto}           & E & S & 10   \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 21 letture + 11 scritture $\rightarrow$ 86 accessi al giorno} \\
     \bottomrule
@@ -331,7 +362,7 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Dipendenti}      & E & L & 18    \\
+    \entita{Dipendente}      & E & L & 18    \\
     \entita{Turno}           & E & L & 18    \\
     \entita{Mansione}        & E & L & 18    \\ 
     \midrule
@@ -346,6 +377,11 @@ Le grandi dimensioni di questa operazione sono giustificabili dal fatto che, nel
 peggiore, la visualizzazione di ombrelloni disponibili richiederebbe la lettura di tutte
 le tuple di \entita{Prenotazioni} e \entita{Abbonamenti}.
 
+\begin{notabox}[Schema di navigazione O.11]
+  \entita{Ombrellone} (lettura completa) $\rightarrow$ \entita{Prenotazione} (completa) \\
+  $\rightarrow$ \entita{Abbonamenti} (completa)
+\end{notabox}
+
 \begin{table}[H]
   \centering
   \caption{Tabella operazione O.11}
@@ -356,9 +392,9 @@ le tuple di \entita{Prenotazioni} e \entita{Abbonamenti}.
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Ombrelloni}      & E & L & 200      \\
-    \entita{Prenotazioni}    & E & L & 11.250   \\
-    \entita{Abbonamenti}     & E & L & 250      \\
+    \entita{Ombrellone}      & E & L & 200      \\
+    \entita{Prenotazione}    & E & L & 11.250   \\
+    \entita{Abbonamento}     & E & L & 250      \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 11.700 letture $\rightarrow$ 351.000 accessi al giorno} \\
     \bottomrule
@@ -560,7 +596,7 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
    & O.5 & 12 accessi/stagione        & & O.14 & 9 accessi/stagione     & \\
    & O.6 & 2310 accessi/giorno        & & O.15 & 30 accessi/stagione    & \\
    & O.7 & 64 accessi/giorno          & & O.16 & 6 accessi/settimana    & \\
-   & O.8 & 124 accessi/stagione       & & O.17 & 120 accessi/giorno     & \\
+   & O.8 & 244 accessi/stagione       & & O.17 & 120 accessi/giorno     & \\
    & O.9 & 86 accessi/giorno          & & O.18 & 45 accessi/giorno      & \\
   \bottomrule
   \end{tabularx}
