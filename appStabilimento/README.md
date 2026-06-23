@@ -62,6 +62,9 @@ Estrarre il contenuto dello zip in una cartella a piacere.
 Dalla cartella del progetto (dove si trova `manage.py`):
 
 ```bash
+uv init #?????
+uv sync # se funziona lasciare solo questo
+#////////////////
 uv venv
 uv pip install -r requirements.txt
 ```
