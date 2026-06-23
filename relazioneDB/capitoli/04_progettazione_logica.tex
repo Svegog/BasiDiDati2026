@@ -245,7 +245,7 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \midrule
     \entita{Dipendente} & E & S & 1      \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 1 scrittura $\rightarrow$ 12 accessi a stagione} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 1 scrittura $\rightarrow$ 24 accessi a stagione} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -366,7 +366,7 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
     \entita{Turno}           & E & L & 18    \\
     \entita{Mansione}        & E & L & 18    \\ 
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 50 letture $\rightarrow$ 250 accessi al giorno} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 50 letture $\rightarrow$ 270 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -589,11 +589,11 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
   \rowcolor{primary!15}
   & \textbf{N.} & \textbf{Frequenza} & & \textbf{N.} & \textbf{Frequenza} & \\
   \midrule
-   & O.1 & 20 accessi/giorno          & & O.10 & 250 accessi/giorno     & \\
+   & O.1 & 20 accessi/giorno          & & O.10 & 270 accessi/giorno     & \\
    & O.2 & 1537 accessi/giorno        & & O.11 & 351.000 accessi/giorno & \\
    & O.3 & 3075 accessi/stagione      & & O.12 & 1.200 accessi/giorno   & \\
    & O.4 & 60 accessi/giorno          & & O.13 & 17 accessi/giorno      & \\
-   & O.5 & 12 accessi/stagione        & & O.14 & 9 accessi/stagione     & \\
+   & O.5 & 24 accessi/stagione        & & O.14 & 9 accessi/stagione     & \\
    & O.6 & 2310 accessi/giorno        & & O.15 & 30 accessi/stagione    & \\
    & O.7 & 64 accessi/giorno          & & O.16 & 6 accessi/settimana    & \\
    & O.8 & 244 accessi/stagione       & & O.17 & 120 accessi/giorno     & \\
@@ -608,14 +608,14 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
 \section{Analisi delle ridondanze}
 
 \begin{itemize}
-  \item \textbf{Ridondanza:} l'attributo \attributo{prezzoTotale} in
+  \item \textbf{Ridondanza:} l'attributo \attributo{Prezzo} in
         \entita{Prenotazione} \`{e} calcolabile come:
         \[
           \text{prezzoTotale} = \text{tariffaGiornaliera}(\text{fila}) \times
           (\text{dataFine} - \text{dataInizio}) \times (1 - \text{sconto})
         \]
 
-        \textbf{Decisione:} si mantiene l'attributo ridondante \attributo{prezzoTotale}
+        \textbf{Decisione:} si mantiene l'attributo ridondante \attributo{Prezzo}
         perché la tariffa potrebbe variare nel tempo e si vuole registrare il prezzo
         concordato al momento della prenotazione. Questo evita problemi di consistenza
         se le tariffe cambiano.
@@ -665,7 +665,7 @@ OMBRELLONE(\chiave{NumOmbrellone, \chiaveest{CodFila}:FILA})
 PRENOTAZIONE(\chiave{CodPrenotazione}, DataInizio, DataFine, Prezzo, Sconto, Note*, Pagamento,
             \chiaveest{IdCliente}:CLIENTE, \chiaveest{(CodFila, NumOmbrellone)}:OMBRELLONE)
 
-ABBONAMENTO(\chiave{\chiaveest{(Codfila, NumOmbrellone)}:OMBRELLONE, Anno}, Prezzo, Sconto, Pagamento
+ABBONAMENTO(\chiave{\chiaveest{(Codfila, NumOmbrellone)}:OMBRELLONE, Anno}, Prezzo, Sconto, Pagamento,
             \chiaveest{IdCliente}) 
 
 TARIFFE\_NOLEGGIO(\chiave{TipoNoleggio}, Prezzo)
@@ -675,11 +675,11 @@ NOLEGGIO\_LETTINO(\chiave{CodNoleggio}, Data, Quantità, PrezzoTotale, Pagamento
 
 MANSIONE(\chiave{CodMansione}, NomeMansione, Descrizione*)
 
-TURNO(\chiave{Data, OraInizio, \chiaveest{idDipendente}:DIPENDENTE}, OraFine, \chiaveest{CodMansione}:MANSIONE)
+TURNO(\chiave{Data, OraInizio, \chiaveest{IdDipendente}:DIPENDENTE}, OraFine, \chiaveest{CodMansione}:MANSIONE)
 
 CATEGORIA(\chiave{CodCategoria}, NomeCategoria, Descrizione*) 
 
-PRODOTTO(\chiave{CodProdotto}, Nome, QuantitàMagazzino, QuantitàMinima, \chiaveest{CodCategoria}:CATEGORIA)
+PRODOTTO(\chiave{CodProdotto}, NomeProdotto, QuantitàMagazzino, QuantitàMinima, \chiaveest{CodCategoria}:CATEGORIA)
 
 FORNITORE(\chiave{PartitaIVA}, Nome, Email, RecapitoTelefonico, Indirizzo) 
 

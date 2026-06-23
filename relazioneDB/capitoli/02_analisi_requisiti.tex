@@ -71,7 +71,7 @@ modellata nel database in quanto risulterebbe \attributo{un'entità debole} priv
 La posizione è dinamica e concordata con il proprietario dello stabilimento 
 al momento della prenotazione, il costo è fisso e non associato al singolo lettino, e la 
 disponibilità è un'informazione derivata, ottenibile tramite verifica in tempo reale 
-sull'applicazione. Si presuppone che la richiesta di lettini sia sempre maggiore della disponibilità.
+sull'applicazione. Si presuppone che la disponibilità di lettini sia sempre maggiore della richiesta.
 
 \subsection{Noleggio, Prenotazione, Abbonamento}
 \textbf{Decisione:} Si modellano tre entit\`{a} separate, al posto di un'unica prenotazione 
@@ -98,7 +98,8 @@ A seguito la spiegazione di alcuni termini ambigui o non chiari precedentemente 
     \item \textbf{Ombrellone:} Anche se il concetto è chiaro, in un'ottica di uno stabilimento balneare
     è importante specificare che la \textit{configurazione standard} del `pacchetto' ombrellone è data 
     dall'ombrellone con due lettini, ogni aggiunta richiesta dal cliente (visto la rarità della richiesta)
-    sarà messa nelle \textit{note} e la tariffa aggiuntiva concordata con il \entita{Proprietario}
+    sarà messa nelle \textit{note} e la tariffa aggiuntiva concordata con il \entita{Proprietario}.
+    Si assume che un ombrellone possa essere assegnato ad un unico cliente per stagione.
     \item \textbf{Posizione:} (inerente agli \entita{Ombrelloni}) Indica la combinazione del \textit{numero dell'ombrellone}
     e della corrispondente \textit{fila}, componenti fondamentali per il calcolo del prezzo 
 \end{itemize}
