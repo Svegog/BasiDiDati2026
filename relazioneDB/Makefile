@@ -6,7 +6,7 @@
 #    make cleanall → rimuove tutto incluso il PDF
 # ============================================================
 
-MAIN    = main
+MAIN    = Gruppo3040_Relazione
 LATEX   = pdflatex
 FLAGS   = -interaction=nonstopmode -halt-on-error
 
