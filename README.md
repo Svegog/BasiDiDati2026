@@ -41,5 +41,3 @@ Inoltre è possibile `consultare`:
 - Dipendenti al lavoro per un determinato giorno
 - Orari di uno specifico dipendente
 - Mancanze in magazzino totali o per uno specifico prodotto
-
-sconto = ScaleFactor × (1 - e^(-k × durata)) 
