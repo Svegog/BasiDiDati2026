@@ -92,9 +92,9 @@ forma di acquisto di un servizio, ma sono intrinsecamente diverse:
 
 A seguito la spiegazione di alcuni termini ambigui o non chiari precedentemente citati:
 \begin{itemize}
-    \item \textbf{Stagionale:} Verrà successivamente sostituito da \textbf{Annuale} 
-    in quanto stagionale è un termine discorsivo che indica la stagione estiva dell'anno corrente,
-    quindi poco chiaro e non rappresentativo
+    \item \textbf{Stagionale:} In termini reali indica \textbf{Annuale} essendo che si tratta della stagione 
+    estiva dell'anno corrente, ma si è scelto il termine \textit{stagionale} in modo da essere più chiaro
+    al committente
     \item \textbf{Ombrellone:} Anche se il concetto è chiaro, in un'ottica di uno stabilimento balneare
     è importante specificare che la \textit{configurazione standard} del `pacchetto' ombrellone è data 
     dall'ombrellone con due lettini, ogni aggiunta richiesta dal cliente (visto la rarità della richiesta)
@@ -128,7 +128,7 @@ Una \entita{Prenotazione} lega un \entita{Cliente} a un \entita{Ombrellone}
 per un periodo definito da \attributo{dataInizio} e \attributo{dataFine}. 
 Il prezzo viene calcolato in base alla durata e alla posizione dell'ombrellone.
 
-Un \entita{Abbonamento} è simile a una prenotazione ma ha durata annuale
+Un \entita{Abbonamento} è simile a una prenotazione ma ha durata stagionale
 e una struttura tariffaria diversa (calcolata su base della posizione).
 Anche l'abbonamento mostra solo il prezzo senza gestire il pagamento.
 
@@ -175,7 +175,7 @@ essere comprati.
     \entita{Ombrellone}        & Postazione identificata da fila e numero \\
     \entita{Noleggio}          & Lega un cliente a un lettino per mezza giornata o giornata intera \\
     \entita{Prenotazione}      & Lega un cliente a un ombrellone per una durata concordata \\
-    \entita{Abbonamento}       & Contratto annuale cliente-ombrellone con tariffa dedicata \\
+    \entita{Abbonamento}       & Contratto stagionale cliente-ombrellone con tariffa dedicata \\
     \entita{Turno}             & Fascia oraria lavorativa di un dipendente \\
     \entita{Mansione}          & Compito che un dipendente svolgerà durante il turno in questione \\
     \entita{Prodotto}          & Articolo presente in magazzino \\

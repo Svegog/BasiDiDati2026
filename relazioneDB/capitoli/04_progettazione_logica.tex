@@ -287,7 +287,7 @@ già il prodotto corrispondente al catalogo.
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Catalogo}         & E & S & 60    \\
+    \entita{Catalogo}         & E & L & 60    \\
     \entita{Fornitore}        & E & S & 1     \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 60 letture + 1 scrittura $\rightarrow$ 124 accessi a stagione} \\
@@ -412,8 +412,8 @@ le tuple di \entita{Prenotazioni} e \entita{Abbonamenti}.
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Tariffe\_Lettino}            & E & L & 1    \\
-    \entita{Tariffe\_Lettino}            & E & S & 1    \\
+    \entita{Tariffe\_Noleggio}            & E & L & 1    \\
+    \entita{Tariffe\_Noleggio}            & E & S & 1    \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 1 lettura + 1 scrittura $\rightarrow$ 9 accessi a stagione} \\
     \bottomrule
@@ -616,11 +616,11 @@ l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel t
 % -- 4.6 Traduzione in relazioni -----------------------------
 \section{Traduzione di entit\`{a} e associazioni in relazioni}
 
-PROPRIETARIO(\chiave{idProprietario}, Nome, Cognome, Email, Password, RecapitoTelefonico)
+PROPRIETARIO(\chiave{IdProprietario}, Nome, Cognome, Email, Password, RecapitoTelefonico)
 
 CLIENTE(\chiave{IdCliente}, Nome, Cognome, Email, RecapitoTelefonico)
 
-DIPENDENTE(\chiave{idDipendente}, Nome, Cognome, Email, RecapitoTelefonico, CodiceFiscale) 
+DIPENDENTE(\chiave{IdDipendente}, Nome, Cognome, Email, RecapitoTelefonico, CodiceFiscale) 
 
 FILA(\chiave{CodFila}, TariffaGiornaliera, TariffaStagionale)
 
@@ -629,7 +629,8 @@ OMBRELLONE(\chiave{NumOmbrellone, \chiaveest{CodFila}:FILA})
 PRENOTAZIONE(\chiave{CodPrenotazione}, DataInizio, DataFine, Prezzo, Sconto, Note*, Pagamento,
             \chiaveest{IdCliente}:CLIENTE, \chiaveest{(CodFila, NumOmbrellone)}:OMBRELLONE)
 
-ABBONAMENTO(\chiave{\chiaveest{(Codfila, NumOmbrellone)}:OMBRELLONE, Anno}, Prezzo) 
+ABBONAMENTO(\chiave{\chiaveest{(Codfila, NumOmbrellone)}:OMBRELLONE, Anno}, Prezzo, Sconto, Pagamento
+            \chiaveest{IdCliente}) 
 
 TARIFFE\_NOLEGGIO(\chiave{TipoNoleggio}, Prezzo)
 
@@ -642,16 +643,15 @@ TURNO(\chiave{Data, OraInizio, \chiaveest{idDipendente}:DIPENDENTE}, OraFine, \c
 
 CATEGORIA(\chiave{CodCategoria}, NomeCategoria, Descrizione*) 
 
-PRODOTTO(\chiave{CodProdotto}, nome, quantità, quantitàMinima, \chiaveest{CodCategoria}:CATEGORIA)
+PRODOTTO(\chiave{CodProdotto}, Nome, QuantitàMagazzino, QuantitàMinima, \chiaveest{CodCategoria}:CATEGORIA)
 
 FORNITORE(\chiave{PartitaIVA}, Nome, Email, RecapitoTelefonico, Indirizzo) 
 
-ORDINE(\chiave{CodOrdine}, \chiaveest{PartitaIVA}:FORNITORE, \chiaveest{idProprietario}:PROPRIETARIO, dataOrdine, ConsegnaPrevista, DataConsegna*)
+ORDINE(\chiave{CodOrdine}, \chiaveest{PartitaIVA}:FORNITORE, \chiaveest{IdProprietario}:PROPRIETARIO, DataOrdine, ConsegnaPrevista, DataConsegna*)
 
-CATALOGO(\chiave{\chiaveest{CodProdotto}:PRODOTTO, \chiaveest{PartitaIVA}:FORNITORE}, prezzoUnitario) 
+CATALOGO(\chiave{\chiaveest{CodProdotto}:PRODOTTO, \chiaveest{PartitaIVA}:FORNITORE}, PrezzoUnitario) 
 
-DETTAGLIO\_ORDINE(\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiaveest{CodOrdine}:ORDINE}, PrezzoAlMomento)
-
+DETTAGLIO\_ORDINE(\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiaveest{CodOrdine}:ORDINE}, Quantità, PrezzoAlMomento)
 
 % -- 4.7 Schema relazionale finale ---------------------------
 \section{Schema relazionale finale}
