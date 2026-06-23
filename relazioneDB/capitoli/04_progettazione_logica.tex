@@ -652,52 +652,120 @@ l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel t
 % -- 4.6 Traduzione in relazioni -----------------------------
 \section{Traduzione di entit\`{a} e associazioni in relazioni}
 
-PROPRIETARIO(\chiave{IdProprietario}, Nome, Cognome, Email, Password, RecapitoTelefonico)
+%PROPRIETARIO(\chiave{IdProprietario}, Nome, Cognome, Email, Password, RecapitoTelefonico)
+%
+%CLIENTE(\chiave{IdCliente}, Nome, Cognome, Email, RecapitoTelefonico)
+%
+%DIPENDENTE(\chiave{IdDipendente}, Nome, Cognome, Email, RecapitoTelefonico, CodiceFiscale) 
+%
+%FILA(\chiave{CodFila}, TariffaGiornaliera, TariffaStagionale)
+%
+%OMBRELLONE(\chiave{NumOmbrellone, \chiaveest{CodFila}:FILA})
+%
+%PRENOTAZIONE(\chiave{CodPrenotazione}, DataInizio, DataFine, Prezzo, Sconto, Note*, Pagamento,
+%            \chiaveest{IdCliente}:CLIENTE, \chiaveest{(CodFila, NumOmbrellone)}:OMBRELLONE)
+%
+%ABBONAMENTO(\chiave{\chiaveest{(Codfila, NumOmbrellone)}:OMBRELLONE, Anno}, Prezzo, Sconto, Pagamento,
+%            \chiaveest{IdCliente}) 
+%
+%TARIFFE\_NOLEGGIO(\chiave{TipoNoleggio}, Prezzo)
+%
+%NOLEGGIO\_LETTINO(\chiave{CodNoleggio}, Data, Quantità, PrezzoTotale, Pagamento, \chiaveest{IdCliente}:CLIENTE,
+%                \chiaveest{TipoNoleggio}:TARIFFE\_NOLEGGIO)
+%
+%MANSIONE(\chiave{CodMansione}, NomeMansione, Descrizione*)
+%
+%TURNO(\chiave{Data, OraInizio, \chiaveest{IdDipendente}:DIPENDENTE}, OraFine, \chiaveest{CodMansione}:MANSIONE)
+%
+%CATEGORIA(\chiave{CodCategoria}, NomeCategoria, Descrizione*) 
+%
+%PRODOTTO(\chiave{CodProdotto}, NomeProdotto, QuantitàMagazzino, QuantitàMinima, \chiaveest{CodCategoria}:CATEGORIA)
+%
+%FORNITORE(\chiave{PartitaIVA}, Nome, Email, RecapitoTelefonico, Indirizzo) 
+%
+%ORDINE(\chiave{CodOrdine}, \chiaveest{PartitaIVA}:FORNITORE, \chiaveest{IdProprietario}:PROPRIETARIO, DataOrdine, ConsegnaPrevista, DataConsegna*)
+%
+%CATALOGO(\chiave{\chiaveest{CodProdotto}:PRODOTTO, \chiaveest{PartitaIVA}:FORNITORE}, PrezzoUnitario) 
+%
+%DETTAGLIO\_ORDINE(\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiaveest{CodOrdine}:ORDINE}, Quantità, PrezzoAlMomento)
 
-CLIENTE(\chiave{IdCliente}, Nome, Cognome, Email, RecapitoTelefonico)
+\begin{tabularx}{\textwidth}{@{}l X@{}}
 
-DIPENDENTE(\chiave{IdDipendente}, Nome, Cognome, Email, RecapitoTelefonico, CodiceFiscale) 
+\textbf{PROPRIETARIO} &
+(\chiave{IdProprietario}, Nome, Cognome, Email, Password, RecapitoTelefonico)
+\\[1cm]
 
-FILA(\chiave{CodFila}, TariffaGiornaliera, TariffaStagionale)
+\textbf{CLIENTE} &
+(\chiave{IdCliente}, Nome, Cognome, Email, RecapitoTelefonico)
+\\[1cm]
 
-OMBRELLONE(\chiave{NumOmbrellone, \chiaveest{CodFila}:FILA})
+\textbf{DIPENDENTE} &
+(\chiave{IdDipendente}, Nome, Cognome, Email, RecapitoTelefonico, CodiceFiscale)
+\\[1cm]
 
-PRENOTAZIONE(\chiave{CodPrenotazione}, DataInizio, DataFine, Prezzo, Sconto, Note*, Pagamento,
-            \chiaveest{IdCliente}:CLIENTE, \chiaveest{(CodFila, NumOmbrellone)}:OMBRELLONE)
+\textbf{FILA} &
+(\chiave{CodFila}, TariffaGiornaliera, TariffaStagionale)
+\\[1cm]
 
-ABBONAMENTO(\chiave{\chiaveest{(Codfila, NumOmbrellone)}:OMBRELLONE, Anno}, Prezzo, Sconto, Pagamento,
-            \chiaveest{IdCliente}) 
+\textbf{OMBRELLONE} &
+(\chiave{NumOmbrellone, \chiaveest{CodFila}:FILA})
+\\[1cm]
 
-TARIFFE\_NOLEGGIO(\chiave{TipoNoleggio}, Prezzo)
+\end{tabularx}
 
-NOLEGGIO\_LETTINO(\chiave{CodNoleggio}, Data, Quantità, PrezzoTotale, Pagamento, \chiaveest{IdCliente}:CLIENTE,
-                \chiaveest{TipoNoleggio}:TARIFFE\_NOLEGGIO)
+\begin{tabularx}{\textwidth}{@{}l X@{}}
 
-MANSIONE(\chiave{CodMansione}, NomeMansione, Descrizione*)
+\textbf{PRENOTAZIONE} &
+(\chiave{CodPrenotazione}, DataInizio, DataFine, Prezzo, Sconto, Note*, Pagamento,
+\chiaveest{IdCliente}:CLIENTE, (\chiaveest{CodFila, NumOmbrellone}):OMBRELLONE)
+\\[1cm]
 
-TURNO(\chiave{Data, OraInizio, \chiaveest{IdDipendente}:DIPENDENTE}, OraFine, \chiaveest{CodMansione}:MANSIONE)
+\textbf{ABBONAMENTO} &
+(\chiave{(\chiaveest{Codfila, NumOmbrellone}):OMBRELLONE, Anno}, Prezzo, Sconto, Pagamento,
+\chiaveest{IdCliente})
+\\[1cm]
 
-CATEGORIA(\chiave{CodCategoria}, NomeCategoria, Descrizione*) 
+\textbf{TARIFFE\_NOLEGGIO} &
+(\chiave{TipoNoleggio}, Prezzo)
+\\[1cm]
 
-PRODOTTO(\chiave{CodProdotto}, NomeProdotto, QuantitàMagazzino, QuantitàMinima, \chiaveest{CodCategoria}:CATEGORIA)
+\textbf{NOLEGGIO\_LETTINO} &
+(\chiave{CodNoleggio}, Data, Quantità, PrezzoTotale, Pagamento, \chiaveest{IdCliente}:CLIENTE,
+\chiaveest{TipoNoleggio}:TARIFFE\_NOLEGGIO)
+\\[1cm]
 
-FORNITORE(\chiave{PartitaIVA}, Nome, Email, RecapitoTelefonico, Indirizzo) 
+\textbf{MANSIONE} &
+(\chiave{CodMansione}, NomeMansione, Descrizione*)
+\\[1cm]
 
-ORDINE(\chiave{CodOrdine}, \chiaveest{PartitaIVA}:FORNITORE, \chiaveest{IdProprietario}:PROPRIETARIO, DataOrdine, ConsegnaPrevista, DataConsegna*)
+\textbf{TURNO} &
+(\chiave{Data, OraInizio, \chiaveest{IdDipendente}:DIPENDENTE}, OraFine, \chiaveest{CodMansione}:MANSIONE)
+\\[1cm]
 
-CATALOGO(\chiave{\chiaveest{CodProdotto}:PRODOTTO, \chiaveest{PartitaIVA}:FORNITORE}, PrezzoUnitario) 
+\textbf{CATEGORIA} &
+(\chiave{CodCategoria}, NomeCategoria, Descrizione*)
+\\[1cm]
 
-DETTAGLIO\_ORDINE(\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiaveest{CodOrdine}:ORDINE}, Quantità, PrezzoAlMomento)
+\textbf{PRODOTTO} &
+(\chiave{CodProdotto}, NomeProdotto, QuantitàMagazzino, QuantitàMinima, \chiaveest{CodCategoria}:CATEGORIA)
+\\[1cm]
 
-% -- 4.7 Schema relazionale finale ---------------------------
-\section{Schema relazionale finale}
+\textbf{FORNITORE} &
+(\chiave{PartitaIVA}, Nome, Email, RecapitoTelefonico, Indirizzo)
+\\[1cm]
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=\textwidth]{immagini/04/schemaLogico.png}
-  \caption{Schema relazionale finale}
-  \label{fig:schema-relazionale}
-\end{figure}
+\textbf{ORDINE} &
+(\chiave{CodOrdine}, \chiaveest{PartitaIVA}:FORNITORE, \chiaveest{IdProprietario}:PROPRIETARIO, DataOrdine, ConsegnaPrevista, DataConsegna*)
+\\[1cm]
+
+\textbf{CATALOGO} &
+(\chiave{\chiaveest{CodProdotto}:PRODOTTO, \chiaveest{PartitaIVA}:FORNITORE}, PrezzoUnitario)
+\\[1cm]
+
+\textbf{DETTAGLIO\_ORDINE} &
+(\chiave{(\chiaveest{PartitaIVA, CodProdotto}):CATALOGO, \chiaveest{CodOrdine}:ORDINE}, Quantità, PrezzoAlMomento)
+
+\end{tabularx}
 
 \clearpage
 
