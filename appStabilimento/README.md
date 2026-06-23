@@ -45,10 +45,10 @@ DATABASES = {
 ```
 
 ## 6. Allineare Django al database (fake migration)
-Le tabelle sono già state create tramite `createDB.sql`, quindi non vanno ricreate da Django: bisogna solo dirgli che le migration sono già applicate.
+Le tabelle sono già state create tramite `createDB.sql`, quindi non vanno ricreate da Django: bisogna solo dirgli che le migration sono già applicate e di inizializzare le tabelle necessarie.
 
 ```bash
-uv run manage.py migrate --fake
+uv run manage.py migrate --fake-initial
 ```
 
 ## 7. Avviare il server
