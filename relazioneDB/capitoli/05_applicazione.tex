@@ -3,16 +3,6 @@
 % ============================================================
 \chapter{Progettazione dell'applicazione}
 
-\section{Architettura del sistema}
-
-L'applicazione segue un'architettura \textbf{client-server a tre livelli}:
-
-\begin{itemize}
-  \item \textbf{Presentation layer}: interfaccia web con interattivit\`{a} parziale tramite \textit{HTMX}
-  \item \textbf{Application layer}: Applicazione Django
-  \item \textbf{Data layer}: DBMS MySQL
-\end{itemize}
-
 \section{Tecnologie utilizzate}
 
 \begin{table}[H]
@@ -167,7 +157,7 @@ Form di inserimento e consultazione possono essere aperti in contemporanea: ques
 è stata inserita per risolvere problemi come: \textit{Quali ombrelloni posso prenotare?} \\
 Basta visualizzare nell'area risultati gli ombrelloni disponibili, inserendo nel form 
 di prenotazione \textit{CodFila} e \textit{NumOmbrellone} ottenuti. \\ \\
-I vari errori, warning o successi sono gestiti con pop-up in basso a destra ( \textit{Toast JS} ) 
+I vari errori, warning o successi sono gestiti con pop-up in basso a destra ( tramite \textit{Toast JS} ) 
 per notificare l'utente se un'operazione è andata a buon fine oppure no.
 
 \begin{figure}[H]
