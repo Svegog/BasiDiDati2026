@@ -1,3 +1,6 @@
+# Setup del progetto
+
+## Struttura
 appStabilimento
 ├── gestionaleStabilimento/
 |   |
@@ -46,3 +49,85 @@ appStabilimento
 ├── pyproject.toml
 ├── uv.lock
 └── README.md
+
+## Requisiti
+- Python 3.11+ installato
+- MySQL Server installato e avviato
+- [uv](https://github.com/astral-sh/uv) installato (`pip install uv` se non già presente)
+
+## 1. Estrarre lo zip
+Estrarre il contenuto dello zip in una cartella a piacere.
+
+## 2. Creare l'ambiente virtuale e installare le dipendenze
+Dalla cartella del progetto (dove si trova `manage.py`):
+
+```bash
+uv venv
+uv pip install -r requirements.txt
+```
+
+Attivare l'ambiente virtuale:
+- Windows: `.venv\Scripts\activate`
+- Linux/Mac: `source .venv/bin/activate`
+
+## 3. Creare il database MySQL
+Aprire un terminale MySQL (es. `mysql -u root -p`) e creare il database:
+
+```sql
+CREATE DATABASE Gestionale;
+```
+
+## 4. Importare schema e dati
+Dalla cartella del progetto, eseguire in ordine i due file SQL presenti in `setup/`:
+
+```bash
+mysql -u root -p Gestionale < setup/schema.sql
+mysql -u root -p Gestionale < setup/dati.sql
+```
+
+> Verrà richiesta la password dell'utente MySQL ad ogni comando.
+
+## 5. Configurare le credenziali
+Le credenziali del database sono in `settings.py`, nella sezione `DATABASES`. Verificare che `NAME`, `USER`, `PASSWORD` e `HOST` corrispondano alla propria installazione MySQL:
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Gestionale',
+        'USER': 'root',
+        'PASSWORD': 'la_tua_password',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
+```
+
+## 6. Allineare Django al database (fake migration)
+Le tabelle sono già state create tramite `schema.sql`, quindi non vanno ricreate da Django: bisogna solo dirgli che le migration sono già applicate.
+
+```bash
+python manage.py migrate --fake
+```
+
+## 7. Avviare il server
+```bash
+python manage.py runserver
+```
+
+L'applicativo sarà disponibile su [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+## Credenziali di accesso al gestionale
+Le credenziali (email e password) per accedere all'applicativo si trovano nel file:
+
+```
+setup/proprietari.txt
+```
+
+## Struttura cartella setup/
+```
+setup/
+├── schema.sql        # struttura delle tabelle
+├── dati.sql           # dati da importare
+└── proprietari.txt    # credenziali di accesso al gestionale
+```
