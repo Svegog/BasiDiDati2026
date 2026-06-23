@@ -168,10 +168,10 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \entita{Cliente}      & E & L & 1      \\
     \entita{Prenotazione} & E & L & 56,25  \\
     \entita{Abbonamento}  & E & L & 1,25   \\
-    \entita{Fila}         &  &  &       \\
+    \entita{Fila}         & E & L & 1      \\
     \entita{Prenotazione} & E & S & 1      \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 58,5 letture + 1 scrittura $\rightarrow$ 1512,5 accessi al giorno} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 59,5 letture + 1 scrittura $\rightarrow$ 1537,5 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -189,10 +189,10 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \entita{Cliente}      & E & L & 1      \\
     \entita{Prenotazione} & E & L & 56,25  \\
     \entita{Abbonamento}  & E & L & 1,25   \\
-    \entita{Fila}         &  &  &         \\
+    \entita{Fila}         & E & L & 1      \\
     \entita{Abbonamento}  & E & S & 1      \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 58,5 letture + 1 scrittura $\rightarrow$ 3025 accessi a stagione} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 59,5 letture + 1 scrittura $\rightarrow$ 3075 accessi a stagione} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -245,10 +245,10 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \midrule
     \entita{Dipendente} & E & L & 1      \\
     \entita{Mansione}   & E & L & 1      \\
-    \entita{Turno}      &  & L &         \\
+    \entita{Turno}      & E & L & 150    \\
     \entita{Turno}      & E & S & 1      \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 2 letture + 1 scrittura $\rightarrow$ 60 accessi al giorno} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 152 letture + 1 scrittura $\rightarrow$ 2310 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -263,14 +263,11 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Proprietario} dalla sessione         & E & L & 1      \\
-    \entita{Fornitore} P IVA            & E & L & 1      \\
     \entita{Catalogo}             & E & L & 10     \\
-    \entita{Prodotto} CodProdotto            & E & L & 10     \\
     \entita{Ordine}               & E & S & 1      \\
     \entita{Dettaglio\_Ordine}    & A & S & 10     \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 22 letture + 11 scritture $\rightarrow$ 88 accessi al giorno} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 10 letture + 11 scritture $\rightarrow$ 64 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -291,10 +288,9 @@ già il prodotto corrispondente al catalogo.
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
     \entita{Catalogo}         & E & S & 60    \\
-    \entita{Prodotto} CodProdotto        & E & L & 60    \\
     \entita{Fornitore}        & E & S & 1     \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 60 letture + 61 scritture $\rightarrow$ 364 accessi a stagione} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 60 letture + 1 scrittura $\rightarrow$ 124 accessi a stagione} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -314,11 +310,11 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Ordine}           & E & L & 1    \\
-    \entita{Ordine}           & E & S & 1    \\
-    \entita{Dettaglio\_Ordine} & A & L & 10   \\
-    \entita{Prodotto}         & E & S & 10   \\
-    \entita{Prodotto}         & E & L & 10   \\
+    \entita{Ordine}             & E & L & 1    \\
+    \entita{Ordine}             & E & S & 1    \\
+    \entita{Dettaglio\_Ordine}  & A & L & 10   \\
+    \entita{Prodotto}           & E & S & 10   \\
+    \entita{Prodotto}           & E & L & 10   \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 21 letture + 11 scritture $\rightarrow$ 86 accessi al giorno} \\
     \bottomrule
@@ -337,9 +333,9 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
     \midrule
     \entita{Dipendenti}      & E & L & 18    \\
     \entita{Turno}           & E & L & 18    \\
-    \entita{Mansione}        &  & L &       \\ 
+    \entita{Mansione}        & E & L & 18    \\ 
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 32 letture $\rightarrow$ 160 accessi al giorno} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 50 letture $\rightarrow$ 250 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -349,8 +345,6 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
 Le grandi dimensioni di questa operazione sono giustificabili dal fatto che, nel caso
 peggiore, la visualizzazione di ombrelloni disponibili richiederebbe la lettura di tutte
 le tuple di \entita{Prenotazioni} e \entita{Abbonamenti}.
-Una possibile ottimizzazione è l'aggiunta di un \textbf{indice} nel database.
-% L'index crea un B-tree che ordina le tuple prima per DataInizio poi per DataFine
 
 \begin{table}[H]
   \centering
@@ -421,7 +415,7 @@ Una possibile ottimizzazione è l'aggiunta di un \textbf{indice} nel database.
     \entita{Tariffe\_Lettino}            & E & L & 1    \\
     \entita{Tariffe\_Lettino}            & E & S & 1    \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 3 letture + 3 scritture $\rightarrow$ 27 accessi a stagione} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 1 lettura + 1 scrittura $\rightarrow$ 9 accessi a stagione} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -439,7 +433,7 @@ Una possibile ottimizzazione è l'aggiunta di un \textbf{indice} nel database.
     \entita{Fila}            & E & L & 1    \\
     \entita{Fila}            & E & S & 1    \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 10 letture + 10 scritture $\rightarrow$ 300 accessi a stagione} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 1 lettura + 1 scrittura $\rightarrow$ 30 accessi a stagione} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -461,11 +455,10 @@ per la giacenza di un prodotto dopo l'inventario.
     \rowcolor{primary!15}
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
-    \entita{Fornitore} P IVA           & E & L & 1    \\
     \entita{Catalogo}            & E & L & 1    \\
     \entita{Catalogo}            & E & S & 1    \\
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 2 letture + 1 scrittura $\rightarrow$ 8 accessi a settimana} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 1 lettura + 1 scrittura $\rightarrow$ 6 accessi a settimana} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -560,14 +553,14 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
   \rowcolor{primary!15}
   & \textbf{N.} & \textbf{Frequenza} & & \textbf{N.} & \textbf{Frequenza} & \\
   \midrule
-   & O.1 & 20 accessi/giorno          & & O.10 & 160 accessi/giorno     & \\
-   & O.2 & 1512 accessi/giorno        & & O.11 & 351.000 accessi/giorno & \\
-   & O.3 & 3025 accessi/stagione      & & O.12 & 1.200 accessi/giorno   & \\
+   & O.1 & 20 accessi/giorno          & & O.10 & 250 accessi/giorno     & \\
+   & O.2 & 1537 accessi/giorno        & & O.11 & 351.000 accessi/giorno & \\
+   & O.3 & 3075 accessi/stagione      & & O.12 & 1.200 accessi/giorno   & \\
    & O.4 & 60 accessi/giorno          & & O.13 & 17 accessi/giorno      & \\
-   & O.5 & 12 accessi/stagione        & & O.14 & 27 accessi/stagione    & \\
-   & O.6 & 60 accessi/giorno          & & O.15 & 300 accessi/stagione   & \\
-   & O.7 & 88 accessi/giorno          & & O.16 & 8 accessi/settimana    & \\
-   & O.8 & 364 accessi/stagione       & & O.17 & 120 accessi/giorno     & \\
+   & O.5 & 12 accessi/stagione        & & O.14 & 9 accessi/stagione     & \\
+   & O.6 & 2310 accessi/giorno        & & O.15 & 30 accessi/stagione    & \\
+   & O.7 & 64 accessi/giorno          & & O.16 & 6 accessi/settimana    & \\
+   & O.8 & 124 accessi/stagione       & & O.17 & 120 accessi/giorno     & \\
    & O.9 & 86 accessi/giorno          & & O.18 & 45 accessi/giorno      & \\
   \bottomrule
   \end{tabularx}
@@ -740,7 +733,7 @@ WHERE Nome = ? AND Cognome = ? AND Email = ?;
 
 SELECT Prezzo FROM TARIFFE_NOLEGGIO WHERE TipoNoleggio = ?;
 
-INSERT INTO NOLEGGIO_LETTINO (Data, Quantità, Pagamento, IdCliente, TipoNoleggio, Prezzo)
+INSERT INTO NOLEGGIO_LETTINO (Data, Quantità, Pagamento, IdCliente, TipoNoleggio, PrezzoTotale)
 VALUES (?, ?, 'N', ?, ?, ?);
 \end{lstlisting}
 
@@ -800,7 +793,8 @@ VALUES (?, ?, ?);
 \begin{lstlisting}[caption={O.9: Registrazione consegna e aggiornamento giacenze}]
 UPDATE ORDINE 
 SET DataConsegna = CURDATE() 
-WHERE CodOrdine = ?;
+WHERE CodOrdine = ?
+AND DataConsegna IS NULL;
 
 UPDATE PRODOTTO P
 JOIN DETTAGLIO_ORDINE DO ON P.CodProdotto = DO.CodProdotto
@@ -857,21 +851,24 @@ i campi impossibili da tradurre (il campo \textit{Anno}).
 \begin{lstlisting}[caption={O.13: Visualizzazione storico cliente}] 
 SELECT IdCliente FROM CLIENTE WHERE Nome = ? AND Cognome = ? AND Email = ?;
 
-SELECT 'Prenotazione' AS TIPO, DataInizio, DataFine, Prezzo 
+SELECT 'Prenotazione' AS TIPO, DataInizio, DataFine, 
+    Prezzo, Pagamento AS StatoPagamento
 FROM PRENOTAZIONE 
-WHERE IdCliente = ? AND DataFine < CURDATE()
+WHERE IdCliente = ?
 
 UNION ALL
 
-SELECT 'Abbonamento' AS TIPO, CAST(Anno AS DATE) AS DataInizio, NULL AS DataFine, Prezzo 
+SELECT 'Abbonamento' AS TIPO, Anno AS DataInizio, 
+    NULL AS DataFine, Prezzo, Pagamento AS StatoPagamento 
 FROM ABBONAMENTO 
 WHERE IdCliente = ?
 
 UNION ALL
 
-SELECT 'Noleggio Lettini' AS TIPO, Data AS DataInizio, NULL AS DataFine, Prezzo 
+SELECT 'Noleggio Lettini' AS TIPO, Data AS DataInizio, 
+    NULL AS DataFine, PrezzoTotale AS Prezzo, Pagamento AS StatoPagamento
 FROM NOLEGGIO_LETTINO 
-WHERE IdCliente = ? AND Data < CURDATE();
+WHERE IdCliente = ?;
 \end{lstlisting}
 
 \subsection*{O.14: Modifica tariffa lettini}

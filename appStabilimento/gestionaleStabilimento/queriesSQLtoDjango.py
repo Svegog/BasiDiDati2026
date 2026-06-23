@@ -1,9 +1,3 @@
-"""
-Modulo contenente tutte le operazioni SQL.
-Ogni funzione usa connection.cursor() per eseguire query SQL pure,
-con %s come placeholder (equivalente del ? generico).
-"""
-
 from django.db import connection
 
 
@@ -365,19 +359,19 @@ def storico_cliente(idcliente):
     with connection.cursor() as cursor:
         cursor.execute(
             """
-            SELECT 'Prenotazione' AS TIPO, DataInizio, DataFine, Prezzo
+            SELECT 'Prenotazione' AS TIPO, DataInizio, DataFine, Prezzo, Pagamento AS StatoPagamento
             FROM PRENOTAZIONE
             WHERE IdCliente = %s
 
             UNION ALL
 
-            SELECT 'Abbonamento' AS TIPO, Anno AS DataInizio, NULL AS DataFine, Prezzo
+            SELECT 'Abbonamento' AS TIPO, Anno AS DataInizio, NULL AS DataFine, Prezzo, Pagamento AS StatoPagamento
             FROM ABBONAMENTO
             WHERE IdCliente = %s
 
             UNION ALL
 
-            SELECT 'Noleggio Lettini' AS TIPO, Data AS DataInizio, NULL AS DataFine, PrezzoTotale AS Prezzo
+            SELECT 'Noleggio Lettini' AS TIPO, Data AS DataInizio, NULL AS DataFine, PrezzoTotale AS Prezzo, Pagamento AS StatoPagamento
             FROM NOLEGGIO_LETTINO
             WHERE IdCliente = %s
             """,
