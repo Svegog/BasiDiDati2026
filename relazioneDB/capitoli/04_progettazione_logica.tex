@@ -14,6 +14,9 @@ associazione, basata su un'ipotetica stagione balneare di medio-grandi dimension
 
 Dato che, da richiesta del committente, si tiene uno storico degli ordini, clienti e turni,
 la stima seguente è calcolata su un lasso di tempo di 5 anni.
+\textit{Nota:} Gli ombrelloni usati per il calcolo di \entita{Prenotazione} sono 150, essendo 50
+gi\'{a} occupati ogni stagione e la stima del volume di \entita{Dipendente} tiene in considerazione
+il fatto che negli anni alcuni dipendenti possano tornare.
 
 \begin{table}[htbp]
   \centering
@@ -366,7 +369,7 @@ Nella seguente operazione non viene effettuata una lettura su \entita{Catalogo} 
     \entita{Turno}           & E & L & 18    \\
     \entita{Mansione}        & E & L & 18    \\ 
     \midrule
-    \multicolumn{4}{c}{\textbf{Totale:} 50 letture $\rightarrow$ 270 accessi al giorno} \\
+    \multicolumn{4}{c}{\textbf{Totale:} 54 letture $\rightarrow$ 270 accessi al giorno} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -611,8 +614,8 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
   \item \textbf{Ridondanza:} l'attributo \attributo{Prezzo} in
         \entita{Prenotazione} \`{e} calcolabile come:
         \[
-          \text{prezzoTotale} = \text{tariffaGiornaliera}(\text{fila}) \times
-          (\text{dataFine} - \text{dataInizio}) \times (1 - \text{sconto})
+          \text{Prezzo} = \text{TariffaGiornaliera}(\text{Fila}) \times
+          (\text{DataFine} - \text{DataInizio}) \times (1 - \text{Sconto})
         \]
 
         \textbf{Decisione:} si mantiene l'attributo ridondante \attributo{Prezzo}
@@ -647,7 +650,7 @@ allo stesso tempo, dato che la copertura è esclusiva, non introduce ridondanza.
 Nello schema ER sono già evidenziate in modo non ambiguo le chiavi primarie della maggior parte 
 delle entità. Gli identificatori delle 3 relazioni create a seguito del collasso verso
 il basso della gerarchia persona diventeranno dei nuovi codici surrogati in quanto 
-l'email non è una caratteristica fissa di una pesona ma potrebbe cambiare nel tempo.
+l'email non è una caratteristica fissa di una persona ma potrebbe cambiare nel tempo.
 
 % -- 4.6 Traduzione in relazioni -----------------------------
 \section{Traduzione di entit\`{a} e associazioni in relazioni}
