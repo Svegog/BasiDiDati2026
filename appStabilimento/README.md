@@ -18,9 +18,9 @@ uv sync
 ## 3. Avviare un server MySQL
 
 ## 4. Creare il database MySQL e Importare schema e dati
-In un terminale MySQL o in MySQLWorkbench creare il database e importare schema e dati eseguendo in ordine il file `createDB.sql` e successivamente uno dei due file `seed`:
-- `seed_full.sql`: contiene dati in quantità corrispondente alla tabella dei volumi indicata nella relazione.
-- `seed_minimal.sql`: contiene dati in quantità ridotta.
+In un terminale MySQL o in MySQLWorkbench creare il database e importare schema e dati eseguendo in ordine il file `setup/createDB.sql` e successivamente uno dei due file `seed` situati all'interno della cartella setup:
+- `setup/seed_full.sql`: contiene dati in quantità corrispondente alla tabella dei volumi indicata nella relazione.
+- `setup/seed_minimal.sql`: contiene dati in quantità ridotta.
 
 Comandi da terminale bash:
 ```bash
