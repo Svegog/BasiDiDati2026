@@ -10,13 +10,14 @@
 
 La tabella seguente riporta la stima del numero di istanze per ogni entit\`{a} e
 associazione, basata su un'ipotetica stagione balneare di medio-grandi dimensioni
-(~200 ombrelloni, ~1000 clienti registrati).
+($\sim$200 ombrelloni).
 
 Dato che, da richiesta del committente, si tiene uno storico degli ordini, clienti e turni,
 la stima seguente è calcolata su un lasso di tempo di 5 anni.
+
 \textit{Nota:} Gli ombrelloni usati per il calcolo di \entita{Prenotazione} sono 150, essendo 50
-gi\'{a} occupati ogni stagione e la stima del volume di \entita{Dipendente} tiene in considerazione
-il fatto che negli anni alcuni dipendenti possano tornare.
+già occupati dagli abbonamenti ogni stagione. La stima del volume di \entita{Dipendente} tiene in considerazione
+il fatto che negli anni alcuni dipendenti possano tornare ed altri siano nuovi: si stimano 20 dipendenti attivi per stagione.
 
 \begin{table}[htbp]
   \centering
@@ -615,7 +616,7 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
         \entita{Prenotazione} \`{e} calcolabile come:
         \[
           \text{Prezzo} = \text{TariffaGiornaliera}(\text{Fila}) \times
-          (\text{DataFine} - \text{DataInizio}) \times (1 - \text{Sconto})
+          (\text{DataFine} - \text{DataInizio} + 1) \times (1 - \text{Sconto})
         \]
 
         \textbf{Decisione:} si mantiene l'attributo ridondante \attributo{Prezzo}
@@ -631,6 +632,8 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
         \textbf{Decisione:} l'attributo ridondante \attributo{PrezzoAlMomento}
         è mantenuto perché il prezzo di un determinato \entita{prodotto},
         venduto da un \entita{Fornitore}, potrebbe cambiare nel tempo.
+        Si vuole memorizzare quindi il prezzo effettivamente pagato al momento
+        dell'ordine.
 \end{itemize}
 
 \clearpage
