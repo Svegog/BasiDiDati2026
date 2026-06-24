@@ -122,7 +122,7 @@ A seguito le operazioni principali richieste dal committente sul database.
    & O.5 & 12/stagione   & & O.14 & 3/stagione   & \\
    & O.6 & 15/giorno     & & O.15 & 10/stagione  & \\
    & O.7 & 2/giorno      & & O.16 & 2/settimana  & \\
-   & O.8 & 2/stagione    & & O.17 & 40/giorno     & \\
+   & O.8 & 2/stagione    & & O.17 & 40/giorno    & \\
    & O.9 & 2/giorno      & & O.18 & 45/giorno    & \\
   \bottomrule
   \end{tabularx}
@@ -131,7 +131,7 @@ A seguito le operazioni principali richieste dal committente sul database.
 \clearpage
 
 % -- 4.3 Schemi di navigazione -------------------------------
-\section{Schemi di navigazione e tabelle degli accessi} % ONGOING
+\section{Schemi di navigazione e tabelle degli accessi}
 
 Di seguito mostreremo solo tramite la tabella degli accessi le operazioni più \textit{banali}, 
 mentre quelle più complesse avranno la loro sezione specifica. \\
@@ -229,7 +229,7 @@ nel periodo di richiesta. Ogni abbonamento e prenotazione si riferiscono ad un s
     \textbf{Concetto} & \textbf{Tipo} & \textbf{L/S} & \textbf{Accessi} \\
     \midrule
     \entita{Cliente}            & E & L & 1 \\
-    \entita{Tariffa\_Noleggio} & E & L & 1 \\
+    \entita{Tariffe\_Noleggio} & E & L & 1 \\
     \entita{Noleggio\_Lettino} & E & S & 1 \\
     \midrule
     \multicolumn{4}{c}{\textbf{Totale:} 2 letture + 1 scrittura $\rightarrow$ 60 accessi al giorno} \\
@@ -601,7 +601,7 @@ tutti posti qui sotto. Si presuppone che il cliente tenga conto del \textit{codi
    & O.6 & 2310 accessi/giorno        & & O.15 & 30 accessi/stagione    & \\
    & O.7 & 64 accessi/giorno          & & O.16 & 6 accessi/settimana    & \\
    & O.8 & 244 accessi/stagione       & & O.17 & 120 accessi/giorno     & \\
-   & O.9 & 86 accessi/giorno          & & O.18 & 45 accessi/giorno      & \\
+   & O.9 & 86 accessi/giorno          & & O.18 & vedi sopra (3 casi)    & \\
   \bottomrule
   \end{tabularx}
 \end{table}
@@ -658,43 +658,6 @@ l'email non è una caratteristica fissa di una persona ma potrebbe cambiare nel 
 % -- 4.6 Traduzione in relazioni -----------------------------
 \section{Traduzione di entit\`{a} e associazioni in relazioni}
 
-%PROPRIETARIO(\chiave{IdProprietario}, Nome, Cognome, Email, Password, RecapitoTelefonico)
-%
-%CLIENTE(\chiave{IdCliente}, Nome, Cognome, Email, RecapitoTelefonico)
-%
-%DIPENDENTE(\chiave{IdDipendente}, Nome, Cognome, Email, RecapitoTelefonico, CodiceFiscale) 
-%
-%FILA(\chiave{CodFila}, TariffaGiornaliera, TariffaStagionale)
-%
-%OMBRELLONE(\chiave{NumOmbrellone, \chiaveest{CodFila}:FILA})
-%
-%PRENOTAZIONE(\chiave{CodPrenotazione}, DataInizio, DataFine, Prezzo, Sconto, Note*, Pagamento,
-%            \chiaveest{IdCliente}:CLIENTE, \chiaveest{(CodFila, NumOmbrellone)}:OMBRELLONE)
-%
-%ABBONAMENTO(\chiave{\chiaveest{(Codfila, NumOmbrellone)}:OMBRELLONE, Anno}, Prezzo, Sconto, Pagamento,
-%            \chiaveest{IdCliente}) 
-%
-%TARIFFE\_NOLEGGIO(\chiave{TipoNoleggio}, Prezzo)
-%
-%NOLEGGIO\_LETTINO(\chiave{CodNoleggio}, Data, Quantità, PrezzoTotale, Pagamento, \chiaveest{IdCliente}:CLIENTE,
-%                \chiaveest{TipoNoleggio}:TARIFFE\_NOLEGGIO)
-%
-%MANSIONE(\chiave{CodMansione}, NomeMansione, Descrizione*)
-%
-%TURNO(\chiave{Data, OraInizio, \chiaveest{IdDipendente}:DIPENDENTE}, OraFine, \chiaveest{CodMansione}:MANSIONE)
-%
-%CATEGORIA(\chiave{CodCategoria}, NomeCategoria, Descrizione*) 
-%
-%PRODOTTO(\chiave{CodProdotto}, NomeProdotto, QuantitàMagazzino, QuantitàMinima, \chiaveest{CodCategoria}:CATEGORIA)
-%
-%FORNITORE(\chiave{PartitaIVA}, Nome, Email, RecapitoTelefonico, Indirizzo) 
-%
-%ORDINE(\chiave{CodOrdine}, \chiaveest{PartitaIVA}:FORNITORE, \chiaveest{IdProprietario}:PROPRIETARIO, DataOrdine, ConsegnaPrevista, DataConsegna*)
-%
-%CATALOGO(\chiave{\chiaveest{CodProdotto}:PRODOTTO, \chiaveest{PartitaIVA}:FORNITORE}, PrezzoUnitario) 
-%
-%DETTAGLIO\_ORDINE(\chiave{\chiaveest{(PartitaIVA, CodProdotto)}:CATALOGO, \chiaveest{CodOrdine}:ORDINE}, Quantità, PrezzoAlMomento)
-
 \begin{tabularx}{\textwidth}{@{}l X@{}}
 
 \textbf{PROPRIETARIO} &
@@ -728,7 +691,7 @@ l'email non è una caratteristica fissa di una persona ma potrebbe cambiare nel 
 
 \textbf{ABBONAMENTO} &
 (\chiave{(\chiaveest{Codfila, NumOmbrellone}):OMBRELLONE, Anno}, Prezzo, Sconto, Pagamento,
-\chiaveest{IdCliente})
+\chiaveest{IdCliente}:CLIENTE)
 \\[1cm]
 
 \textbf{TARIFFE\_NOLEGGIO} &
